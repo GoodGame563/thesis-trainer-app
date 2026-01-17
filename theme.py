@@ -1,0 +1,80 @@
+from flet import (
+    Theme,
+    ColorScheme,
+    TextTheme, 
+    TextStyle
+    )
+
+light_cs = ColorScheme(
+    primary="#0D1B2A",
+    on_primary="#FFFFFF",
+    secondary="#4CC9F0",
+    on_secondary="#0D1B2A",
+    surface="#FFFFFF",
+    on_surface="#1B1B1B",
+    outline="#6B7280",
+    error="#E63946",
+    on_error="#FFFFFF",
+    shadow="#000000",
+)
+light_theme = Theme(
+    color_scheme=light_cs,
+    scaffold_bgcolor="#FFFFFF",
+    divider_color="#6B7280",
+    card_bgcolor="#FFFFFF",
+    use_material3=True,
+    text_theme=TextTheme(
+        body_large=TextStyle(color=light_cs.primary),
+        body_medium=TextStyle(color=light_cs.primary),
+        body_small=TextStyle(color=light_cs.primary),
+        display_large=TextStyle(color=light_cs.primary),
+        display_medium=TextStyle(color=light_cs.primary),
+        display_small=TextStyle(color=light_cs.primary),
+        headline_large=TextStyle(color=light_cs.primary),
+        headline_medium=TextStyle(color=light_cs.primary),
+        headline_small=TextStyle(color=light_cs.primary),
+        label_large=TextStyle(color=light_cs.primary),
+        label_medium=TextStyle(color=light_cs.primary),
+        label_small=TextStyle(color=light_cs.primary),
+        title_large=TextStyle(color=light_cs.primary),
+        title_medium=TextStyle(color=light_cs.primary),
+        title_small=TextStyle(color=light_cs.primary)
+    )
+)
+
+dark_cs = ColorScheme(
+    primary="#E6F4FF",
+    on_primary="#0D1217",
+    secondary="#4CC9F0",
+    on_secondary="#0D1217",
+    surface="#0D1217",
+    on_surface="#E2E8F0",
+    outline="#4B5563",
+    error="#F15A60",
+    on_error="#0D1217",
+    shadow="#FFFFFF",
+)
+dark_theme = Theme(
+    color_scheme=dark_cs,
+    scaffold_bgcolor="#0D1217",
+    divider_color="#4B5563",
+    card_bgcolor="#111217",
+    use_material3=True,
+    text_theme=TextTheme(
+        body_large=TextStyle(color=dark_cs.primary),
+        body_medium=TextStyle(color=dark_cs.primary),
+        body_small=TextStyle(color=dark_cs.primary),
+        display_large=TextStyle(color=dark_cs.primary),
+        display_medium=TextStyle(color=dark_cs.primary),
+        display_small=TextStyle(color=dark_cs.primary),
+        headline_large=TextStyle(color=dark_cs.primary),
+        headline_medium=TextStyle(color=dark_cs.primary),
+        headline_small=TextStyle(color=dark_cs.primary),
+        label_large=TextStyle(color=dark_cs.primary),
+        label_medium=TextStyle(color=dark_cs.primary),
+        label_small=TextStyle(color=dark_cs.primary),
+        title_large=TextStyle(color=dark_cs.primary),
+        title_medium=TextStyle(color=dark_cs.primary),
+        title_small=TextStyle(color=dark_cs.primary)
+    )
+)
