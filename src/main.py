@@ -45,7 +45,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 
-def main(page: Page):
+async def main(page: Page):
     logging.getLogger("flet_core").setLevel(logging.INFO)
     page.title = "Таблица с фильтром"
     page.padding = 0
