@@ -8,7 +8,7 @@ from flet import (
     ColorScheme,
     CupertinoFilledButton,
 )
-from structs import Role, Player
+from structs import Role, Player, Team
 from datetime import date
 from utils import create_basic_text, create_basic_text_button
 
@@ -47,7 +47,6 @@ visible_column_table = {
     "rating": True,
 }
 
-
 name_column_table = {
     "player": "Игрок",
     "date_birth": "Дата рождения",
@@ -82,6 +81,30 @@ name_column_table = {
     "red_cards": "Красных карточек",
     "rating": "Рейтинговые баллы",
 }
+
+positive_indicators = {
+    "passes_percent": None,
+    "captures_percent": None,
+    "rakov_cleared": None,
+    "tackles_done": None,
+    "meters_covered": None,
+    "defenders_beaten": None,
+    "breakthroughs": None,
+    "attempts_grounded": None,
+    "realizations_percent": None,
+    "penalties_percent": None,
+    "dropgoals_percent": None,
+    "points_scored": None,
+}
+
+negative_indicators = {
+    "penalties_received": None,
+    "loss_ball": None,
+    "yellow_cards": None,
+    "red_cards": None,
+}
+
+
 
 
 class TableData:
@@ -149,6 +172,46 @@ class TableData:
         self.yellow_cards = yellow_cards
         self.red_cards = red_cards
         self.rating = 0.0
+
+
+def create_empty() -> TableData:
+    return TableData(
+        player=Player(
+            nst="Иванов Иван Иванович",
+            weight=85.0,
+            height=190.0,
+            team=Team(name="Рубин"),
+            birth_date=date(1990, 5, 15),
+        ),
+        role=Role.NOTHING,
+        minutes_played=0,
+        passes_accurate=0,
+        passes_inaccurate=0,
+        captures_done=0,
+        captures_missed=0,
+        rakov_cleared=0,
+        tackles_done=0,
+        meters_covered=0,
+        defenders_beaten=0,
+        breakthroughs=0,
+        attempts_grounded=0,
+        realizations_scored=0,
+        realizations_attempted=0,
+        penalties_scored=0,
+        penalties_attempted=0,
+        dropgoals_scored=0,
+        dropgoals_attempted=0,
+        points_scored=0,
+        penalties_received=0,
+        loss_ball=0,
+        yellow_cards=0,
+        red_cards=0,
+        passes_percent=0.0,
+        captures_percent=0.0,
+        realizations_percent=0.0,
+        penalties_percent=0.0,
+        dropgoals_percent=0.0,
+    )
 
 
 def create_table(

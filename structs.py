@@ -21,6 +21,14 @@ class ButtonType(Enum):
     CANCEL = 4
 
 
+class СomparisonType(Enum):
+    EQUALLY = "="
+    LESS = ">"
+    MORE = "<"
+    EQUALLY_MORE = "=<"
+    EQUALLY_LESS = ">="
+
+
 class Team:
     def __init__(self, name: str, path_to_logo: str = ""):
         self.path_to_logo = path_to_logo
@@ -43,3 +51,9 @@ class Player:
         self.path_to_photo = path_to_photo
         self.team = team
         self.birth_date = birth_date
+
+
+class ComparisonValue:
+    def __init__(self, comparison_type: СomparisonType, value: int):
+        self.comparison_type = comparison_type
+        self.value = value

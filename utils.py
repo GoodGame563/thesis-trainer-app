@@ -6,8 +6,9 @@ from flet import (
     RoundedRectangleBorder,
     FloatingActionButton,
     IconButton,
+    Button,
+    Margin,
     icons,
-    margin,
 )
 from structs import ButtonType
 
@@ -26,13 +27,13 @@ def create_bigest_text(value: str) -> Text:
 
 def create_basic_text_button(
     value: str, color_scheme: ColorScheme, on_click=None
-) -> ElevatedButton:
+) -> Button:
     return create_button(value, None, color_scheme, ButtonType.BASIC, on_click)
 
 
 def create_action_text_button(
     value: str, color_scheme: ColorScheme, on_click=None
-) -> ElevatedButton:
+) -> Button:
     return create_button(value, None, color_scheme, ButtonType.ACTION, on_click)
 
 
@@ -44,21 +45,21 @@ def create_icon_button(
 
 def create_agree_text_button(
     value: str, color_scheme: ColorScheme, on_click=None
-) -> ElevatedButton:
+) -> Button:
     return create_button(value, None, color_scheme, ButtonType.AGREE, on_click)
 
 
 def create_cancel_text_button(
     value: str, color_scheme: ColorScheme, on_click=None
-) -> ElevatedButton:
+) -> Button:
     return create_button(value, None, color_scheme, ButtonType.CANCEL, on_click)
 
 
 def create_button(
     text: str, icon: icons.Icons, color_scheme: ColorScheme, type: ButtonType, on_click
-) -> ElevatedButton:
+) -> Button:
     style = ButtonStyle(shape=RoundedRectangleBorder(radius=8))
-    size_margin = margin.only(left=10, right=10, top=5, bottom=0)
+    size_margin = Margin.only(left=10, right=10, top=5, bottom=0)
     bgcolor = None
     match type:
         case ButtonType.ACTION:
@@ -78,7 +79,7 @@ def create_button(
             margin=20,
             on_click=on_click,
         )
-    return ElevatedButton(
+    return Button(
         icon=icon,
         content=create_biger_text(text),
         bgcolor=bgcolor,

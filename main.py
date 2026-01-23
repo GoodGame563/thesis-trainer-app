@@ -1,105 +1,231 @@
 from flet import (
     Page,
     run,
-    DataTable,
-    DataColumn,
-    DataRow,
-    DataCell,
-    Text,
-    Theme,
-    ColorScheme,
-    AppBar,
-    IconButton,
-    FloatingActionButton,
-    FloatingActionButtonLocation,
     icons,
     Column,
     Container,
-    SnackBar,
-    RoundedRectangleBorder,
     BoxShadow,
     Offset,
     Animation,
     Row,
-    NavigationDrawer,
-    NavigationDrawerDestination,
-    Icon,
-    Divider,
-    ElevatedButton,
-    app,
-    Pagelet,
-    Button,
     Stack,
-    ButtonStyle,
     Colors,
-    AnimationCurve,
     Margin,
-    ListView,
-    CrossAxisAlignment,
     Switch,
     ControlState,
+    PopupMenuButton,
+    PopupMenuItem,
+    PopupMenuPosition,
+    TextField,
+    Dropdown, 
+    DropdownOption
 )
+
 import logging
-from theme import light_theme, dark_theme, light_cs, dark_cs
-from structs import Role, Player, Team
+from theme import light_theme, dark_theme
+from components import create_menu, create_filter_view, create_black_overlay
+from structs import СomparisonType, Role
 from table import (
     create_table,
-    TableData,
     visible_column_table,
     name_column_table,
     update_table,
+    create_empty,
+    positive_indicators,
+    negative_indicators
 )
-from datetime import date
 from utils import (
-    create_basic_text_button,
-    create_action_text_button,
     create_icon_button,
-    create_agree_text_button,
-    create_cancel_text_button,
-    create_biger_text,
-    create_bigest_text,
+    create_basic_text,
+    create_action_text_button,
+    create_basic_text_button,
 )
 
 logging.basicConfig(level=logging.INFO)
 
 
+
 def main(page: Page):
+    logging.getLogger("flet_core").setLevel(logging.INFO)
+    page.title = "Таблица с фильтром"
+    page.padding = 0
+    is_dark = {"value": False}
+    page.theme = dark_theme if is_dark["value"] else light_theme
+   
+
+    base_shadow = BoxShadow(
+        color=Colors.with_opacity(
+            0.5,
+            page.theme.color_scheme.shadow,
+        ),
+        offset=Offset(0, 0),
+        blur_radius=12.3,
+        blur_style="OUTER",
+    )
+    small_shadow = BoxShadow(
+        color=Colors.with_opacity(
+            0.5,
+            page.theme.color_scheme.shadow,
+        ),
+        offset=Offset(0, 0),
+        blur_radius=6,
+        blur_style="OUTER",
+    )
 
     def open_menu(e):
         logging.info("Menu opened")
         menu.offset = Offset(0, 0)
         black_overlay.offset = Offset(0, 0)
         black_overlay.opacity = 1.0
-        page.update()
+        # page.update()
+
+    def chage_content_button(e):
+        match e.control.key:
+            case СomparisonType.EQUALLY:
+                e.control.key = СomparisonType.LESS
+            case СomparisonType.LESS:
+                e.control.key = СomparisonType.EQUALLY_MORE
+            case СomparisonType.MORE:
+                e.control.key = СomparisonType.EQUALLY_MORE
+            case СomparisonType.EQUALLY_MORE:
+                e.control.key = СomparisonType.EQUALLY_LESS
+            case СomparisonType.EQUALLY_LESS:
+                e.control.key = СomparisonType.EQUALLY
+        e.control.content.value = e.control.key.value
 
     def close_menu(e):
         logging.info("Menu closed")
         black_overlay.offset = Offset(-1, 0)
         black_overlay.opacity = 0.0
         menu.offset = Offset(-1, 0)
-        page.update()
+        # page.update()
 
-    def open_filter_page(e):
-        filter_page.offset = Offset(0, 0)
+    def open_filter_view(e):
+        filter_view.offset = Offset(0, 0)
         black_overlay.offset = Offset(0, 0)
         black_overlay.opacity = 1.0
-        page.update()
+        # page.update()
 
     def safe_button(e):
         for c in column_table:
             visible_column_table[c.content.key] = c.content.value
         update_table(table)
-        filter_page.offset = Offset(0, 1)
+        filter_view.offset = Offset(0, 1)
         black_overlay.offset = Offset(-1, 0)
         black_overlay.opacity = 0.0
         table.update()
-        page.update()
+        # page.update()
 
-    logging.getLogger("flet_core").setLevel(logging.INFO)
-    page.title = "Таблица с фильтром"
-    page.padding = 0
-    is_dark = {"value": False}
-    page.theme = dark_theme if is_dark["value"] else light_theme
+    def change_switch(e):
+        e.control.data.disabled = not e.control.value
+    
+    def get_positive_table():
+        positive_table = []
+        for key, value in positive_indicators.items():
+            button = create_basic_text_button(
+                "=", page.theme.color_scheme, chage_content_button
+            )
+            button.style.padding = 0
+            button.margin = 5
+            button.width = 35
+            button.height = 35
+            button.key = СomparisonType.EQUALLY
+            field = TextField(
+                height=35,
+                content_padding=0,
+                expand=1,
+                margin=Margin.only(right=5),
+            )
+            switch = Switch(
+                label=name_column_table[key],
+                key=key,
+                value=False if value == None else True,
+                thumb_color={
+                    ControlState.SELECTED: page.theme.color_scheme.tertiary,
+                    ControlState.DISABLED: page.theme.color_scheme.primary,
+                },
+                data=field,
+                track_color=page.theme.color_scheme.primary,
+                on_change=change_switch,
+            )
+            field.disabled = not switch.value
+            positive_table.append(
+                Container(
+                    content=Row(controls=[switch, button, field]),
+                    bgcolor=page.theme.color_scheme.surface,
+                    margin=Margin.only(
+                        left=10,
+                        right=10,
+                        top=8,
+                        bottom=0,
+                    ),
+                    border_radius=8,
+                    shadow=[small_shadow],
+                )
+            )
+        return positive_table
+    
+    def get_negative_table():
+        negative_table = []
+        for key, value in negative_indicators.items():
+            button = create_basic_text_button(
+                "=", page.theme.color_scheme, chage_content_button
+            )
+            button.style.padding = 0
+            button.margin = 5
+            button.width = 35
+            button.height = 35
+            button.key = СomparisonType.EQUALLY
+            field = TextField(
+                height=35,
+                content_padding=0,
+                expand=1,
+                margin=Margin.only(right=5),
+            )
+            switch = Switch(
+                label=name_column_table[key],
+                key=key,
+                value=False if value == None else True,
+                thumb_color={
+                    ControlState.SELECTED: page.theme.color_scheme.error,
+                    ControlState.DISABLED: page.theme.color_scheme.primary,
+                },
+                # data=field,
+                track_color=page.theme.color_scheme.primary,
+                # on_change=change_switch,
+            )
+            # field.disabled = not switch.value
+            negative_table.append(
+                Container(
+                    content=Row(controls=[switch, button, field]),
+                    bgcolor=page.theme.color_scheme.surface,
+                    margin=Margin.only(
+                        left=10,
+                        right=10,
+                        top=8,
+                        bottom=0,
+                    ),
+                    border_radius=8,
+                    shadow=[small_shadow],
+                )
+            )
+        return negative_table
+        
+
+    def get_option():
+        options = []
+        for role in Role:
+            key = role.value
+            if role.name == 'NOTHING':
+                key = 'Все роли'
+            options.append(
+                DropdownOption(
+                    key=key,
+                    data=[get_positive_table(), get_negative_table()]
+                )
+
+            )
+        return options
 
     column_table = []
     for key, value in visible_column_table.items():
@@ -123,420 +249,34 @@ def main(page: Page):
                     bottom=0,
                 ),
                 border_radius=8,
-                shadow=[
-                    BoxShadow(
-                        color=Colors.with_opacity(
-                            0.5,
-                            page.theme.color_scheme.shadow,
-                        ),
-                        offset=Offset(0, 0),
-                        blur_radius=8,
-                        blur_style="OUTER",
-                    )
-                ],
+                shadow=[small_shadow],
             )
         )
 
+    dropdown = Dropdown(
+        value=0,
+        options=get_option(),
+        bgcolor=page.theme.color_scheme.surface
+    )
+
+    
+
     table = create_table(
-        [
-            TableData(
-                player=Player(
-                    nst="Иванов Иван Иванович",
-                    weight=85.0,
-                    height=190.0,
-                    team=Team(name="Рубин"),
-                    birth_date=date(1990, 5, 15),
-                ),
-                role=Role.NOTHING,
-                minutes_played=0,
-                passes_accurate=0,
-                passes_inaccurate=0,
-                captures_done=0,
-                captures_missed=0,
-                rakov_cleared=0,
-                tackles_done=0,
-                meters_covered=0,
-                defenders_beaten=0,
-                breakthroughs=0,
-                attempts_grounded=0,
-                realizations_scored=0,
-                realizations_attempted=0,
-                penalties_scored=0,
-                penalties_attempted=0,
-                dropgoals_scored=0,
-                dropgoals_attempted=0,
-                points_scored=0,
-                penalties_received=0,
-                loss_ball=0,
-                yellow_cards=0,
-                red_cards=0,
-                passes_percent=0.0,
-                captures_percent=0.0,
-                realizations_percent=0.0,
-                penalties_percent=0.0,
-                dropgoals_percent=0.0,
-            ),
-            TableData(
-                player=Player(
-                    nst="Иванов Иван Иванович",
-                    weight=85.0,
-                    height=190.0,
-                    team=Team(name="Рубин"),
-                    birth_date=date(1990, 5, 15),
-                ),
-                role=Role.NOTHING,
-                minutes_played=0,
-                passes_accurate=0,
-                passes_inaccurate=0,
-                captures_done=0,
-                captures_missed=0,
-                rakov_cleared=0,
-                tackles_done=0,
-                meters_covered=0,
-                defenders_beaten=0,
-                breakthroughs=0,
-                attempts_grounded=0,
-                realizations_scored=0,
-                realizations_attempted=0,
-                penalties_scored=0,
-                penalties_attempted=0,
-                dropgoals_scored=0,
-                dropgoals_attempted=0,
-                points_scored=0,
-                penalties_received=0,
-                loss_ball=0,
-                yellow_cards=0,
-                red_cards=0,
-                passes_percent=0.0,
-                captures_percent=0.0,
-                realizations_percent=0.0,
-                penalties_percent=0.0,
-                dropgoals_percent=0.0,
-            ),
-        ],
+        [create_empty(), create_empty(), create_empty()],
         page.theme.color_scheme,
         visible_column_table,
     )
-    black_overlay = Container(
-        bgcolor=Colors.with_opacity(0.1, page.theme.color_scheme.shadow),
-        blur=5,
-        visible=True,
-        opacity=0.0,
-        offset=Offset(-1, 0),
-        animate_opacity=400,
-    )
-    menu = Row(
-        controls=[
-            Container(
-                content=Column(
-                    controls=[
-                        create_basic_text_button(
-                            "Добавить игрока", page.theme.color_scheme
-                        ),
-                        create_basic_text_button(
-                            "Добавить матч", page.theme.color_scheme
-                        ),
-                        create_basic_text_button(
-                            "Создать команду", page.theme.color_scheme
-                        ),
-                        create_basic_text_button("Трансфер", page.theme.color_scheme),
-                        create_basic_text_button(
-                            "Открыть статистику",
-                            page.theme.color_scheme,
-                        ),
-                    ],
-                    spacing=10,
-                    horizontal_alignment="STRETCH",
-                    width=300,
-                ),
-                bgcolor=page.theme.color_scheme.outline,
-                padding=20,
-            ),
-            create_icon_button(icons.Icons.CLOSE, page.theme.color_scheme, close_menu),
-        ],
-        vertical_alignment="start",
-        spacing=2,
-        offset=Offset(-1, 0),
-        animate_offset=Animation(300, AnimationCurve.EASE_OUT),
-    )
 
-    filter_page = Container(
-        content=(
-            Column(
-                controls=[
-                    Container(
-                        bgcolor=page.theme.color_scheme.surface,
-                        content=Row(
-                            controls=[
-                                Text(
-                                    "Фильтр",
-                                    no_wrap=False,
-                                    overflow="ELLIPSIS",
-                                    expand=True,
-                                    size=40,
-                                    text_align="center",
-                                )
-                            ],
-                            alignment="center",
-                            expand=True,
-                        ),
-                        border_radius=8,
-                        shadow=[
-                            BoxShadow(
-                                color=Colors.with_opacity(
-                                    0.5, page.theme.color_scheme.shadow
-                                ),
-                                offset=Offset(0, 0),
-                                blur_radius=10,
-                                blur_style="OUTER",
-                            )
-                        ],
-                        margin=10,
-                    ),
-                    Container(
-                        bgcolor=page.theme.color_scheme.surface,
-                        expand=8,
-                        content=Row(
-                            controls=[
-                                Container(
-                                    content=Column(
-                                        controls=[
-                                            Container(
-                                                content=Text(
-                                                    "Что отображать",
-                                                    no_wrap=False,
-                                                    overflow="ELLIPSIS",
-                                                    expand=True,
-                                                    size=30,
-                                                    text_align="center",
-                                                    margin=10,
-                                                ),
-                                                bgcolor=page.theme.color_scheme.surface,
-                                                margin=Margin.only(
-                                                    left=10,
-                                                    right=10,
-                                                    top=10,
-                                                    bottom=0,
-                                                ),
-                                                border_radius=8,
-                                                shadow=[
-                                                    BoxShadow(
-                                                        color=Colors.with_opacity(
-                                                            0.5,
-                                                            page.theme.color_scheme.shadow,
-                                                        ),
-                                                        offset=Offset(0, 0),
-                                                        blur_radius=8,
-                                                        blur_style="OUTER",
-                                                    )
-                                                ],
-                                            ),
-                                            Container(
-                                                content=ListView(
-                                                    controls=column_table, spacing=0
-                                                ),
-                                                expand=True,
-                                                padding=10,
-                                                bgcolor=page.theme.color_scheme.surface,
-                                                margin=Margin.only(
-                                                    left=10,
-                                                    right=10,
-                                                    top=0,
-                                                    bottom=10,
-                                                ),
-                                                shadow=[
-                                                    BoxShadow(
-                                                        color=Colors.with_opacity(
-                                                            0.5,
-                                                            page.theme.color_scheme.shadow,
-                                                        ),
-                                                        offset=Offset(0, 0),
-                                                        blur_radius=10,
-                                                        blur_style="OUTER",
-                                                    )
-                                                ],
-                                                border_radius=8,
-                                            ),
-                                        ],
-                                        horizontal_alignment="STRETCH",
-                                        spacing=10,
-                                    ),
-                                    expand=2,
-                                ),
-                                Container(
-                                    content=Column(
-                                        controls=[
-                                            Container(
-                                                content=Text(
-                                                    "Подсчет KPI",
-                                                    no_wrap=False,
-                                                    overflow="ELLIPSIS",
-                                                    expand=True,
-                                                    size=30,
-                                                    text_align="center",
-                                                    margin=10,
-                                                ),
-                                                bgcolor=page.theme.color_scheme.surface,
-                                                margin=Margin.only(
-                                                    left=10,
-                                                    right=10,
-                                                    top=10,
-                                                    bottom=0,
-                                                ),
-                                                border_radius=8,
-                                                shadow=[
-                                                    BoxShadow(
-                                                        color=Colors.with_opacity(
-                                                            0.5,
-                                                            page.theme.color_scheme.shadow,
-                                                        ),
-                                                        offset=Offset(0, 0),
-                                                        blur_radius=8,
-                                                        blur_style="OUTER",
-                                                    )
-                                                ],
-                                            ),
-                                            Container(
-                                                content=Row(
-                                                    controls=[
-                                                        Column(
-                                                            controls=[
-                                                                Container(
-                                                                    content=Switch(
-                                                                        label="Учитывать амплуа",
-                                                                        key="check_role",
-                                                                        value=value,
-                                                                        thumb_color={
-                                                                            ControlState.SELECTED: page.theme.color_scheme.secondary,
-                                                                            ControlState.DISABLED: page.theme.color_scheme.primary,
-                                                                        },
-                                                                        track_color=page.theme.color_scheme.primary,
-                                                                    ),
-                                                                    bgcolor=page.theme.color_scheme.surface,
-                                                                    margin=Margin.only(
-                                                                        left=10,
-                                                                        right=10,
-                                                                        top=10,
-                                                                        bottom=0,
-                                                                    ),
-                                                                    border_radius=8,
-                                                                    shadow=[
-                                                                        BoxShadow(
-                                                                            color=Colors.with_opacity(
-                                                                                0.5,
-                                                                                page.theme.color_scheme.shadow,
-                                                                            ),
-                                                                            offset=Offset(
-                                                                                0, 0
-                                                                            ),
-                                                                            blur_radius=8,
-                                                                            blur_style="OUTER",
-                                                                        )
-                                                                    ],
-                                                                ),
-                                                                Container(
-                                                                    content=Switch(
-                                                                        label="Учитывать амплуа",
-                                                                        key="check_role",
-                                                                        value=value,
-                                                                        thumb_color={
-                                                                            ControlState.SELECTED: page.theme.color_scheme.secondary,
-                                                                            ControlState.DISABLED: page.theme.color_scheme.primary,
-                                                                        },
-                                                                        track_color=page.theme.color_scheme.primary,
-                                                                    ),
-                                                                    bgcolor=page.theme.color_scheme.surface,
-                                                                    margin=Margin.only(
-                                                                        left=10,
-                                                                        right=10,
-                                                                        top=10,
-                                                                        bottom=0,
-                                                                    ),
-                                                                    border_radius=8,
-                                                                    shadow=[
-                                                                        BoxShadow(
-                                                                            color=Colors.with_opacity(
-                                                                                0.5,
-                                                                                page.theme.color_scheme.shadow,
-                                                                            ),
-                                                                            offset=Offset(
-                                                                                0, 0
-                                                                            ),
-                                                                            blur_radius=8,
-                                                                            blur_style="OUTER",
-                                                                        )
-                                                                    ],
-                                                                ),
-                                                            ],
-                                                            expand=1,
-                                                            horizontal_alignment="STRETCH",
-                                                        ),
-                                                        Column(
-                                                            controls=[],
-                                                            expand=1,
-                                                            horizontal_alignment="STRETCH",
-                                                        ),
-                                                    ]
-                                                ),
-                                                expand=True,
-                                                bgcolor=page.theme.color_scheme.surface,
-                                                margin=Margin.only(
-                                                    left=10,
-                                                    right=10,
-                                                    top=0,
-                                                    bottom=10,
-                                                ),
-                                                shadow=[
-                                                    BoxShadow(
-                                                        color=Colors.with_opacity(
-                                                            0.5,
-                                                            page.theme.color_scheme.shadow,
-                                                        ),
-                                                        offset=Offset(0, 0),
-                                                        blur_radius=10,
-                                                        blur_style="OUTER",
-                                                    )
-                                                ],
-                                                border_radius=8,
-                                            ),
-                                        ],
-                                        horizontal_alignment="STRETCH",
-                                        spacing=10,
-                                    ),
-                                    expand=4,
-                                ),
-                            ]
-                        ),
-                    ),
-                    Row(
-                        controls=[
-                            create_action_text_button(
-                                "Сохранить", page.theme.color_scheme, safe_button
-                            )
-                        ],
-                        alignment="center",
-                    ),
-                ],
-                # expand=True
-            )
-        ),
-        margin=30,
-        padding=10,
-        border_radius=16,
-        bgcolor=page.theme.color_scheme.surface,
-        clip_behavior="ANTI_ALIAS_WITH_SAVE_LAYER",
-        shadow=[
-            BoxShadow(
-                color=page.theme.color_scheme.shadow,
-                offset=Offset(0, 0),
-                blur_radius=6,
-                blur_style="OUTER",
-            )
-        ],
-        offset=Offset(0, 0),
-        animate_offset=300,
-    )
+    menu = create_menu(page, close_menu)
+    # filter_view = Container(
+    #     offset=Offset(1,1)
 
+    # )
+    filter_view = create_filter_view(
+        page, base_shadow, small_shadow, column_table, dropdown, safe_button
+    )
+    black_overlay = create_black_overlay(page)
+    # open_filter_view(menu)
     page.add(
         Container(
             Stack(
@@ -553,21 +293,14 @@ def main(page: Page):
                         animate=Animation(250),
                         border_radius=16,
                         margin=40,
-                        shadow=[
-                            BoxShadow(
-                                color=page.theme.color_scheme.shadow,
-                                offset=Offset(0, 0),
-                                blur_radius=12.8,
-                                blur_style="OUTER",
-                            )
-                        ],
+                        shadow=[base_shadow],
                         expand=True,
                     ),
                     Container(
                         content=create_icon_button(
                             icons.Icons.FILTER_LIST,
                             page.theme.color_scheme,
-                            open_filter_page,
+                            open_filter_view,
                         ),
                         right=0,
                         bottom=0,
@@ -580,7 +313,7 @@ def main(page: Page):
                         left=0,
                     ),
                     black_overlay,
-                    filter_page,
+                    filter_view,
                     menu,
                 ]
             ),
