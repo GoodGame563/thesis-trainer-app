@@ -14,13 +14,6 @@ class Role(Enum):
     NOTHING = "Не указано"
 
 
-class ButtonType(Enum):
-    ACTION = 1
-    BASIC = 2
-    AGREE = 3
-    CANCEL = 4
-
-
 class СomparisonType(Enum):
     EQUALLY = "="
     LESS = ">"

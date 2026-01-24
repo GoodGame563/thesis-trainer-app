@@ -8,9 +8,11 @@ from flet import (
     ColorScheme,
     CupertinoFilledButton,
 )
-from structs import Role, Player, Team
+from dataclasses import dataclass
+from .structs import Role, Player, Team
 from datetime import date
 from utils import create_basic_text, create_basic_text_button
+from theme import AppTheme
 
 visible_column_table = {
     "player": True,
@@ -82,96 +84,61 @@ name_column_table = {
     "rating": "Рейтинговые баллы",
 }
 
-positive_indicators = {
-    "passes_percent": None,
-    "captures_percent": None,
-    "rakov_cleared": None,
-    "tackles_done": None,
-    "meters_covered": None,
-    "defenders_beaten": None,
-    "breakthroughs": None,
-    "attempts_grounded": None,
-    "realizations_percent": None,
-    "penalties_percent": None,
-    "dropgoals_percent": None,
-    "points_scored": None,
-}
+# positive_indicators = {
+#     "passes_percent": None,
+#     "captures_percent": None,
+#     "rakov_cleared": None,
+#     "tackles_done": None,
+#     "meters_covered": None,
+#     "defenders_beaten": None,
+#     "breakthroughs": None,
+#     "attempts_grounded": None,
+#     "realizations_percent": None,
+#     "penalties_percent": None,
+#     "dropgoals_percent": None,
+#     "points_scored": None,
+# }
 
-negative_indicators = {
-    "penalties_received": None,
-    "loss_ball": None,
-    "yellow_cards": None,
-    "red_cards": None,
-}
-
-
+# negative_indicators = {
+#     "penalties_received": None,
+#     "loss_ball": None,
+#     "yellow_cards": None,
+#     "red_cards": None,
+# }
 
 
+@dataclass
 class TableData:
-    def __init__(
-        self,
-        player: Player,
-        role: Role,
-        minutes_played: int,
-        passes_accurate: int,
-        passes_inaccurate: int,
-        passes_percent: float,
-        captures_done: int,
-        captures_missed: int,
-        captures_percent: float,
-        rakov_cleared: int,
-        tackles_done: int,
-        meters_covered: int,
-        defenders_beaten: int,
-        breakthroughs: int,
-        attempts_grounded: int,
-        realizations_scored: int,
-        realizations_attempted: int,
-        realizations_percent: float,
-        penalties_scored: int,
-        penalties_attempted: int,
-        penalties_percent: float,
-        dropgoals_scored: int,
-        dropgoals_attempted: int,
-        dropgoals_percent: float,
-        points_scored: int,
-        penalties_received: int,
-        loss_ball: int,
-        yellow_cards: int,
-        red_cards: int,
-    ):
-        self.player = player
-        self.date_birth = player.birth_date
-        self.team = player.team.name
-        self.role = role
-        self.minutes_played = minutes_played
-        self.passes_accurate = passes_accurate
-        self.passes_inaccurate = passes_inaccurate
-        self.passes_percent = passes_percent
-        self.captures_done = captures_done
-        self.captures_missed = captures_missed
-        self.captures_percent = captures_percent
-        self.rakov_cleared = rakov_cleared
-        self.tackles_done = tackles_done
-        self.meters_covered = meters_covered
-        self.defenders_beaten = defenders_beaten
-        self.breakthroughs = breakthroughs
-        self.attempts_grounded = attempts_grounded
-        self.realizations_scored = realizations_scored
-        self.realizations_attempted = realizations_attempted
-        self.realizations_percent = realizations_percent
-        self.penalties_scored = penalties_scored
-        self.penalties_attempted = penalties_attempted
-        self.penalties_percent = penalties_percent
-        self.dropgoals_scored = dropgoals_scored
-        self.dropgoals_attempted = dropgoals_attempted
-        self.dropgoals_percent = dropgoals_percent
-        self.points_scored = points_scored
-        self.penalties_received = penalties_received
-        self.loss_ball = loss_ball
-        self.yellow_cards = yellow_cards
-        self.red_cards = red_cards
-        self.rating = 0.0
+    player: Player
+    role: Role
+    minutes_played: int
+    passes_accurate: int
+    passes_inaccurate: int
+    passes_percent: float
+    captures_done: int
+    captures_missed: int
+    captures_percent: float
+    rakov_cleared: int
+    tackles_done: int
+    meters_covered: int
+    defenders_beaten: int
+    breakthroughs: int
+    attempts_grounded: int
+    realizations_scored: int
+    realizations_attempted: int
+    realizations_percent: float
+    penalties_scored: int
+    penalties_attempted: int
+    penalties_percent: float
+    dropgoals_scored: int
+    dropgoals_attempted: int
+    dropgoals_percent: float
+    points_scored: int
+    penalties_received: int
+    loss_ball: int
+    yellow_cards: int
+    red_cards: int
+    rating: float
 
 
 def create_empty() -> TableData:
@@ -181,7 +148,7 @@ def create_empty() -> TableData:
             weight=85.0,
             height=190.0,
             team=Team(name="Рубин"),
-            birth_date=date(1990, 5, 15),
+            birth_date=date(1995, 5, 15),
         ),
         role=Role.NOTHING,
         minutes_played=0,
@@ -211,14 +178,28 @@ def create_empty() -> TableData:
         realizations_percent=0.0,
         penalties_percent=0.0,
         dropgoals_percent=0.0,
+        rating=0.0,
     )
+
+
+table = DataTable(
+    columns=[],
+    rows=[],
+    expand=False,
+    horizontal_lines=BorderSide(1, AppTheme.color_scheme.outline),
+    vertical_lines=BorderSide(1, AppTheme.color_scheme.outline),
+    show_bottom_border=True,
+    clip_behavior="hard",
+    border_radius=9,
+    column_spacing=8,
+    divider_thickness=1,
+)
 
 
 def create_table(
     data_list: list[TableData],
-    color_scheme: ColorScheme,
-    visible_column_table: dict[str, bool],
 ) -> DataTable:
+    color_scheme = AppTheme.color_scheme
     columns = []
     for key, value in visible_column_table.items():
         columns.append(
@@ -230,44 +211,36 @@ def create_table(
     for d in data_list:
         cells = []
         for a in visible_column_table:
-            if a == "player":
-                button = create_basic_text_button(getattr(d, a).full_name, color_scheme)
-                button.margin = 5
-                cells.append(
-                    DataCell(
-                        button,
-                        visible=visible_column_table[a],
-                        key=a,
+            match a:
+                case "player":
+                    button = create_basic_text_button(
+                        getattr(d, a).full_name, color_scheme
                     )
-                )
-                continue
+                    button.margin = 5
+                    content = button
+                case "date_birth":
+                    content = create_basic_text(getattr(d, "player").birth_date)
+                case "team":
+                    content = create_basic_text(getattr(d, "player").team.name)
+                case _:
+                    content = create_basic_text(getattr(d, a))
             cells.append(
                 DataCell(
-                    create_basic_text(getattr(d, a)),
+                    content,
                     visible=visible_column_table[a],
                     key=a,
                 )
             )
-
         rows.append(DataRow(cells=cells))
+    table.columns = columns
+    table.rows = rows
 
-    return DataTable(
-        columns=columns,
-        rows=rows,
-        expand=False,
-        horizontal_lines=BorderSide(1, color_scheme.outline),
-        vertical_lines=BorderSide(1, color_scheme.outline),
-        show_bottom_border=True,
-        clip_behavior="hard",
-        border_radius=9,
-        column_spacing=8,
-        divider_thickness=1,
-    )
+    return table
 
 
-def update_table(dataTable: DataTable):
-    for i in range(len(dataTable.columns)):
-        value = visible_column_table[dataTable.columns[i].key]
-        dataTable.columns[i].visible = value
-        for row in dataTable.rows:
+def update_table():
+    for i in range(len(table.columns)):
+        value = visible_column_table[table.columns[i].key]
+        table.columns[i].visible = value
+        for row in table.rows:
             row.cells[i].visible = value

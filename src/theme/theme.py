@@ -1,4 +1,5 @@
-from flet import Theme, ColorScheme, TextTheme, TextStyle, Colors
+import black
+from flet import Theme, ColorScheme, TextTheme, TextStyle, Colors, Offset, BoxShadow
 
 light_color = {
     "primary": "#0D1B2A",
@@ -98,4 +99,26 @@ dark_theme = Theme(
         title_medium=TextStyle(color=dark_color["primary"]),
         title_small=TextStyle(color=dark_color["primary"]),
     ),
+)
+
+
+AppTheme = light_theme
+
+base_shadow = BoxShadow(
+    color=Colors.with_opacity(
+        0.5,
+        AppTheme.color_scheme.shadow,
+    ),
+    offset=Offset(0, 0),
+    blur_radius=12.3,
+    blur_style="OUTER",
+)
+small_shadow = BoxShadow(
+    color=Colors.with_opacity(
+        0.5,
+        AppTheme.color_scheme.shadow,
+    ),
+    offset=Offset(0, 0),
+    blur_radius=6,
+    blur_style="OUTER",
 )

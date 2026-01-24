@@ -10,7 +10,7 @@ from flet import (
     Margin,
     icons,
 )
-from structs import ButtonType
+from .constants import ButtonType
 
 
 def create_basic_text(value: str) -> Text:
