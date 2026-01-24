@@ -51,6 +51,10 @@ def change_switch(e):
     e.control.data.disabled = not e.control.value
 
 
+def change_current_switch(e):
+    e.data.disabled = not e.value
+
+
 def change_content_button(e):
     match e.control.content.value:
         case СomparisonType.EQUALLY:
@@ -65,12 +69,12 @@ def change_content_button(e):
             e.control.content.value = СomparisonType.EQUALLY_LESS
         case СomparisonType.EQUALLY_LESS:
             e.control.content.value = СomparisonType.EQUALLY
-    # e.control.content.value = e.control.key.value
 
 
 def safe_button(e):
     for c in column_table:
         visible_column_table[c.content.key] = c.content.value
+    safe_tables()
     update_table()
     close_overlay()
     filter_view.offset = Offset(0, 1)
@@ -205,6 +209,12 @@ def set_tables():
                         filter_kpi[selectKpiRole].positive_indicators[c.key],
                         element.key,
                     )
+                case Switch():
+                    element.value = getattr(
+                        filter_kpi[selectKpiRole].positive_indicators[c.key],
+                        element.key,
+                    )
+                    change_current_switch(element)
                 case _:
                     element.value = getattr(
                         filter_kpi[selectKpiRole].positive_indicators[c.key],
@@ -218,6 +228,12 @@ def set_tables():
                         filter_kpi[selectKpiRole].negative_indicators[c.key],
                         element.key,
                     )
+                case Switch():
+                    element.value = getattr(
+                        filter_kpi[selectKpiRole].negative_indicators[c.key],
+                        element.key,
+                    )
+                    change_current_switch(element)
                 case _:
                     element.value = getattr(
                         filter_kpi[selectKpiRole].negative_indicators[c.key],

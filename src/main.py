@@ -33,18 +33,6 @@ from components import (
     open_filter_view,
 )
 from models import create_table, create_empty
-
-# from models import СomparisonType, Role
-
-# from models import (
-#     create_table,
-#     visible_column_table,
-#     name_column_table,
-#     update_table,
-#     create_empty,
-#     positive_indicators,
-#     negative_indicators
-# )
 from utils import (
     create_icon_button,
     create_basic_text,
@@ -59,37 +47,18 @@ async def main(page: Page):
     logging.getLogger("flet_core").setLevel(logging.INFO)
     page.title = "Таблица с фильтром"
     page.padding = 0
-    is_dark = {"value": True}
+    is_dark = {"value": False}
     page.theme = dark_theme if is_dark["value"] else light_theme
     global AppTheme
     AppTheme = page.theme
-    
+
     menu = create_menu()
     black_overlay = create_black_overlay()
     table = create_table(
         [create_empty(), create_empty(), create_empty()],
     )
-
-    # def open_menu(e):
-    #     logging.info("Menu opened")
-    #     menu.offset = Offset(0, 0)
-    #     black_overlay.offset = Offset(0, 0)
-    #     black_overlay.opacity = 1.0
-    #     # page.update()
-
-    # def open_filter_view(e):
-    #     filter_view.offset = Offset(0, 0)
-    #     black_overlay.offset = Offset(0, 0)
-    #     black_overlay.opacity = 1.0
-    #     # page.update()
-
-    # # filter_view = Container(
-    # #     offset=Offset(1,1)
-
-    # # )
     filter_view = create_filter_view()
 
-    # # open_filter_view(menu)
     page.add(
         Container(
             Stack(
@@ -134,9 +103,6 @@ async def main(page: Page):
             clip_behavior="ANTI_ALIAS_WITH_SAVE_LAYER",
         )
     )
-    page.update()
-    black_overlay.update()
-    filter_view.update()
 
 
 if __name__ == "__main__":
