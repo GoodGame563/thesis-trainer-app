@@ -9,6 +9,7 @@ from flet import (
     Button,
     Margin,
     icons,
+    FilledButton,
 )
 from .constants import ButtonType
 
@@ -25,67 +26,59 @@ def create_bigest_text(value: str) -> Text:
     return Text(value, no_wrap=False, overflow="ELLIPSIS", expand=True, size=30)
 
 
-def create_basic_text_button(
-    value: str, color_scheme: ColorScheme, on_click=None
-) -> Button:
-    return create_button(value, None, color_scheme, ButtonType.BASIC, on_click)
+def create_basic_text_button(value: str, on_click=None) -> Button:
+    return create_button(value, None, ButtonType.BASIC, on_click)
 
 
-def create_action_text_button(
-    value: str, color_scheme: ColorScheme, on_click=None
-) -> Button:
-    return create_button(value, None, color_scheme, ButtonType.ACTION, on_click)
+def create_action_text_button(value: str, on_click=None) -> Button:
+    return create_button(value, None, ButtonType.ACTION, on_click)
 
 
-def create_icon_button(
-    icon: icons.Icons, color_scheme: ColorScheme, on_click=None
-) -> FloatingActionButton:
-    return create_button("", icon, color_scheme, ButtonType.BASIC, on_click)
+def create_icon_button(icon: icons.Icons, on_click=None) -> FloatingActionButton:
+    return create_button("", icon, ButtonType.BASIC, on_click)
 
 
-def create_agree_text_button(
-    value: str, color_scheme: ColorScheme, on_click=None
-) -> Button:
-    return create_button(value, None, color_scheme, ButtonType.AGREE, on_click)
+def create_agree_text_button(value: str, on_click=None) -> Button:
+    return create_button(value, None, ButtonType.AGREE, on_click)
 
 
-def create_cancel_text_button(
-    value: str, color_scheme: ColorScheme, on_click=None
-) -> Button:
-    return create_button(value, None, color_scheme, ButtonType.CANCEL, on_click)
+def create_cancel_text_button(value: str, on_click=None) -> Button:
+    return create_button(value, None, ButtonType.CANCEL, on_click)
 
 
-def create_button(
-    text: str, icon: icons.Icons, color_scheme: ColorScheme, type: ButtonType, on_click
-) -> Button:
+def create_button(text: str, icon: icons.Icons, type: ButtonType, on_click) -> Button:
     style = ButtonStyle(shape=RoundedRectangleBorder(radius=8))
     size_margin = Margin.only(left=10, right=10, top=5, bottom=0)
-    bgcolor = None
     match type:
         case ButtonType.ACTION:
-            bgcolor = color_scheme.secondary
+            return FilledButton(
+                content=create_biger_text(text),
+                style=style,
+                elevation=10,
+                margin=size_margin,
+                height=50,
+                on_click=on_click,
+            )
         case ButtonType.BASIC:
-            bgcolor = color_scheme.surface
+            if icon is not None:
+                return FloatingActionButton(
+                    icon=icon,
+                    shape=RoundedRectangleBorder(radius=20),
+                    margin=20,
+                    on_click=on_click,
+                )
+            return Button(
+                icon=icon,
+                content=create_biger_text(text),
+                style=style,
+                elevation=10,
+                margin=size_margin,
+                height=50,
+                on_click=on_click,
+            )
         case ButtonType.AGREE:
-            bgcolor = color_scheme.tertiary
+            pass
+            # bgcolor = color_scheme.tertiary
         case ButtonType.CANCEL:
-            bgcolor = color_scheme.error
-    if icon is not None:
-        return FloatingActionButton(
-            icon=icon,
-            bgcolor=bgcolor,
-            shape=RoundedRectangleBorder(radius=20),
-            foreground_color=color_scheme.primary,
-            margin=20,
-            on_click=on_click,
-        )
-    return Button(
-        icon=icon,
-        content=create_biger_text(text),
-        bgcolor=bgcolor,
-        style=style,
-        elevation=10,
-        margin=size_margin,
-        height=50,
-        on_click=on_click,
-    )
+            pass
+            # bgcolor = color_scheme.error

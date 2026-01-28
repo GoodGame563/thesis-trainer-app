@@ -1,19 +1,15 @@
 from flet import (
+    Card,
     Row,
     Container,
     Column,
     Offset,
     Animation,
     AnimationCurve,
-    icons,
-    Page,
     Text,
     Margin,
     ListView,
     Switch,
-    ControlState,
-    BoxShadow,
-    Colors,
     Dropdown,
     DropdownOption,
     TextField,
@@ -22,15 +18,12 @@ from flet import (
 
 from utils import (
     create_basic_text_button,
-    create_icon_button,
     create_action_text_button,
 )
 
 from .overlay import open_overlay, close_overlay
 
-from theme import AppTheme, base_shadow, small_shadow
 from models import (
-    create_basic_text,
     СomparisonType,
     name_column_table,
     visible_column_table,
@@ -96,9 +89,7 @@ def create_filter_view() -> Container:
 def create_positive_table():
     positive_table = []
     for key, value in filter_kpi[selectKpiRole].positive_indicators.items():
-        button = create_basic_text_button(
-            value.comprasion, AppTheme.color_scheme, change_content_button
-        )
+        button = create_basic_text_button(value.comprasion, change_content_button)
         button.style.padding = 0
         button.margin = 5
         button.width = 35
@@ -116,19 +107,13 @@ def create_positive_table():
             label=name_column_table[key],
             key="enabled",
             value=value.enabled,
-            thumb_color={
-                ControlState.SELECTED: AppTheme.color_scheme.tertiary,
-                ControlState.DISABLED: AppTheme.color_scheme.primary,
-            },
             data=field,
-            track_color=AppTheme.color_scheme.primary,
             on_change=change_switch,
         )
         field.disabled = not switch.value
         positive_table.append(
-            Container(
+            Card(
                 content=Row(controls=[switch, button, field]),
-                bgcolor=AppTheme.color_scheme.surface,
                 margin=Margin.only(
                     left=10,
                     right=10,
@@ -136,8 +121,6 @@ def create_positive_table():
                     bottom=0,
                 ),
                 key=key,
-                border_radius=8,
-                shadow=[small_shadow],
             )
         )
     return positive_table
@@ -146,9 +129,7 @@ def create_positive_table():
 def create_negative_table():
     negative_table = []
     for key, value in filter_kpi[selectKpiRole].negative_indicators.items():
-        button = create_basic_text_button(
-            value.comprasion, AppTheme.color_scheme, change_content_button
-        )
+        button = create_basic_text_button(value.comprasion, change_content_button)
         button.style.padding = 0
         button.margin = 5
         button.width = 35
@@ -166,19 +147,13 @@ def create_negative_table():
             label=name_column_table[key],
             key="enabled",
             value=value.enabled,
-            thumb_color={
-                ControlState.SELECTED: AppTheme.color_scheme.error,
-                ControlState.DISABLED: AppTheme.color_scheme.primary,
-            },
             data=field,
-            track_color=AppTheme.color_scheme.primary,
             on_change=change_switch,
         )
         field.disabled = not switch.value
         negative_table.append(
-            Container(
+            Card(
                 content=Row(controls=[switch, button, field]),
-                bgcolor=AppTheme.color_scheme.surface,
                 margin=Margin.only(
                     left=10,
                     right=10,
@@ -186,8 +161,6 @@ def create_negative_table():
                     bottom=0,
                 ),
                 key=key,
-                border_radius=8,
-                shadow=[small_shadow],
             )
         )
     return negative_table
@@ -268,15 +241,14 @@ def safe_tables():
 
 def select(e):
     update_tables(KpiRole[e.data])
-    # global selectKpiRole
-    # selectKpiRole = KpiRole[e.data]
 
 
 dropdown = Dropdown(
     value="ALL_ROLES",
     options=get_option(),
-    bgcolor=AppTheme.color_scheme.surface,
     on_select=select,
+    margin=5,
+    expand=True
 )
 
 positive_table = ListView(controls=[])
@@ -286,31 +258,22 @@ negative_table = ListView(controls=[])
 column_table = []
 for key, value in visible_column_table.items():
     column_table.append(
-        Container(
+        Card(
             content=Switch(
                 label=name_column_table[key],
                 key=key,
                 value=value,
-                thumb_color={
-                    ControlState.SELECTED: AppTheme.color_scheme.secondary,
-                    ControlState.DISABLED: AppTheme.color_scheme.primary,
-                },
-                track_color=AppTheme.color_scheme.primary,
             ),
-            bgcolor=AppTheme.color_scheme.surface,
             margin=Margin.only(
                 left=10,
                 right=10,
                 top=8,
                 bottom=0,
             ),
-            border_radius=8,
-            shadow=[small_shadow],
         )
     )
 
-filter_name_block = Container(
-    bgcolor=AppTheme.color_scheme.surface,
+filter_name_block = Card(
     content=Row(
         controls=[
             Text(
@@ -325,14 +288,12 @@ filter_name_block = Container(
         alignment="center",
         expand=True,
     ),
-    border_radius=8,
-    shadow=[base_shadow],
 )
 
 middle_content_left_side = Container(
     content=Column(
         controls=[
-            Container(
+            Card(
                 content=Text(
                     "Что отображать",
                     no_wrap=False,
@@ -342,29 +303,22 @@ middle_content_left_side = Container(
                     text_align="center",
                     margin=10,
                 ),
-                bgcolor=AppTheme.color_scheme.surface,
                 margin=Margin.only(
                     left=10,
                     right=10,
                     top=10,
                     bottom=0,
                 ),
-                border_radius=8,
-                shadow=[base_shadow],
             ),
-            Container(
+            Card(
                 content=ListView(controls=column_table, spacing=0),
                 expand=True,
-                padding=10,
-                bgcolor=AppTheme.color_scheme.surface,
                 margin=Margin.only(
                     left=10,
                     right=10,
                     top=0,
                     bottom=10,
                 ),
-                shadow=[base_shadow],
-                border_radius=8,
             ),
         ],
         horizontal_alignment="STRETCH",
@@ -376,7 +330,7 @@ middle_content_left_side = Container(
 middle_content_right_side = Container(
     content=Column(
         controls=[
-            Container(
+            Card(
                 content=Text(
                     "Подсчет KPI",
                     no_wrap=False,
@@ -386,53 +340,39 @@ middle_content_right_side = Container(
                     text_align="center",
                     margin=10,
                 ),
-                bgcolor=AppTheme.color_scheme.surface,
                 margin=Margin.only(
                     left=10,
                     right=10,
                     top=10,
                     bottom=0,
                 ),
-                border_radius=8,
-                shadow=[base_shadow],
             ),
             Container(
                 content=Row(
                     controls=[
                         Column(
                             controls=[
-                                Container(
+                                Card(
                                     content=Switch(
                                         label="Учитывать амплуа",
                                         key="check_role",
                                         # value=value,
-                                        thumb_color={
-                                            ControlState.SELECTED: AppTheme.color_scheme.secondary,
-                                            ControlState.DISABLED: AppTheme.color_scheme.primary,
-                                        },
-                                        track_color=AppTheme.color_scheme.primary,
                                     ),
-                                    bgcolor=AppTheme.color_scheme.surface,
                                     margin=Margin.only(
                                         left=10,
                                         right=10,
                                         top=10,
                                         bottom=0,
                                     ),
-                                    border_radius=8,
-                                    shadow=[base_shadow],
                                 ),
-                                Container(
+                                Card(
                                     content=positive_table,
-                                    bgcolor=AppTheme.color_scheme.surface,
                                     margin=Margin.only(
                                         left=10,
                                         right=10,
-                                        top=10,
+                                        top=0,
                                         bottom=10,
                                     ),
-                                    border_radius=8,
-                                    shadow=[small_shadow],
                                     expand=True,
                                 ),
                             ],
@@ -441,29 +381,23 @@ middle_content_right_side = Container(
                         ),
                         Column(
                             controls=[
-                                Container(
+                                Card(
                                     content=dropdown,
-                                    bgcolor=AppTheme.color_scheme.surface,
                                     margin=Margin.only(
                                         left=10,
                                         right=10,
                                         top=10,
                                         bottom=0,
                                     ),
-                                    border_radius=8,
-                                    shadow=[base_shadow],
                                 ),
-                                Container(
+                                Card(
                                     content=negative_table,
-                                    bgcolor=AppTheme.color_scheme.surface,
                                     margin=Margin.only(
                                         left=10,
                                         right=10,
-                                        top=10,
+                                        top=0,
                                         bottom=10,
                                     ),
-                                    border_radius=8,
-                                    shadow=[small_shadow],
                                     expand=True,
                                 ),
                             ],
@@ -473,14 +407,12 @@ middle_content_right_side = Container(
                     ]
                 ),
                 expand=True,
-                bgcolor=AppTheme.color_scheme.surface,
                 margin=Margin.only(
                     left=10,
                     right=10,
                     top=0,
                     bottom=10,
                 ),
-                shadow=[base_shadow],
                 border_radius=8,
             ),
         ],
@@ -490,8 +422,7 @@ middle_content_right_side = Container(
     expand=4,
 )
 
-middle_content_block = Container(
-    bgcolor=AppTheme.color_scheme.surface,
+middle_content_block = Card(
     expand=8,
     content=Row(
         controls=[
@@ -503,28 +434,25 @@ middle_content_block = Container(
 
 filter_view = Container(
     content=(
-        Column(
-            controls=[
-                filter_name_block,
-                middle_content_block,
-                Row(
+        Card(
+            content=Container(
+                content=Column(
                     controls=[
-                        create_action_text_button(
-                            "Сохранить", AppTheme.color_scheme, safe_button
-                        )
+                        filter_name_block,
+                        middle_content_block,
+                        Row(
+                            controls=[
+                                create_action_text_button("Сохранить", safe_button)
+                            ],
+                            alignment="center",
+                        ),
                     ],
-                    alignment="center",
                 ),
-            ],
-            # expand=True
+                margin=10,
+            ),
         )
     ),
-    margin=30,
-    padding=10,
-    border_radius=16,
-    bgcolor=AppTheme.color_scheme.surface,
-    clip_behavior="ANTI_ALIAS_WITH_SAVE_LAYER",
-    shadow=[base_shadow],
+    padding=30,
     offset=Offset(0, 1),
-    animate_offset=300,
+    animate_offset=Animation(300, AnimationCurve.EASE_IN_OUT),
 )

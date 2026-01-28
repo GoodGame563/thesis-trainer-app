@@ -1,5 +1,23 @@
-import black
-from flet import Theme, ColorScheme, TextTheme, TextStyle, Colors, Offset, BoxShadow
+from flet import (
+    Page,
+    Theme,
+    ColorScheme,
+    TextTheme,
+    TextStyle,
+    Colors,
+    Offset,
+    BoxShadow,
+    ButtonTheme,
+    ButtonStyle,
+    FloatingActionButtonTheme,
+    DataTableTheme,
+    BorderSide,
+    SwitchTheme,
+    ControlState,
+    CardTheme,
+    DropdownTheme,
+    MenuStyle,
+)
 
 light_color = {
     "primary": "#0D1B2A",
@@ -27,11 +45,39 @@ light_cs = ColorScheme(
     shadow=light_color["shadow"],
 )
 light_theme = Theme(
+    color_scheme_seed="light",
     color_scheme=light_cs,
     scaffold_bgcolor=light_color["background"],
     divider_color=light_color["spliter"],
     card_bgcolor=light_color["background"],
     use_material3=True,
+    button_theme=ButtonTheme(ButtonStyle(bgcolor=light_color["background"])),
+    floating_action_button_theme=FloatingActionButtonTheme(
+        bgcolor=light_color["background"],
+        foreground_color=light_color["primary"],
+        elevation=8,
+    ),
+    switch_theme=SwitchTheme(
+        track_color=light_color["primary"],
+        thumb_color={
+            ControlState.SELECTED: light_color["accent"],
+            ControlState.DISABLED: light_color["primary"],
+            ControlState.ERROR: light_color["error"],
+        },
+    ),
+    card_theme=CardTheme(
+        shadow_color=light_color["shadow"],
+        color=light_color["background"],
+        elevation=8,
+    ),
+    dropdown_theme=DropdownTheme(
+        menu_style=MenuStyle(
+            elevation=8,
+            bgcolor=light_color["background"],
+            padding= 5,
+        )
+    ),
+
     text_theme=TextTheme(
         body_large=TextStyle(color=light_color["primary"]),
         body_medium=TextStyle(color=light_color["primary"]),
@@ -50,6 +96,7 @@ light_theme = Theme(
         title_small=TextStyle(color=light_color["primary"]),
     ),
 )
+
 
 dark_color = {
     "primary": "#E6F4FF",
@@ -77,11 +124,36 @@ dark_cs = ColorScheme(
     shadow=dark_color["shadow"],
 )
 dark_theme = Theme(
+    color_scheme_seed="dark",
     color_scheme=dark_cs,
     scaffold_bgcolor=dark_color["background"],
     divider_color=dark_color["spliter"],
     card_bgcolor=dark_color["background"],
     use_material3=True,
+    button_theme=ButtonTheme(ButtonStyle(bgcolor=dark_color["background"])),
+    floating_action_button_theme=FloatingActionButtonTheme(
+        bgcolor=dark_color["background"], foreground_color=dark_color["primary"]
+    ),
+    switch_theme=SwitchTheme(
+        track_color=dark_color["primary"],
+        thumb_color={
+            ControlState.SELECTED: dark_color["accent"],
+            ControlState.DISABLED: dark_color["primary"],
+        },
+    ),
+    card_theme=CardTheme(
+        shadow_color=dark_color["shadow"],
+        color=dark_color["background"],
+        elevation=8,
+        margin=5,
+    ),
+        dropdown_theme=DropdownTheme(
+        menu_style=MenuStyle(
+            elevation=8,
+            bgcolor=dark_color["background"],
+            padding= 5,
+        )
+    ),
     text_theme=TextTheme(
         body_large=TextStyle(color=dark_color["primary"]),
         body_medium=TextStyle(color=dark_color["primary"]),
@@ -101,24 +173,3 @@ dark_theme = Theme(
     ),
 )
 
-
-AppTheme = light_theme
-
-base_shadow = BoxShadow(
-    color=Colors.with_opacity(
-        0.5,
-        AppTheme.color_scheme.shadow,
-    ),
-    offset=Offset(0, 0),
-    blur_radius=12.3,
-    blur_style="OUTER",
-)
-small_shadow = BoxShadow(
-    color=Colors.with_opacity(
-        0.5,
-        AppTheme.color_scheme.shadow,
-    ),
-    offset=Offset(0, 0),
-    blur_radius=6,
-    blur_style="OUTER",
-)

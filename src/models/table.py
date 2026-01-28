@@ -7,12 +7,12 @@ from flet import (
     BorderSide,
     ColorScheme,
     CupertinoFilledButton,
+    Theme,
 )
 from dataclasses import dataclass
 from .structs import Role, Player, Team
 from datetime import date
 from utils import create_basic_text, create_basic_text_button
-from theme import AppTheme
 
 visible_column_table = {
     "player": True,
@@ -83,28 +83,6 @@ name_column_table = {
     "red_cards": "Красных карточек",
     "rating": "Рейтинговые баллы",
 }
-
-# positive_indicators = {
-#     "passes_percent": None,
-#     "captures_percent": None,
-#     "rakov_cleared": None,
-#     "tackles_done": None,
-#     "meters_covered": None,
-#     "defenders_beaten": None,
-#     "breakthroughs": None,
-#     "attempts_grounded": None,
-#     "realizations_percent": None,
-#     "penalties_percent": None,
-#     "dropgoals_percent": None,
-#     "points_scored": None,
-# }
-
-# negative_indicators = {
-#     "penalties_received": None,
-#     "loss_ball": None,
-#     "yellow_cards": None,
-#     "red_cards": None,
-# }
 
 
 @dataclass
@@ -182,24 +160,26 @@ def create_empty() -> TableData:
     )
 
 
-table = DataTable(
-    columns=[],
-    rows=[],
-    expand=False,
-    horizontal_lines=BorderSide(1, AppTheme.color_scheme.outline),
-    vertical_lines=BorderSide(1, AppTheme.color_scheme.outline),
-    show_bottom_border=True,
-    clip_behavior="hard",
-    border_radius=9,
-    column_spacing=8,
-    divider_thickness=1,
-)
+table = DataTable(columns=[])
 
 
 def create_table(
+    theme: Theme,
     data_list: list[TableData],
 ) -> DataTable:
-    color_scheme = AppTheme.color_scheme
+    global table
+    table = DataTable(
+        columns=[],
+        rows=[],
+        expand=False,
+        horizontal_lines=BorderSide(1, theme.color_scheme.outline),
+        vertical_lines=BorderSide(1, theme.color_scheme.outline),
+        # show_bottom_border=True,
+        clip_behavior="hard",
+        border_radius=9,
+        divider_thickness=1,
+    )
+
     columns = []
     for key, value in visible_column_table.items():
         columns.append(
@@ -214,7 +194,7 @@ def create_table(
             match a:
                 case "player":
                     button = create_basic_text_button(
-                        getattr(d, a).full_name, color_scheme
+                        getattr(d, a).full_name, theme.color_scheme
                     )
                     button.margin = 5
                     content = button
