@@ -1,5 +1,6 @@
 from os import makedirs, path
 from sqlite3 import connect
+
 from .structure import init_database
 
 data_path = "data"

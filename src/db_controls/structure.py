@@ -1,5 +1,5 @@
 import sqlite3
-from dataclasses import dataclass, fields, field
+from dataclasses import dataclass, field, fields
 from typing import ClassVar, List, Tuple
 
 
@@ -30,9 +30,7 @@ class TableSchema:
     @classmethod
     def get_columns(cls) -> List[Tuple[str, str]]:
         return [
-            (f.name, f.metadata["_sql"])
-            for f in fields(cls)
-            if "_sql" in f.metadata
+            (f.name, f.metadata["_sql"]) for f in fields(cls) if "_sql" in f.metadata
         ]
 
 
@@ -124,7 +122,11 @@ class Transfers(TableSchema):
 def _create_table(cur, schema_cls):
     columns = schema_cls.get_columns()
     col_defs = ",\n    ".join(f"{name} {typ}" for name, typ in columns)
-    fkey_defs = ",\n    ".join(schema_cls.__foreign_keys__) if schema_cls.__foreign_keys__ else ""
+    fkey_defs = (
+        ",\n    ".join(schema_cls.__foreign_keys__)
+        if schema_cls.__foreign_keys__
+        else ""
+    )
     separator = ",\n    " if fkey_defs else ""
     sql = f"CREATE TABLE {schema_cls.__tablename__} (\n    {col_defs}{separator}{fkey_defs}\n)"
     cur.execute(sql)
@@ -142,7 +144,9 @@ def _recreate_table(cur, schema_cls):
     common = [c for c in old_cols if c in new_cols]
     if common and old_cols:
         cols = ", ".join(common)
-        cur.execute(f"INSERT INTO {schema_cls.__tablename__} ({cols}) SELECT {cols} FROM {schema_cls.__tablename__}")
+        cur.execute(
+            f"INSERT INTO {schema_cls.__tablename__} ({cols}) SELECT {cols} FROM {schema_cls.__tablename__}"
+        )
     cur.execute(f"DROP TABLE IF EXISTS {schema_cls.__tablename__}_backup")
 
 
@@ -162,7 +166,10 @@ def init_database(db_path: str = "rugby.db"):
         if exists:
             cur.execute(f"PRAGMA table_info({schema_cls.__tablename__})")
             existing = [(row[1].lower(), row[2].upper()) for row in cur.fetchall()]
-            expected = [(name.lower(), typ.split()[0].upper()) for name, typ in schema_cls.get_columns()]
+            expected = [
+                (name.lower(), typ.split()[0].upper())
+                for name, typ in schema_cls.get_columns()
+            ]
             if existing != expected:
                 _recreate_table(cur, schema_cls)
         else:
