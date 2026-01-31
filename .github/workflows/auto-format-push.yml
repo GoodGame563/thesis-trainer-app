@@ -1,0 +1,100 @@
+name: Auto-Format on Push
+
+on:
+  push:
+    branches:
+      - 'feature/**'
+      - 'feat/**'
+      - 'dev/**'
+      - 'bugfix/**'
+      - 'hotfix/**'
+      - 'task/**'
+      - 'experiment/**'
+
+
+concurrency:
+  group: auto-format-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write  
+
+jobs:
+  auto-format:
+    name: "Auto-format Python code on push"
+    runs-on: ubuntu-latest
+    
+    if: github.actor != 'github-actions[bot]' && github.actor != 'dependabot[bot]'
+
+    steps:
+      - name: Checkout repository with write access
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}  
+          ref: ${{ github.head_ref }}                    
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: "pyproject.toml"
+
+      - name: Install formatters
+        run: |
+          python -m pip install --upgrade pip
+          pip install black==24.4.2 isort==5.13.2
+
+      - name: Save current commit SHA
+        id: current-commit
+        run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Run isort
+        run: |
+          echo "🔧 Sorting imports with isort..."
+          isort --version
+          isort .
+          echo "isort completed"
+
+      - name: Run Black
+        run: |
+          echo "Formatting code with Black..."
+          black --version
+          black .
+          echo "Black completed"
+
+      - name: Check for changes
+        id: git-diff
+        run: |
+          git diff --quiet && echo "changed=false" >> $GITHUB_OUTPUT || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.git-diff.outputs.changed == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: |
+            style: auto-format code with black and isort
+            
+            Formatted with:
+            - Black 24.4.2
+            - isort 5.13.2
+          commit_options: "--no-verify" 
+          branch: ${{ github.head_ref }}
+          file_pattern: "*.py"
+          skip_fetch: true
+          skip_checkout: true
+      - name: No changes needed
+        if: steps.git-diff.outputs.changed == 'false'
+        run: echo "Code already properly formatted — no changes needed"
+
+      - name: 📌 Summary
+        if: always()
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo " Auto-Format Workflow Summary"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Triggered by: ${{ github.actor }}"
+          echo "Changes detected: ${{ steps.git-diff.outputs.changed }}"
+          echo "Original commit: ${{ steps.current-commit.outputs.sha }}"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

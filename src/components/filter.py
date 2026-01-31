@@ -25,10 +25,7 @@ from models import (
     update_table,
     visible_column_table,
 )
-from utils import (
-    create_action_text_button,
-    create_basic_text_button,
-)
+from utils import create_action_text_button, create_basic_text_button
 
 from .overlay import close_overlay, open_overlay
 
