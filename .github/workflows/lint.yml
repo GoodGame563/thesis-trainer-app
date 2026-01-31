@@ -1,9 +1,6 @@
 name: Lint & Format Check
 
 on:
-  push:
-    branches:
-      - 'master' 
   pull_request:
     branches: ["main", "master", "develop"]
   workflow_dispatch:  
