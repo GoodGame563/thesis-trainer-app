@@ -2,6 +2,14 @@ name: Auto-Format on Push
 
 on:
   push:
+    branches:
+      - 'feature/**'
+      - 'feat/**'
+      - 'dev/**'
+      - 'bugfix/**'
+      - 'hotfix/**'
+      - 'task/**'
+      - 'experiment/**'
     branches-ignore:
       - 'master'
       - 'develop'
