@@ -27,9 +27,7 @@ from components import (
 from db_controls import create_db
 from models import create_empty, create_table
 from theme import dark_theme, light_theme
-from utils import (
-    create_icon_button,
-)
+from utils import create_icon_button
 
 logging.basicConfig(level=logging.INFO)
 

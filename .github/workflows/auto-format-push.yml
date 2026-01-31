@@ -10,9 +10,6 @@ on:
       - 'hotfix/**'
       - 'task/**'
       - 'experiment/**'
-    branches-ignore:
-      - 'master'
-      - 'develop'
 
 
 concurrency:
@@ -34,8 +31,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}  
-          ref: ${{ github.ref }}             
-          fetch-depth: 0                     
+          ref: ${{ github.head_ref }}                    
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
@@ -67,36 +63,29 @@ jobs:
           black .
           echo "Black completed"
 
-      - name: Check if any files were modified
-        id: git-status
+      - name: Check for changes
+        id: git-diff
         run: |
-          if git diff --quiet; then
-            echo "changed=false" >> $GITHUB_OUTPUT
-            echo "No formatting changes needed — code is already formatted"
-          else
-            echo "changed=true" >> $GITHUB_OUTPUT
-            echo "✨ Formatting changes detected:"
-            git diff --stat
-          fi
+          git diff --quiet && echo "changed=false" >> $GITHUB_OUTPUT || echo "changed=true" >> $GITHUB_OUTPUT
 
-      - name: Commit and push formatted code
-        if: steps.git-status.outputs.changed == 'true'
-        run: |
-          git commit -m "style: auto-format code [skip ci]
-          
-          Formatted with:
-          - Black 24.4.2 (PEP 8 compliant)
-          - isort 5.13.2 (import sorting)
-          
-          This commit was created automatically by GitHub Actions.
-          To disable auto-formatting, push with [skip format] in commit message."
-          
-          git push origin ${{ github.ref }}
-          
-          echo "Auto-formatting commit pushed successfully!"
+      - name: Commit and push changes
+        if: steps.git-diff.outputs.changed == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: |
+            style: auto-format code with black and isort
+            
+            Formatted with:
+            - Black 24.4.2
+            - isort 5.13.2
+          commit_options: "--no-verify" 
+          branch: ${{ github.head_ref }}
+          file_pattern: "*.py"
+          skip_fetch: true
+          skip_checkout: true
       - name: No changes needed
-        if: steps.git-status.outputs.changed == 'false'
-        run: echo "Code is already properly formatted — nothing to commit"
+        if: steps.git-diff.outputs.changed == 'false'
+        run: echo "Code already properly formatted — no changes needed"
 
       - name: 📌 Summary
         if: always()
@@ -106,6 +95,6 @@ jobs:
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "Branch: ${{ github.ref_name }}"
           echo "Triggered by: ${{ github.actor }}"
-          echo "Changes detected: ${{ steps.git-status.outputs.changed }}"
+          echo "Changes detected: ${{ steps.git-diff.outputs.changed }}"
           echo "Original commit: ${{ steps.current-commit.outputs.sha }}"
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
