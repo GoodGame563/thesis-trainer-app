@@ -1,3 +1,4 @@
+from click import style
 from flet import (
     Card,
     Row,
@@ -244,11 +245,7 @@ def select(e):
 
 
 dropdown = Dropdown(
-    value="ALL_ROLES",
-    options=get_option(),
-    on_select=select,
-    margin=5,
-    expand=True
+    value="ALL_ROLES", options=get_option(), on_select=select, margin=5, expand=True
 )
 
 positive_table = ListView(controls=[])

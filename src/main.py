@@ -30,14 +30,20 @@ from utils import (
     create_icon_button,
 )
 
+from db_controls import create_db
+
 logging.basicConfig(level=logging.INFO)
+
+create_db()
 
 
 async def main(page: Page):
 
     def change_theme(e):
         page.theme = dark_theme if page.theme == light_theme else light_theme
-        theme_button.icon = icons.Icons.SUNNY if page.theme == light_theme else icons.Icons.DARK_MODE
+        theme_button.icon = (
+            icons.Icons.SUNNY if page.theme == light_theme else icons.Icons.DARK_MODE
+        )
         page.update()
 
     logging.getLogger("flet_core").setLevel(logging.INFO)

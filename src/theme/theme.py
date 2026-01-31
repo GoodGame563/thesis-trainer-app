@@ -74,10 +74,9 @@ light_theme = Theme(
         menu_style=MenuStyle(
             elevation=8,
             bgcolor=light_color["background"],
-            padding= 5,
+            padding=5,
         )
     ),
-
     text_theme=TextTheme(
         body_large=TextStyle(color=light_color["primary"]),
         body_medium=TextStyle(color=light_color["primary"]),
@@ -144,14 +143,14 @@ dark_theme = Theme(
     card_theme=CardTheme(
         shadow_color=dark_color["shadow"],
         color=dark_color["background"],
-        elevation=8,
+        elevation=12,
         margin=5,
     ),
-        dropdown_theme=DropdownTheme(
+    dropdown_theme=DropdownTheme(
         menu_style=MenuStyle(
             elevation=8,
             bgcolor=dark_color["background"],
-            padding= 5,
+            padding=5,
         )
     ),
     text_theme=TextTheme(
@@ -172,4 +171,3 @@ dark_theme = Theme(
         title_small=TextStyle(color=dark_color["primary"]),
     ),
 )
-
