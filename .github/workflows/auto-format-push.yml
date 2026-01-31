@@ -31,8 +31,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}  
-          ref: ${{ github.ref }}             
-          fetch-depth: 0                     
+          ref: ${{ github.head_ref }}                    
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
@@ -88,16 +87,14 @@ jobs:
         if: steps.git-diff.outputs.changed == 'false'
         run: echo "Code already properly formatted — no changes needed"
 
-      - name: Comment on PR
-        if: steps.git-diff.outputs.changed == 'true'
-        uses: thollander/actions-comment-pull-request@v2
-        with:
-          message: |
-            **Auto-formatting applied**
-            
-            I've automatically formatted your code with:
-            - Black (PEP 8 compliant formatting)
-            - isort (import sorting)
-            
-            Review the changes in the latest commit.
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: 📌 Summary
+        if: always()
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo " Auto-Format Workflow Summary"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Triggered by: ${{ github.actor }}"
+          echo "Changes detected: ${{ steps.git-diff.outputs.changed }}"
+          echo "Original commit: ${{ steps.current-commit.outputs.sha }}"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
