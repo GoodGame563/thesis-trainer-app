@@ -1,37 +1,36 @@
 from click import style
 from flet import (
-    Card,
-    Row,
-    Container,
-    Column,
-    Offset,
     Animation,
     AnimationCurve,
-    Text,
-    Margin,
-    ListView,
-    Switch,
+    Button,
+    Card,
+    Column,
+    Container,
     Dropdown,
     DropdownOption,
+    ListView,
+    Margin,
+    Offset,
+    Row,
+    Switch,
+    Text,
     TextField,
-    Button,
 )
-
-from utils import (
-    create_basic_text_button,
-    create_action_text_button,
-)
-
-from .overlay import open_overlay, close_overlay
 
 from models import (
-    СomparisonType,
-    name_column_table,
-    visible_column_table,
-    update_table,
-    filter_kpi,
     KpiRole,
+    СomparisonType,
+    filter_kpi,
+    name_column_table,
+    update_table,
+    visible_column_table,
 )
+from utils import (
+    create_action_text_button,
+    create_basic_text_button,
+)
+
+from .overlay import close_overlay, open_overlay
 
 selectKpiRole = KpiRole.ALL_ROLES
 

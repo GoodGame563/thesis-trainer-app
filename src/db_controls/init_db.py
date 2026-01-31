@@ -1,5 +1,5 @@
+from os import makedirs, path
 from sqlite3 import connect
-from os import path, makedirs
 
 data_path = "data"
 

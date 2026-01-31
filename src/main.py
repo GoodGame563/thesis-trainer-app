@@ -1,36 +1,35 @@
+import logging
+
 import black
 from flet import (
+    Animation,
     Card,
-    FloatingActionButton,
-    FloatingActionButtonLocation,
-    Page,
-    run,
-    icons,
+    Colors,
     Column,
     Container,
-    Animation,
+    FloatingActionButton,
+    FloatingActionButtonLocation,
+    Offset,
+    Page,
     Row,
     Stack,
-    Colors,
-    Offset,
+    icons,
+    run,
 )
 
-
-import logging
-from theme import light_theme, dark_theme
 from components import (
     create_black_overlay,
-    create_menu,
-    open_menu,
     create_filter_view,
+    create_menu,
     open_filter_view,
+    open_menu,
 )
-from models import create_table, create_empty
+from db_controls import create_db
+from models import create_empty, create_table
+from theme import dark_theme, light_theme
 from utils import (
     create_icon_button,
 )
-
-from db_controls import create_db
 
 logging.basicConfig(level=logging.INFO)
 

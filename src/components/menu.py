@@ -1,20 +1,18 @@
 from flet import (
-    Row,
-    Container,
-    Column,
-    Offset,
     Animation,
     AnimationCurve,
+    Column,
+    Container,
+    Offset,
+    Row,
     icons,
 )
 
-
+from theme import light_theme
 from utils import (
     create_basic_text_button,
     create_icon_button,
 )
-
-from theme import light_theme
 
 from .overlay import close_overlay, open_overlay
 
