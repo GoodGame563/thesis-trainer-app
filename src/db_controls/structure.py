@@ -22,7 +22,25 @@ def nn_float():
 def nn_date():
     return field(metadata={"_sql": "DATE NOT NULL"})
 
+     
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
 class TableSchema:
     __tablename__: ClassVar[str] = ""
     __foreign_keys__: ClassVar[List[str]] = []
