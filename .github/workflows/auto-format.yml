@@ -18,40 +18,40 @@ jobs:
       github.actor != 'github-actions[bot]'
 
     steps:
-      - name: 📥 Checkout PR branch
+      - name: Checkout PR branch
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🐍 Set up Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: "pip"
 
-      - name: 📦 Install formatters
+      - name: Install formatters
         run: |
           pip install black isort
 
-      - name: ⚙️ Run isort
+      - name: Run isort
         run: |
-          echo "🔍 Checking imports with isort..."
+          echo "Checking imports with isort..."
           isort --version
           isort .
 
-      - name: 🎨 Run Black
+      - name: Run Black
         run: |
-          echo "🎨 Formatting code with Black..."
+          echo "Formatting code with Black..."
           black --version
           black .
 
-      - name: 📊 Check for changes
+      - name: Check for changes
         id: git-diff
         run: |
           git diff --quiet && echo "changed=false" >> $GITHUB_OUTPUT || echo "changed=true" >> $GITHUB_OUTPUT
 
-      - name: 💾 Commit and push changes
+      - name: Commit and push changes
         if: steps.git-diff.outputs.changed == 'true'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
@@ -67,20 +67,20 @@ jobs:
           skip_fetch: true
           skip_checkout: true
 
-      - name: ℹ️ No changes needed
+      - name: No changes needed
         if: steps.git-diff.outputs.changed == 'false'
-        run: echo "✅ Code already properly formatted — no changes needed"
+        run: echo "Code already properly formatted — no changes needed"
 
-      - name: 💬 Comment on PR
+      - name: Comment on PR
         if: steps.git-diff.outputs.changed == 'true'
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
-            🤖 **Auto-formatting applied**
+            **Auto-formatting applied**
             
             I've automatically formatted your code with:
-            - ✅ Black (PEP 8 compliant formatting)
-            - ✅ isort (import sorting)
+            - Black (PEP 8 compliant formatting)
+            - isort (import sorting)
             
             Review the changes in the latest commit.
           github-token: ${{ secrets.GITHUB_TOKEN }}
