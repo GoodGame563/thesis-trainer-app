@@ -1,24 +1,26 @@
-from models import Role, TableData, Player, Team
-from .db_connection import db_connect
 from datetime import date
+
+from models import Player, Role, TableData, Team
+
+from .db_connection import db_connect
 
 
 def get_games_statistics() -> list[TableData]:
     ROLE_MAPPING = {
-        'First line': Role.FIRST_LINE,
-        'Second line': Role.SECOND_LINE,
-        'Third line': Role.THIRD_LINE,
-        'Scrum-half': Role.SCRUM_HALF,
-        'Fly-half': Role.FLY_HALF,
-        'Center': Role.CENTER,
-        'Wing': Role.WING,
-        'Fullback': Role.FULLBACK,
-        'Nothing': Role.NOTHING,
+        "First line": Role.FIRST_LINE,
+        "Second line": Role.SECOND_LINE,
+        "Third line": Role.THIRD_LINE,
+        "Scrum-half": Role.SCRUM_HALF,
+        "Fly-half": Role.FLY_HALF,
+        "Center": Role.CENTER,
+        "Wing": Role.WING,
+        "Fullback": Role.FULLBACK,
+        "Nothing": Role.NOTHING,
     }
-    
+
     conn = db_connect()
     cur = conn.cursor()
-    
+
     query = """
         SELECT 
             p.full_name,
@@ -62,30 +64,30 @@ def get_games_statistics() -> list[TableData]:
         JOIN roles r ON g.role_id = r.id
         ORDER BY g.id
     """
-    
+
     cur.execute(query)
     rows = cur.fetchall()
     conn.close()
-    
+
     result = []
     for row in rows:
         birth_date = date.fromisoformat(row[3]) if row[3] else date.today()
-        
+
         team = Team(name=row[5], path_to_logo=row[6])
-        
+
         player = Player(
             nst=row[0],
             weight=row[1],
             height=row[2],
             team=team,
             birth_date=birth_date,
-            path_to_photo=row[4]
+            path_to_photo=row[4],
         )
-        
+
         role = ROLE_MAPPING.get(row[7], Role.NOTHING)
-        
+
         rating = 0.0
-        
+
         table_data = TableData(
             player=player,
             role=role,
@@ -116,8 +118,8 @@ def get_games_statistics() -> list[TableData]:
             loss_ball=row[32],
             yellow_cards=row[33],
             red_cards=row[34],
-            rating=rating  
+            rating=rating,
         )
         result.append(table_data)
-    
+
     return result

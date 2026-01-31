@@ -53,7 +53,6 @@ async def main(page: Page):
     black_overlay = create_black_overlay()
     # print(data)
 
-
     theme_button = create_icon_button(icons.Icons.SUNNY, change_theme)
 
     page.floating_action_button = theme_button
@@ -69,12 +68,12 @@ async def main(page: Page):
                         content=Row(
                             controls=Column(
                                 controls=create_table(
-        page.theme,
-        get_games_statistics(),
-    ), 
-                                scroll="ALWAYS", 
-                                # expand=True
+                                    page.theme,
+                                    get_games_statistics(),
                                 ),
+                                scroll="ALWAYS",
+                                # expand=True
+                            ),
                             scroll="ADAPTIVE",
                             expand=True,
                         ),
