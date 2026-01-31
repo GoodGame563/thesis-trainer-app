@@ -1,5 +1,5 @@
-from dataclasses import dataclass, field, fields
-from sqlite3 import connect
+import sqlite3
+from dataclasses import dataclass, fields, field
 from typing import ClassVar, List, Tuple
 
 
@@ -30,13 +30,16 @@ class TableSchema:
     @classmethod
     def get_columns(cls) -> List[Tuple[str, str]]:
         return [
-            (f.name, f.metadata["_sql"]) for f in fields(cls) if "_sql" in f.metadata
+            (f.name, f.metadata["_sql"])
+            for f in fields(cls)
+            if "_sql" in f.metadata
         ]
 
 
 @dataclass
 class Players(TableSchema):
     __tablename__ = "players"
+
     id: int = pk()
     full_name: str = nn_str()
     height: int = nn_int()
@@ -60,3 +63,110 @@ class Roles(TableSchema):
 
     id: int = pk()
     name: str = nn_str()
+
+
+@dataclass
+class AllGames(TableSchema):
+    __tablename__ = "all_games"
+    __foreign_keys__ = [
+        "FOREIGN KEY (player_id) REFERENCES players(id)",
+        "FOREIGN KEY (team_id) REFERENCES teams(id)",
+        "FOREIGN KEY (role_id) REFERENCES roles(id)",
+    ]
+
+    id: int = pk()
+    player_id: int = nn_int()
+    team_id: int = nn_int()
+    role_id: int = nn_int()
+    minutes_played: int = nn_int()
+    passes_accurate: int = nn_int()
+    passes_inaccurate: int = nn_int()
+    passes_percent: float = nn_float()
+    captures_done: int = nn_int()
+    captures_missed: int = nn_int()
+    captures_percent: float = nn_float()
+    rakov_cleared: int = nn_int()
+    tackles_done: int = nn_int()
+    meters_covered: int = nn_int()
+    defenders_beaten: int = nn_int()
+    breakthroughs: int = nn_int()
+    attempts_grounded: int = nn_int()
+    realizations_scored: int = nn_int()
+    realizations_attempted: int = nn_int()
+    realizations_percent: float = nn_float()
+    penalties_scored: int = nn_int()
+    penalties_attempted: int = nn_int()
+    penalties_percent: float = nn_float()
+    dropgoals_scored: int = nn_int()
+    dropgoals_attempted: int = nn_int()
+    dropgoals_percent: float = nn_float()
+    points_scored: int = nn_int()
+    penalties_received: int = nn_int()
+    loss_ball: int = nn_int()
+    yellow_cards: int = nn_int()
+    red_cards: int = nn_int()
+
+
+@dataclass
+class Transfers(TableSchema):
+    __tablename__ = "transfers"
+    __foreign_keys__ = [
+        "FOREIGN KEY (player_id) REFERENCES players(id)",
+        "FOREIGN KEY (team_id) REFERENCES teams(id)",
+    ]
+
+    id: int = pk()
+    player_id: int = nn_int()
+    team_id: int = nn_int()
+    data: str = nn_date()
+
+
+def _create_table(cur, schema_cls):
+    columns = schema_cls.get_columns()
+    col_defs = ",\n    ".join(f"{name} {typ}" for name, typ in columns)
+    fkey_defs = ",\n    ".join(schema_cls.__foreign_keys__) if schema_cls.__foreign_keys__ else ""
+    separator = ",\n    " if fkey_defs else ""
+    sql = f"CREATE TABLE {schema_cls.__tablename__} (\n    {col_defs}{separator}{fkey_defs}\n)"
+    cur.execute(sql)
+
+
+def _recreate_table(cur, schema_cls):
+    temp_name = f"{schema_cls.__tablename__}_new"
+    cur.execute(f"CREATE TABLE {temp_name} (id INTEGER PRIMARY KEY) WITHOUT ROWID")
+    cur.execute(f"DROP TABLE {temp_name}")
+    _create_table(cur, schema_cls)
+    cur.execute(f"PRAGMA table_info({schema_cls.__tablename__})")
+    old_cols = [row[1] for row in cur.fetchall()]
+    cur.execute(f"PRAGMA table_info({schema_cls.__tablename__})")
+    new_cols = [row[1] for row in cur.fetchall()]
+    common = [c for c in old_cols if c in new_cols]
+    if common and old_cols:
+        cols = ", ".join(common)
+        cur.execute(f"INSERT INTO {schema_cls.__tablename__} ({cols}) SELECT {cols} FROM {schema_cls.__tablename__}")
+    cur.execute(f"DROP TABLE IF EXISTS {schema_cls.__tablename__}_backup")
+
+
+def init_database(db_path: str = "rugby.db"):
+    schemas = [Players, Teams, Roles, AllGames, Transfers]
+    conn = sqlite3.connect(db_path)
+    conn.execute("PRAGMA foreign_keys = ON")
+    cur = conn.cursor()
+
+    for schema_cls in schemas:
+        cur.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
+            (schema_cls.__tablename__,),
+        )
+        exists = cur.fetchone() is not None
+
+        if exists:
+            cur.execute(f"PRAGMA table_info({schema_cls.__tablename__})")
+            existing = [(row[1].lower(), row[2].upper()) for row in cur.fetchall()]
+            expected = [(name.lower(), typ.split()[0].upper()) for name, typ in schema_cls.get_columns()]
+            if existing != expected:
+                _recreate_table(cur, schema_cls)
+        else:
+            _create_table(cur, schema_cls)
+
+    conn.commit()
+    conn.close()
