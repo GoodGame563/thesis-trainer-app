@@ -1,18 +1,21 @@
+from dataclasses import dataclass
+from datetime import date
+
 from flet import (
+    BorderSide,
+    ColorScheme,
+    CupertinoFilledButton,
     DataCell,
     DataColumn,
     DataRow,
     DataTable,
     Text,
-    BorderSide,
-    ColorScheme,
-    CupertinoFilledButton,
     Theme,
 )
-from dataclasses import dataclass
-from .structs import Role, Player, Team
-from datetime import date
+
 from utils import create_basic_text, create_basic_text_button
+
+from .structs import Player, Role, Team
 
 visible_column_table = {
     "player": True,

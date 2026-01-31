@@ -1,5 +1,5 @@
+from dataclasses import dataclass, field, fields
 from sqlite3 import connect
-from dataclasses import dataclass, fields, field
 from typing import ClassVar, List, Tuple
 
 

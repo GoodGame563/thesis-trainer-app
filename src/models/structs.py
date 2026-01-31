@@ -1,5 +1,5 @@
-from enum import Enum
 from datetime import date
+from enum import Enum
 
 
 class Role(Enum):

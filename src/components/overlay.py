@@ -1,6 +1,6 @@
-from flet import Container, Offset, Colors
+from flet import Colors, Container, Offset
 
-from theme import light_theme, dark_theme
+from theme import dark_theme, light_theme
 
 overlay = Container(
     # theme=light_theme
