@@ -10,9 +10,6 @@ on:
       - 'hotfix/**'
       - 'task/**'
       - 'experiment/**'
-    branches-ignore:
-      - 'master'
-      - 'develop'
 
 
 concurrency:
