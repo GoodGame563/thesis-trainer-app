@@ -22,7 +22,7 @@ def get_games_statistics() -> list[TableData]:
     cur = conn.cursor()
 
     query = """
-        SELECT 
+        SELECT
             p.full_name,
             p.weight,
             p.height,
