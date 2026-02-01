@@ -20,9 +20,9 @@ from components import (
     create_black_overlay,
     create_filter_view,
     create_menu,
+    create_team_view,
     open_filter_view,
     open_menu,
-    create_team_view
 )
 from db_controls import create_db, get_games_statistics
 from models import create_empty, create_table

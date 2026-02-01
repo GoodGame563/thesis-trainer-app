@@ -10,6 +10,7 @@ from flet import (
     DataTableTheme,
     DropdownTheme,
     FilledButton,
+    FilledButtonTheme,
     FloatingActionButtonTheme,
     MenuStyle,
     Offset,
@@ -18,7 +19,6 @@ from flet import (
     TextStyle,
     TextTheme,
     Theme,
-    FilledButtonTheme,
 )
 
 light_color = {
@@ -54,11 +54,8 @@ light_theme = Theme(
     card_bgcolor=light_color["background"],
     use_material3=True,
     filled_button_theme=FilledButtonTheme(
-        style=ButtonStyle(
-            bgcolor=light_color["accent"]
-        )
+        style=ButtonStyle(bgcolor=light_color["accent"])
     ),
-    
     button_theme=ButtonTheme(ButtonStyle(bgcolor=light_color["background"])),
     floating_action_button_theme=FloatingActionButtonTheme(
         bgcolor=light_color["background"],
@@ -161,10 +158,8 @@ dark_theme = Theme(
             padding=5,
         )
     ),
-        filled_button_theme=FilledButtonTheme(
-        style=ButtonStyle(
-            bgcolor=dark_color["accent"]
-        )
+    filled_button_theme=FilledButtonTheme(
+        style=ButtonStyle(bgcolor=dark_color["accent"])
     ),
     text_theme=TextTheme(
         body_large=TextStyle(color=dark_color["primary"]),

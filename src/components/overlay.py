@@ -2,8 +2,7 @@ from flet import Colors, Container, Offset
 
 from theme import dark_theme, light_theme
 
-overlay = Container(
-)
+overlay = Container()
 
 
 def create_black_overlay() -> Container:
