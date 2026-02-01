@@ -24,7 +24,7 @@ from components import (
     open_filter_view,
     open_menu,
 )
-from db_controls import create_db
+from db_controls import create_db, get_games_statistics
 from models import create_empty, create_table
 from theme import dark_theme, light_theme
 from utils import create_icon_button
@@ -49,13 +49,10 @@ async def main(page: Page):
     is_dark = {"value": False}
     page.theme_mode = "light"
     page.theme = dark_theme if is_dark["value"] else light_theme
-
     menu = create_menu()
     black_overlay = create_black_overlay()
-    table = create_table(
-        page.theme,
-        [create_empty(), create_empty(), create_empty()],
-    )
+    # print(data)
+
     theme_button = create_icon_button(icons.Icons.SUNNY, change_theme)
 
     page.floating_action_button = theme_button
@@ -68,9 +65,16 @@ async def main(page: Page):
             Stack(
                 controls=[
                     Card(
-                        content=Column(
-                            controls=Row(controls=table, scroll="AUTO", expand=True),
-                            scroll="AUTO",
+                        content=Row(
+                            controls=Column(
+                                controls=create_table(
+                                    page.theme,
+                                    get_games_statistics(),
+                                ),
+                                scroll="ALWAYS",
+                                # expand=True
+                            ),
+                            scroll="ADAPTIVE",
                             expand=True,
                         ),
                         clip_behavior="none",
