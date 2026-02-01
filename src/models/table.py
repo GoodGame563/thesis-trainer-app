@@ -2,18 +2,13 @@ from dataclasses import dataclass
 from datetime import date
 
 from flet import (
-    BorderSide,
-    ColorScheme,
-    CupertinoFilledButton,
     DataCell,
     DataColumn,
     DataRow,
     DataTable,
-    Text,
-    Theme,
 )
 
-from utils import create_basic_text, create_basic_text_button
+from utils import create_basic_text
 
 from .structs import Player, Role, Team
 
@@ -201,11 +196,11 @@ def create_table(
                     # )
                     # button.margin = 5
                     # content = button
-                    content = create_basic_text(getattr(d, "player").full_name)
+                    content = create_basic_text(d.player.full_name)
                 case "date_birth":
-                    content = create_basic_text(getattr(d, "player").birth_date)
+                    content = create_basic_text(d.player.birth_date)
                 case "team":
-                    content = create_basic_text(getattr(d, "player").team.name)
+                    content = create_basic_text(d.player.team.name)
                 case _:
                     content = create_basic_text(getattr(d, a))
             cells.append(
