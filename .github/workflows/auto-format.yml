@@ -1,4 +1,4 @@
-name: Auto-Format Code
+name: Auto-Format Code (Ruff)
 
 on:
   pull_request:
