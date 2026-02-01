@@ -14,6 +14,7 @@ def create_black_overlay() -> Container:
         offset=Offset(-1, 0),
         animate_opacity=500,
         animate_offset=10,
+        bgcolor=Colors.with_opacity(0.2,light_theme.color_scheme.shadow)
     )
     return overlay
 

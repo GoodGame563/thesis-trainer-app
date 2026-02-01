@@ -23,6 +23,7 @@ from components import (
     create_team_view,
     open_filter_view,
     open_menu,
+    open_team_view,
 )
 from db_controls import create_db, get_games_statistics
 from models import create_empty, create_table
@@ -94,8 +95,9 @@ async def main(page: Page):
                         top=0,
                         left=0,
                     ),
-                    create_team_view(),
+                    
                     black_overlay,
+                    create_team_view(),
                     filter_view,
                     menu,
                 ]
@@ -104,6 +106,7 @@ async def main(page: Page):
             clip_behavior="ANTI_ALIAS_WITH_SAVE_LAYER",
         )
     )
+    open_team_view()
 
 
 if __name__ == "__main__":
