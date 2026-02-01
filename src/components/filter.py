@@ -24,7 +24,12 @@ from models import (
     update_table,
     visible_column_table,
 )
-from utils import create_action_text_button, create_basic_text_button, СomparisonButton, PositiveSwitchTextFieldBlock
+from utils import (
+    PositiveSwitchTextFieldBlock,
+    СomparisonButton,
+    create_action_text_button,
+    create_basic_text_button,
+)
 
 from .overlay import close_overlay, open_overlay
 
@@ -69,7 +74,15 @@ def create_filter_view() -> Container:
 def create_positive_table():
     positive_table = []
     for key, value in filter_kpi[selectKpiRole].positive_indicators.items():
-        positive_table.append(PositiveSwitchTextFieldBlock(name_column_table[key], value.enabled, value.comprasion, value.value, key))
+        positive_table.append(
+            PositiveSwitchTextFieldBlock(
+                name_column_table[key],
+                value.enabled,
+                value.comprasion,
+                value.value,
+                key,
+            )
+        )
     return positive_table
 
 

@@ -1,6 +1,9 @@
-from flet import Button, ButtonStyle, RoundedRectangleBorder, Margin
+from flet import Button, ButtonStyle, Margin, RoundedRectangleBorder
+
 from models import СomparisonType
+
 from .text import NormalText
+
 
 def change_content_button(e):
     match e.control.content.value:
@@ -24,16 +27,16 @@ class СomparisonButton(Button):
         self.style = ButtonStyle(shape=RoundedRectangleBorder(radius=8), padding=0)
         self.content = NormalText(text)
         self.on_click = change_content_button
-        self.elevation=3
-        self.margin=5
-        self.height=35
-        self.width=35
+        self.elevation = 3
+        self.margin = 5
+        self.height = 35
+        self.width = 35
         self.key = "comprasion"
 
+
 class BasicButton(Button):
-    def __init__(self, text, on_click = None):
+    def __init__(self, text, on_click=None):
         super().__init__()
         self.style = ButtonStyle(shape=RoundedRectangleBorder(radius=8))
         self.content = NormalText(text)
         self.on_click = on_click
-

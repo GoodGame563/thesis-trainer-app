@@ -37,6 +37,7 @@ def create_biger_text_block(value: str) -> Card:
     text.margin = 5
     return Card(content=text, variant=CardVariant.OUTLINED, elevation=2)
 
+
 def create_bigest_text_block(value: str) -> Card:
     text = create_biger_text(value)
     text.margin = 5
