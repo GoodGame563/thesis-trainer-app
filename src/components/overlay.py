@@ -3,16 +3,12 @@ from flet import Colors, Container, Offset
 from theme import dark_theme, light_theme
 
 overlay = Container(
-    # theme=light_theme
 )
 
 
 def create_black_overlay() -> Container:
     global overlay
     overlay = Container(
-        theme=light_theme,
-        dark_theme=dark_theme,
-        # bgcolor=Colors.with_opacity(1.0, overlay.theme.color_scheme.on_surface),
         blur=5,
         visible=True,
         opacity=0.0,

@@ -22,6 +22,7 @@ from components import (
     create_menu,
     open_filter_view,
     open_menu,
+    create_team_view
 )
 from db_controls import create_db, get_games_statistics
 from models import create_empty, create_table
@@ -93,6 +94,7 @@ async def main(page: Page):
                         top=0,
                         left=0,
                     ),
+                    create_team_view(),
                     black_overlay,
                     filter_view,
                     menu,
