@@ -63,6 +63,7 @@ def get_games_statistics() -> list[TableData]:
         JOIN teams t ON g.team_id = t.id
         JOIN roles r ON g.role_id = r.id
         ORDER BY g.id
+        LIMIT 30
     """
 
     cur.execute(query)

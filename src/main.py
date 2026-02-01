@@ -1,6 +1,5 @@
 import logging
 
-import black
 from flet import (
     Animation,
     Card,
@@ -36,7 +35,7 @@ create_db()
 
 async def main(page: Page):
 
-    def change_theme(e):
+    async def change_theme(e):
         page.theme = dark_theme if page.theme == light_theme else light_theme
         theme_button.icon = (
             icons.Icons.SUNNY if page.theme == light_theme else icons.Icons.DARK_MODE
@@ -68,7 +67,7 @@ async def main(page: Page):
                         content=Row(
                             controls=Column(
                                 controls=create_table(
-                                    page.theme,
+                                    # []
                                     get_games_statistics(),
                                 ),
                                 scroll="ALWAYS",

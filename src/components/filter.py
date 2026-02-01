@@ -1,4 +1,3 @@
-from click import style
 from flet import (
     Animation,
     AnimationCurve,

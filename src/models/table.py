@@ -167,7 +167,7 @@ table = DataTable(columns=[])
 
 
 def create_table(
-    theme: Theme,
+    # theme: Theme,
     data_list: list[TableData],
 ) -> DataTable:
     global table
@@ -175,8 +175,8 @@ def create_table(
         columns=[],
         rows=[],
         expand=False,
-        horizontal_lines=BorderSide(1, theme.color_scheme.outline),
-        vertical_lines=BorderSide(1, theme.color_scheme.outline),
+        # horizontal_lines=BorderSide(1, theme.color_scheme.outline),
+        # vertical_lines=BorderSide(1, theme.color_scheme.outline),
         # show_bottom_border=True,
         clip_behavior="hard",
         border_radius=9,
@@ -196,11 +196,12 @@ def create_table(
         for a in visible_column_table:
             match a:
                 case "player":
-                    button = create_basic_text_button(
-                        getattr(d, a).full_name, theme.color_scheme
-                    )
-                    button.margin = 5
-                    content = button
+                    # button = create_basic_text_button(
+                    #     getattr(d, a).full_name,
+                    # )
+                    # button.margin = 5
+                    # content = button
+                    content = create_basic_text(getattr(d, "player").full_name)
                 case "date_birth":
                     content = create_basic_text(getattr(d, "player").birth_date)
                 case "team":
