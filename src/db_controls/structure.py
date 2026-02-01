@@ -1,6 +1,5 @@
-import sqlite3
 from dataclasses import dataclass, field, fields
-from typing import ClassVar, List, Tuple
+from typing import ClassVar
 
 
 def pk():
@@ -25,10 +24,10 @@ def nn_date():
 
 class TableSchema:
     __tablename__: ClassVar[str] = ""
-    __foreign_keys__: ClassVar[List[str]] = []
+    __foreign_keys__: ClassVar[list[str]] = []
 
     @classmethod
-    def get_columns(cls) -> List[Tuple[str, str]]:
+    def get_columns(cls) -> list[tuple[str, str]]:
         return [
             (f.name, f.metadata["_sql"]) for f in fields(cls) if "_sql" in f.metadata
         ]

@@ -1,14 +1,10 @@
 import logging
 
 from flet import (
-    Animation,
     Card,
-    Colors,
     Column,
     Container,
-    FloatingActionButton,
     FloatingActionButtonLocation,
-    Offset,
     Page,
     Row,
     Stack,
@@ -24,10 +20,9 @@ from components import (
     create_user_view,
     open_filter_view,
     open_menu,
-    open_team_view,
 )
 from db_controls import create_db, get_games_statistics
-from models import create_empty, create_table
+from models import create_table
 from theme import dark_theme, light_theme
 from utils import create_icon_button
 
@@ -37,7 +32,6 @@ create_db()
 
 
 async def main(page: Page):
-
     async def change_theme(e):
         page.theme = dark_theme if page.theme == light_theme else light_theme
         theme_button.icon = (

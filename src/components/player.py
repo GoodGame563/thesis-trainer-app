@@ -4,39 +4,22 @@ from flet import (
     AnimationCurve,
     Border,
     BorderSide,
-    Button,
     Card,
-    CardVariant,
-    Colors,
     Column,
     Container,
     CupertinoSlidingSegmentedButton,
-    CupertinoTextField,
-    Dropdown,
-    DropdownOption,
     Image,
     ListView,
-    MainAxisAlignment,
-    Margin,
     Offset,
-    ResponsiveRow,
     Row,
-    Switch,
-    Text,
-    TextField,
-    View,
 )
 
 from models import create_table
 from utils import (
-    create_action_text_button,
     create_basic_text,
-    create_basic_text_button,
     create_biger_text_block,
     create_bigest_text,
 )
-
-from .overlay import close_overlay, open_overlay
 
 user_view = Container()
 
@@ -84,7 +67,7 @@ def create_user_view():
                         controls=[
                             Card(
                                 content=Image(
-                                    src=f"not-found.jpg",
+                                    src="not-found.jpg",
                                 ),
                                 expand=1,
                             ),
