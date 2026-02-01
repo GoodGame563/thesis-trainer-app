@@ -1,6 +1,7 @@
 from flet import (
     Button,
     ButtonStyle,
+    Card,
     CardVariant,
     ColorScheme,
     ElevatedButton,
@@ -11,7 +12,6 @@ from flet import (
     RoundedRectangleBorder,
     Text,
     icons,
-    Card
 )
 
 from .constants import ButtonType
@@ -28,23 +28,17 @@ def create_biger_text(value: str) -> Text:
 def create_bigest_text(value: str) -> Text:
     return Text(value, no_wrap=False, overflow="ELLIPSIS", expand=True, size=30)
 
+
 def create_basic_text_block(value: str) -> Card:
     text = create_basic_text(value)
     text.margin = 5
-    return Card(
-        content=text,
-        variant=CardVariant.OUTLINED,
-        elevation=4
-    )
+    return Card(content=text, variant=CardVariant.OUTLINED, elevation=4)
+
 
 def create_biger_text_block(value: str) -> Card:
     text = create_biger_text(value)
     text.margin = 5
-    return Card(
-        content=text,
-        variant=CardVariant.OUTLINED,
-        elevation=2
-    )
+    return Card(content=text, variant=CardVariant.OUTLINED, elevation=2)
 
 
 def create_basic_text_button(value: str, on_click=None) -> Button:
