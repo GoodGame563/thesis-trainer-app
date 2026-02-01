@@ -30,21 +30,20 @@ jobs:
           python-version: "3.11"
           cache: "pip"
 
-      - name: Install formatters
+      - name: Install Ruff
         run: |
-          pip install black isort
+          pip install --upgrade pip
+          pip install ruff
 
-      - name: Run isort
+      - name: Run Ruff check (linting + import sorting)
         run: |
-          echo "Checking imports with isort..."
-          isort --version
-          isort .
+          echo "Running Ruff linter with auto-fix..."
+          ruff check . --fix
 
-      - name: Run Black
+      - name: Run Ruff format
         run: |
-          echo "Formatting code with Black..."
-          black --version
-          black .
+          echo "Formatting code with Ruff..."
+          ruff format .
 
       - name: Check for changes
         id: git-diff
@@ -56,12 +55,12 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: |
-            style: auto-format code with black and isort
+            style: auto-format code with Ruff
             
             Formatted with:
-            - Black 24.4.2
-            - isort 5.13.2
-          commit_options: "--no-verify" 
+            - Ruff format (Black-compatible style)
+            - Ruff check --fix (linting + import sorting)
+          commit_options: "--no-verify"
           branch: ${{ github.head_ref }}
           file_pattern: "*.py"
           skip_fetch: true
@@ -77,10 +76,6 @@ jobs:
         with:
           message: |
             **Auto-formatting applied**
-            
-            I've automatically formatted your code with:
-            - Black (PEP 8 compliant formatting)
-            - isort (import sorting)
             
             Review the changes in the latest commit.
           github-token: ${{ secrets.GITHUB_TOKEN }}
