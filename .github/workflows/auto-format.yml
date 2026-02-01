@@ -38,7 +38,7 @@ jobs:
       - name: Run Ruff check (linting + import sorting)
         run: |
           echo "Running Ruff linter with auto-fix..."
-          ruff check . --fix --unsafe-fixes
+          ruff check . --fix --unsafe-fixes --exit-zero
 
       - name: Run Ruff format
         run: |

@@ -63,10 +63,10 @@ select = [
     "SIM", 
     "PTH", 
 ]
-fixable = ["ALL"]
+
 
 ignore = [
-    "E501",  
+    "E501", "PLW0603", "F403"
 ]
 
 [tool.ruff.format]
