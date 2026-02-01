@@ -107,7 +107,7 @@ def create_user_view():
                 ]
             )
         ),
-        offset=Offset(0, 0),
+        offset=Offset(-1, 0),
         alignment=Alignment(0, 0),
         margin=50,
         animate_offset=Animation(300, AnimationCurve.EASE_IN_OUT),

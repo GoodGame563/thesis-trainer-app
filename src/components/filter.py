@@ -24,7 +24,7 @@ from models import (
     update_table,
     visible_column_table,
 )
-from utils import create_action_text_button, create_basic_text_button
+from utils import create_action_text_button, create_basic_text_button, СomparisonButton, PositiveSwitchTextFieldBlock
 
 from .overlay import close_overlay, open_overlay
 
@@ -42,22 +42,6 @@ def change_switch(e):
 
 def change_current_switch(e):
     e.data.disabled = not e.value
-
-
-def change_content_button(e):
-    match e.control.content.value:
-        case СomparisonType.EQUALLY:
-            e.control.content.value = СomparisonType.MORE
-        case СomparisonType.MORE:
-            e.control.content.value = СomparisonType.LESS
-        case СomparisonType.LESS:
-            e.control.content.value = СomparisonType.EQUALLY_MORE
-        case СomparisonType.MORE:
-            e.control.content.value = СomparisonType.EQUALLY_MORE
-        case СomparisonType.EQUALLY_MORE:
-            e.control.content.value = СomparisonType.EQUALLY_LESS
-        case СomparisonType.EQUALLY_LESS:
-            e.control.content.value = СomparisonType.EQUALLY
 
 
 def safe_button(e):
@@ -85,52 +69,14 @@ def create_filter_view() -> Container:
 def create_positive_table():
     positive_table = []
     for key, value in filter_kpi[selectKpiRole].positive_indicators.items():
-        button = create_basic_text_button(value.comprasion, change_content_button)
-        button.style.padding = 0
-        button.margin = 5
-        button.width = 35
-        button.height = 35
-        button.key = "comprasion"
-        field = TextField(
-            height=35,
-            value=value.value,
-            content_padding=0,
-            key="value",
-            expand=1,
-            margin=Margin.only(right=5),
-        )
-        switch = Switch(
-            label=name_column_table[key],
-            key="enabled",
-            value=value.enabled,
-            data=field,
-            on_change=change_switch,
-        )
-        field.disabled = not switch.value
-        positive_table.append(
-            Card(
-                content=Row(controls=[switch, button, field]),
-                margin=Margin.only(
-                    left=10,
-                    right=10,
-                    top=8,
-                    bottom=0,
-                ),
-                key=key,
-            )
-        )
+        positive_table.append(PositiveSwitchTextFieldBlock(name_column_table[key], value.enabled, value.comprasion, value.value, key))
     return positive_table
 
 
 def create_negative_table():
     negative_table = []
     for key, value in filter_kpi[selectKpiRole].negative_indicators.items():
-        button = create_basic_text_button(value.comprasion, change_content_button)
-        button.style.padding = 0
-        button.margin = 5
-        button.width = 35
-        button.height = 35
-        button.key = "comprasion"
+        button = СomparisonButton(value.comprasion)
         field = TextField(
             height=35,
             value=value.value,
@@ -183,7 +129,9 @@ def set_tables():
                         filter_kpi[selectKpiRole].positive_indicators[c.key],
                         element.key,
                     )
-                    change_current_switch(element)
+                    element.on_change()
+                    # element.change_switch()
+                    # change_current_switch(element)
                 case _:
                     element.value = getattr(
                         filter_kpi[selectKpiRole].positive_indicators[c.key],
@@ -202,7 +150,7 @@ def set_tables():
                         filter_kpi[selectKpiRole].negative_indicators[c.key],
                         element.key,
                     )
-                    change_current_switch(element)
+                    # change_current_switch(element)
                 case _:
                     element.value = getattr(
                         filter_kpi[selectKpiRole].negative_indicators[c.key],

@@ -58,7 +58,7 @@ light_theme = Theme(
     switch_theme=SwitchTheme(
         track_color=light_color["primary"],
         thumb_color={
-            ControlState.SELECTED: light_color["accent"],
+            # ControlState.SELECTED: light_color["accent"],
             ControlState.DISABLED: light_color["primary"],
             ControlState.ERROR: light_color["error"],
         },
@@ -134,8 +134,8 @@ dark_theme = Theme(
     switch_theme=SwitchTheme(
         track_color=dark_color["primary"],
         thumb_color={
-            ControlState.SELECTED: dark_color["accent"],
-            ControlState.DISABLED: dark_color["primary"],
+            # ControlState.SELECTED: dark_color["accent"],
+            ControlState.DISABLED: dark_color["background"],
         },
     ),
     card_theme=CardTheme(

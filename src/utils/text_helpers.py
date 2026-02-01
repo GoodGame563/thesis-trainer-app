@@ -37,6 +37,11 @@ def create_biger_text_block(value: str) -> Card:
     text.margin = 5
     return Card(content=text, variant=CardVariant.OUTLINED, elevation=2)
 
+def create_bigest_text_block(value: str) -> Card:
+    text = create_biger_text(value)
+    text.margin = 5
+    return Card(content=text, variant=CardVariant.OUTLINED, elevation=2)
+
 
 def create_basic_text_button(value: str, on_click=None) -> Button:
     return create_button(value, None, ButtonType.BASIC, on_click)
