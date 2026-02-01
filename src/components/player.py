@@ -15,11 +15,7 @@ from flet import (
 )
 
 from models import create_table
-from utils import (
-    create_basic_text,
-    create_biger_text_block,
-    create_bigest_text,
-)
+from utils import create_basic_text, create_biger_text_block, create_bigest_text
 
 user_view = Container()
 

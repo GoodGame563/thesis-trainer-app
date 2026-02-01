@@ -1,12 +1,7 @@
 from dataclasses import dataclass
 from datetime import date
 
-from flet import (
-    DataCell,
-    DataColumn,
-    DataRow,
-    DataTable,
-)
+from flet import DataCell, DataColumn, DataRow, DataTable
 
 from utils import create_basic_text
 
