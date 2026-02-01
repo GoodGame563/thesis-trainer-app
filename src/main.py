@@ -95,7 +95,6 @@ async def main(page: Page):
                         top=0,
                         left=0,
                     ),
-                    
                     black_overlay,
                     create_team_view(),
                     filter_view,

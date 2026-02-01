@@ -4,7 +4,6 @@ from theme import light_theme
 from utils import create_basic_text_button, create_icon_button
 
 from .overlay import close_overlay, open_overlay
-
 from .team import open_team_view
 
 
@@ -12,12 +11,15 @@ def close_menu(e):
     menu.offset = Offset(-1, 0)
     close_overlay()
 
+
 def close_menu_without_overlay():
     menu.offset = Offset(-1, 0)
+
 
 def open_menu(e):
     menu.offset = Offset(0, 0)
     open_overlay()
+
 
 def element_open_team():
     close_menu_without_overlay()
@@ -35,10 +37,7 @@ def create_menu() -> Row:
                         create_basic_text_button(
                             "Добавить матч",
                         ),
-                        create_basic_text_button(
-                            "Создать команду",
-                            element_open_team
-                        ),
+                        create_basic_text_button("Создать команду", element_open_team),
                         create_basic_text_button(
                             "Трансфер",
                         ),
