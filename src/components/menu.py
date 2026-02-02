@@ -1,7 +1,7 @@
 from flet import Animation, AnimationCurve, Column, Container, Offset, Row, icons
 
 from theme import light_theme
-from utils import MenuButton, IconButton
+from utils import IconButton, MenuButton
 
 from .overlay import close_overlay, open_overlay
 from .team import open_team_view

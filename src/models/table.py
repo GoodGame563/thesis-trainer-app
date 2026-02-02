@@ -1,10 +1,9 @@
 from dataclasses import dataclass
 from datetime import date
 
-from flet import DataCell, DataColumn, DataRow, DataTable, BorderSide
+from flet import BorderSide, DataCell, DataColumn, DataRow, DataTable
 
 from theme import light_cs
-
 from utils import BasicButton, NormalText
 
 from .structs import Player, Role, Team
@@ -158,10 +157,7 @@ def create_empty() -> TableData:
 table = DataTable(columns=[])
 
 
-def create_table(
-    data_list: list[TableData],
-    open_user_view
-) -> DataTable:
+def create_table(data_list: list[TableData], open_user_view) -> DataTable:
     global table
     table = DataTable(
         columns=[],
@@ -177,9 +173,7 @@ def create_table(
     columns = []
     for key, value in visible_column_table.items():
         columns.append(
-            DataColumn(
-                NormalText(f"{name_column_table[key]}"), visible=value, key=key
-            )
+            DataColumn(NormalText(f"{name_column_table[key]}"), visible=value, key=key)
         )
     rows = []
     for d in data_list:
@@ -187,10 +181,7 @@ def create_table(
         for a in visible_column_table:
             match a:
                 case "player":
-                    button = BasicButton(
-                        getattr(d, a).full_name,
-                        open_user_view
-                    )
+                    button = BasicButton(getattr(d, a).full_name, open_user_view)
                     button.margin = 5
                     content = button
                     # content = create_basic_text(d.player.full_name)

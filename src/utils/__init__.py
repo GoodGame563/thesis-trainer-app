@@ -6,6 +6,7 @@ from .blocks import (
     PositiveSwitchTextFieldBlock,
     SwitchBlock,
 )
-from .buttons import ActionButton, BasicButton, СomparisonButton, MenuButton, IconButton
+from .buttons import ActionButton, BasicButton, IconButton, MenuButton, СomparisonButton
+
 # from .text_helpers import *
-from .text import NormalText, BigestText
+from .text import BigestText, NormalText

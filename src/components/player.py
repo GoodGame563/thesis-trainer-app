@@ -14,15 +14,17 @@ from flet import (
     Row,
 )
 
+from utils import BigerTextBlock, BigestText, NormalText
+
 # from models import create_table
 from .overlay import open_overlay
-from utils import NormalText, BigerTextBlock, BigestText
 
 user_view = Container()
 
+
 def open_user_view(id):
     global user_view
-    user_view.offset = Offset(0,0)
+    user_view.offset = Offset(0, 0)
     open_overlay()
 
 

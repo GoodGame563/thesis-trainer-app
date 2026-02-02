@@ -1,8 +1,15 @@
-from flet import Button, ButtonStyle, FilledButton, Margin, RoundedRectangleBorder, FloatingActionButton
+from flet import (
+    Button,
+    ButtonStyle,
+    FilledButton,
+    FloatingActionButton,
+    Margin,
+    RoundedRectangleBorder,
+)
 
 from models import СomparisonType
 
-from .text import BigerText, NormalText, MenuText
+from .text import BigerText, MenuText, NormalText
 
 
 def change_content_button(e):
@@ -42,6 +49,7 @@ class BasicButton(Button):
         self.on_click = on_click
         self.elevation = 8
 
+
 class MenuButton(Button):
     def __init__(self, text, on_click=None):
         super().__init__()
@@ -50,8 +58,9 @@ class MenuButton(Button):
         self.on_click = on_click
         self.elevation = 8
 
+
 class IconButton(FloatingActionButton):
-    def __init__(self, icon, on_click = None):
+    def __init__(self, icon, on_click=None):
         super().__init__(
             icon=icon,
             shape=RoundedRectangleBorder(radius=20),

@@ -20,7 +20,7 @@ from components import (
     create_user_view,
     open_filter_view,
     open_menu,
-    open_user_view
+    open_user_view,
 )
 from db_controls import create_db, get_games_statistics
 from models import create_table
@@ -66,7 +66,7 @@ async def main(page: Page):
                                 controls=create_table(
                                     # []
                                     get_games_statistics(),
-                                    open_user_view
+                                    open_user_view,
                                 ),
                                 scroll="ALWAYS",
                                 # expand=True
