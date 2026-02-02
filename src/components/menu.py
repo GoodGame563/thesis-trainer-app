@@ -1,9 +1,10 @@
 from flet import Animation, AnimationCurve, Column, Container, Offset, Row, icons
 
 from theme import light_theme
-from utils import create_basic_text_button, create_icon_button
+from utils import IconButton, MenuButton
 
 from .overlay import close_overlay, open_overlay
+from .team import open_team_view
 
 
 def close_menu(e):
@@ -11,9 +12,18 @@ def close_menu(e):
     close_overlay()
 
 
+def close_menu_without_overlay():
+    menu.offset = Offset(-1, 0)
+
+
 def open_menu(e):
     menu.offset = Offset(0, 0)
     open_overlay()
+
+
+def element_open_team():
+    close_menu_without_overlay()
+    open_team_view()
 
 
 def create_menu() -> Row:
@@ -23,17 +33,15 @@ def create_menu() -> Row:
             Container(
                 content=Column(
                     controls=[
-                        create_basic_text_button("Добавить игрока"),
-                        create_basic_text_button(
+                        MenuButton("Добавить игрока"),
+                        MenuButton(
                             "Добавить матч",
                         ),
-                        create_basic_text_button(
-                            "Создать команду",
-                        ),
-                        create_basic_text_button(
+                        MenuButton("Создать команду", element_open_team),
+                        MenuButton(
                             "Трансфер",
                         ),
-                        create_basic_text_button(
+                        MenuButton(
                             "Открыть статистику",
                         ),
                     ],
@@ -44,7 +52,7 @@ def create_menu() -> Row:
                 bgcolor=light_theme.color_scheme.outline,
                 padding=20,
             ),
-            create_icon_button(icons.Icons.CLOSE, close_menu),
+            IconButton(icons.Icons.CLOSE, close_menu),
         ],
         vertical_alignment="start",
         spacing=2,

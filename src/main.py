@@ -1,15 +1,10 @@
 import logging
 
-import black
 from flet import (
-    Animation,
     Card,
-    Colors,
     Column,
     Container,
-    FloatingActionButton,
     FloatingActionButtonLocation,
-    Offset,
     Page,
     Row,
     Stack,
@@ -21,13 +16,16 @@ from components import (
     create_black_overlay,
     create_filter_view,
     create_menu,
+    create_team_view,
+    create_user_view,
     open_filter_view,
     open_menu,
+    open_user_view,
 )
-from db_controls import create_db
-from models import create_empty, create_table
+from db_controls import create_db, get_games_statistics
+from models import create_table
 from theme import dark_theme, light_theme
-from utils import create_icon_button
+from utils import IconButton
 
 logging.basicConfig(level=logging.INFO)
 
@@ -35,8 +33,7 @@ create_db()
 
 
 async def main(page: Page):
-
-    def change_theme(e):
+    async def change_theme(e):
         page.theme = dark_theme if page.theme == light_theme else light_theme
         theme_button.icon = (
             icons.Icons.SUNNY if page.theme == light_theme else icons.Icons.DARK_MODE
@@ -49,28 +46,32 @@ async def main(page: Page):
     is_dark = {"value": False}
     page.theme_mode = "light"
     page.theme = dark_theme if is_dark["value"] else light_theme
-
     menu = create_menu()
     black_overlay = create_black_overlay()
-    table = create_table(
-        page.theme,
-        [create_empty(), create_empty(), create_empty()],
-    )
-    theme_button = create_icon_button(icons.Icons.SUNNY, change_theme)
+    # print(data)
+
+    theme_button = IconButton(icons.Icons.SUNNY, change_theme)
 
     page.floating_action_button = theme_button
     page.floating_action_button_location = FloatingActionButtonLocation.END_TOP
 
     filter_view = create_filter_view()
-
     page.add(
         Container(
             Stack(
                 controls=[
                     Card(
-                        content=Column(
-                            controls=Row(controls=table, scroll="AUTO", expand=True),
-                            scroll="AUTO",
+                        content=Row(
+                            controls=Column(
+                                controls=create_table(
+                                    # []
+                                    get_games_statistics(),
+                                    open_user_view,
+                                ),
+                                scroll="ALWAYS",
+                                # expand=True
+                            ),
+                            scroll="ADAPTIVE",
                             expand=True,
                         ),
                         clip_behavior="none",
@@ -78,7 +79,7 @@ async def main(page: Page):
                         expand=True,
                     ),
                     Container(
-                        content=create_icon_button(
+                        content=IconButton(
                             icons.Icons.FILTER_LIST,
                             open_filter_view,
                         ),
@@ -86,11 +87,13 @@ async def main(page: Page):
                         bottom=0,
                     ),
                     Container(
-                        content=create_icon_button(icons.Icons.MENU, open_menu),
+                        content=IconButton(icons.Icons.MENU, open_menu),
                         top=0,
                         left=0,
                     ),
                     black_overlay,
+                    create_team_view(),
+                    create_user_view(),
                     filter_view,
                     menu,
                 ]

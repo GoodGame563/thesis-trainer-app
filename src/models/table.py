@@ -1,19 +1,10 @@
 from dataclasses import dataclass
 from datetime import date
 
-from flet import (
-    BorderSide,
-    ColorScheme,
-    CupertinoFilledButton,
-    DataCell,
-    DataColumn,
-    DataRow,
-    DataTable,
-    Text,
-    Theme,
-)
+from flet import BorderSide, DataCell, DataColumn, DataRow, DataTable
 
-from utils import create_basic_text, create_basic_text_button
+from theme import light_cs
+from utils import BasicButton, NormalText
 
 from .structs import Player, Role, Team
 
@@ -166,18 +157,14 @@ def create_empty() -> TableData:
 table = DataTable(columns=[])
 
 
-def create_table(
-    theme: Theme,
-    data_list: list[TableData],
-) -> DataTable:
+def create_table(data_list: list[TableData], open_user_view) -> DataTable:
     global table
     table = DataTable(
         columns=[],
         rows=[],
         expand=False,
-        horizontal_lines=BorderSide(1, theme.color_scheme.outline),
-        vertical_lines=BorderSide(1, theme.color_scheme.outline),
-        # show_bottom_border=True,
+        horizontal_lines=BorderSide(1, light_cs.outline),
+        vertical_lines=BorderSide(1, light_cs.outline),
         clip_behavior="hard",
         border_radius=9,
         divider_thickness=1,
@@ -186,9 +173,7 @@ def create_table(
     columns = []
     for key, value in visible_column_table.items():
         columns.append(
-            DataColumn(
-                create_basic_text(f"{name_column_table[key]}"), visible=value, key=key
-            )
+            DataColumn(NormalText(f"{name_column_table[key]}"), visible=value, key=key)
         )
     rows = []
     for d in data_list:
@@ -196,17 +181,16 @@ def create_table(
         for a in visible_column_table:
             match a:
                 case "player":
-                    button = create_basic_text_button(
-                        getattr(d, a).full_name, theme.color_scheme
-                    )
+                    button = BasicButton(getattr(d, a).full_name, open_user_view)
                     button.margin = 5
                     content = button
+                    # content = create_basic_text(d.player.full_name)
                 case "date_birth":
-                    content = create_basic_text(getattr(d, "player").birth_date)
+                    content = NormalText(d.player.birth_date)
                 case "team":
-                    content = create_basic_text(getattr(d, "player").team.name)
+                    content = NormalText(d.player.team.name)
                 case _:
-                    content = create_basic_text(getattr(d, a))
+                    content = NormalText(getattr(d, a))
             cells.append(
                 DataCell(
                     content,
