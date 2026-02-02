@@ -14,14 +14,18 @@ from flet import (
     Row,
 )
 
-from models import create_table
-from utils import (
-    create_basic_text,
-    create_biger_text_block,
-    create_bigest_text,
-)
+from utils import BigerTextBlock, BigestText, NormalText
+
+# from models import create_table
+from .overlay import open_overlay
 
 user_view = Container()
+
+
+def open_user_view(id):
+    global user_view
+    user_view.offset = Offset(0, 0)
+    open_overlay()
 
 
 def user_information():
@@ -33,21 +37,21 @@ def user_information():
         content=Column(
             controls=[
                 Container(
-                    content=create_bigest_text(name),
+                    content=BigestText(name),
                     border=Border(bottom=BorderSide(2.0)),
                 ),
                 Row(
                     controls=[
                         Row(
                             controls=[
-                                create_biger_text_block(date),
-                                create_biger_text_block(height + " см"),
-                                create_biger_text_block(weight + "кг"),
+                                BigerTextBlock(date),
+                                BigerTextBlock(height + " см"),
+                                BigerTextBlock(weight + "кг"),
                             ],
                             wrap=False,
                             expand=1,
                         ),
-                        ListView(controls=[create_biger_text_block(date)], expand=1),
+                        ListView(controls=[BigerTextBlock(date)], expand=1),
                     ]
                 ),
             ],
@@ -79,20 +83,21 @@ def create_user_view():
                         controls=[
                             CupertinoSlidingSegmentedButton(
                                 controls=[
-                                    create_basic_text("Рофл"),
-                                    create_basic_text("Рофл"),
-                                    create_basic_text("Рофл"),
-                                    create_basic_text("Рофл"),
-                                    create_basic_text("Рофл"),
+                                    NormalText("Рофл"),
+                                    NormalText("Рофл"),
+                                    NormalText("Рофл"),
+                                    NormalText("Рофл"),
+                                    NormalText("Рофл"),
                                 ]
                             ),
                             Card(
                                 content=Row(
                                     controls=Column(
-                                        controls=create_table(
-                                            []
-                                            # get_games_statistics(),
-                                        ),
+                                        controls=[],
+                                        # create_table(
+                                        #     []
+                                        #     # get_games_statistics(),
+                                        # ),
                                         scroll="ALWAYS",
                                         # expand=True
                                     ),
@@ -107,7 +112,7 @@ def create_user_view():
                 ]
             )
         ),
-        offset=Offset(0, 0),
+        offset=Offset(-1, 0),
         alignment=Alignment(0, 0),
         margin=50,
         animate_offset=Animation(300, AnimationCurve.EASE_IN_OUT),

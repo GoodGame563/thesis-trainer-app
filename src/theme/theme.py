@@ -135,7 +135,7 @@ dark_theme = Theme(
         track_color=dark_color["primary"],
         thumb_color={
             ControlState.SELECTED: dark_color["accent"],
-            ControlState.DISABLED: dark_color["primary"],
+            ControlState.DISABLED: dark_color["background"],
         },
     ),
     card_theme=CardTheme(

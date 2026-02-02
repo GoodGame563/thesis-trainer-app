@@ -20,11 +20,12 @@ from components import (
     create_user_view,
     open_filter_view,
     open_menu,
+    open_user_view,
 )
 from db_controls import create_db, get_games_statistics
 from models import create_table
 from theme import dark_theme, light_theme
-from utils import create_icon_button
+from utils import IconButton
 
 logging.basicConfig(level=logging.INFO)
 
@@ -49,13 +50,12 @@ async def main(page: Page):
     black_overlay = create_black_overlay()
     # print(data)
 
-    theme_button = create_icon_button(icons.Icons.SUNNY, change_theme)
+    theme_button = IconButton(icons.Icons.SUNNY, change_theme)
 
     page.floating_action_button = theme_button
     page.floating_action_button_location = FloatingActionButtonLocation.END_TOP
 
     filter_view = create_filter_view()
-
     page.add(
         Container(
             Stack(
@@ -66,6 +66,7 @@ async def main(page: Page):
                                 controls=create_table(
                                     # []
                                     get_games_statistics(),
+                                    open_user_view,
                                 ),
                                 scroll="ALWAYS",
                                 # expand=True
@@ -78,7 +79,7 @@ async def main(page: Page):
                         expand=True,
                     ),
                     Container(
-                        content=create_icon_button(
+                        content=IconButton(
                             icons.Icons.FILTER_LIST,
                             open_filter_view,
                         ),
@@ -86,7 +87,7 @@ async def main(page: Page):
                         bottom=0,
                     ),
                     Container(
-                        content=create_icon_button(icons.Icons.MENU, open_menu),
+                        content=IconButton(icons.Icons.MENU, open_menu),
                         top=0,
                         left=0,
                     ),
