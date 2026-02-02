@@ -14,7 +14,7 @@ from flet import (
     TextField,
 )
 
-from utils import create_action_text_button, create_basic_text_button
+from utils import ActionButton, BasicButton
 
 from .overlay import close_overlay, open_overlay
 
@@ -68,10 +68,10 @@ def create_team_view() -> Card:
                                     ),
                                     expand=True,
                                 ),
-                                create_basic_text_button("Загрузить лого"),
+                                BasicButton("Загрузить лого"),
                             ]
                         ),
-                        create_action_text_button("Сохранить", close_team_view),
+                        ActionButton("Сохранить", close_team_view),
                     ],
                     alignment=MainAxisAlignment.SPACE_EVENLY,
                     expand=True,

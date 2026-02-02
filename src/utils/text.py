@@ -10,6 +10,15 @@ class NormalText(Text):
         self.expand = True
         self.size = 18
 
+class MenuText(Text):
+    def __init__(self, text):
+        super().__init__()
+        self.value = text
+        self.no_wrap = False
+        self.overflow = "ELLIPSIS"
+        self.expand = True
+        self.size = 22
+        self.margin = 10
 
 class BigestText(Text):
     def __init__(self, text, text_align="center"):
