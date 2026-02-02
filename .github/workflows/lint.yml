@@ -53,13 +53,13 @@ jobs:
           echo "Running Ruff linter on changed files..."
           echo "Changed files:"
           echo "${{ steps.changed-files.outputs.all_changed_files }}"
-          ruff check . --diff
+          ruff check .
 
       - name: Run Ruff format check
         if: steps.changed-files.outputs.any_changed == 'true'
         run: |
           echo "Checking code formatting with Ruff..."
-          ruff format --check --diff .
+          ruff format --check .
 
       - name: Success message
         if: success()
