@@ -13,12 +13,12 @@ from flet import (
 )
 
 from components import (
+    FilterContainer,
+    PlayerContainer,
     create_black_overlay,
     create_menu,
     create_team_view,
-    PlayerContainer,
     open_menu,
-    FilterContainer,
 )
 from db_controls import create_db, get_games_statistics
 from theme import dark_theme, light_theme
@@ -55,7 +55,7 @@ async def main(page: Page):
     main_table = InformationTable(
         # []
         get_games_statistics(),
-        None
+        None,
         # player_view.open,
     )
     filter_view = FilterContainer(main_table.get_columns(), main_table.set_column)

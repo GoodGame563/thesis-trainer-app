@@ -14,20 +14,16 @@ from flet import (
     Switch,
 )
 
-from models import (
-    KpiRole,
-    filter_kpi,
-    name_column_table,
-)
+from models import KpiRole, filter_kpi, name_column_table
 from utils import (
     ActionButton,
     BigerTextBlock,
     BigestTextBlock,
     CustomBSContentBlock,
+    InformationTable,
     NegativeSwitchTextFieldBlock,
     PositiveSwitchTextFieldBlock,
     SwitchBlock,
-    InformationTable,
 )
 
 from .overlay import close_overlay, open_overlay
@@ -36,7 +32,7 @@ from .overlay import close_overlay, open_overlay
 class FilterContainer(Container):
     selectKpiRole = KpiRole.ALL_ROLES
 
-    def __init__(self, visible_columns:dict[str, bool], set_column):
+    def __init__(self, visible_columns: dict[str, bool], set_column):
         self.set = set_column
         self.positive_table = ListView(
             controls=[
@@ -206,8 +202,6 @@ class FilterContainer(Container):
     def change_switch(self, e):
         self.set(e.control.key, e.control.value)
         # print(e.content.content.content.controls)
-
-
 
     def open_filter_view(self):
         self.offset = Offset(0, 0)

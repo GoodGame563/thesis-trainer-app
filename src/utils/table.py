@@ -1,10 +1,10 @@
-from flet import DataTable, DataColumn, BorderSide, DataCell, DataRow
-
-from theme import light_cs
+from flet import BorderSide, DataCell, DataColumn, DataRow, DataTable
 
 from models import TableData, name_column_table
-from .text import NormalText
+from theme import light_cs
+
 from .buttons import BasicButton
+from .text import NormalText
 
 
 class InformationTable(DataTable):
@@ -89,10 +89,10 @@ class InformationTable(DataTable):
             for row in self.rows:
                 row.cells[i].visible = value
         super().update()
-    
+
     def get_columns(self):
         return self.visible_column_table
-    
+
     def set_column(self, name_column, value):
         self.visible_column_table[name_column] = value
         self.update()
