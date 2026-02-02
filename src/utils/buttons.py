@@ -1,8 +1,8 @@
-from flet import Button, ButtonStyle, Margin, RoundedRectangleBorder
+from flet import Button, ButtonStyle, Margin, RoundedRectangleBorder, FilledButton
 
 from models import СomparisonType
 
-from .text import NormalText
+from .text import NormalText, BigerText
 
 
 def change_content_button(e):
@@ -40,3 +40,15 @@ class BasicButton(Button):
         self.style = ButtonStyle(shape=RoundedRectangleBorder(radius=8))
         self.content = NormalText(text)
         self.on_click = on_click
+        self.elevation = 8
+
+class ActionButton(FilledButton):
+    def __init__(self, text, on_click=None):
+        super().__init__()
+        self.style = ButtonStyle(shape=RoundedRectangleBorder(radius=8))
+        self.content = NormalText(text)
+        self.height = 50
+        self.on_click = on_click
+        self.elevation = 8
+        self.margin = Margin.only(left=10, right=10, top=5, bottom=0)
+        

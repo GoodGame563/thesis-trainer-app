@@ -55,7 +55,6 @@ async def main(page: Page):
     page.floating_action_button_location = FloatingActionButtonLocation.END_TOP
 
     filter_view = create_filter_view()
-    open_filter_view()
     page.add(
         Container(
             Stack(
@@ -92,7 +91,7 @@ async def main(page: Page):
                     ),
                     black_overlay,
                     create_team_view(),
-                    create_user_view(),
+                    # create_user_view(),
                     filter_view,
                     menu,
                 ]

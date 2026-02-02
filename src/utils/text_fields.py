@@ -10,3 +10,4 @@ class SmallTextField(TextField):
         self.key = key
         self.expand = 1
         self.margin = Margin.only(right=5)
+

@@ -3,7 +3,7 @@ from datetime import date
 
 from flet import DataCell, DataColumn, DataRow, DataTable
 
-from utils import create_basic_text
+from utils import create_basic_text, BasicButton
 
 from .structs import Player, Role, Team
 
@@ -186,12 +186,12 @@ def create_table(
         for a in visible_column_table:
             match a:
                 case "player":
-                    # button = create_basic_text_button(
-                    #     getattr(d, a).full_name,
-                    # )
-                    # button.margin = 5
-                    # content = button
-                    content = create_basic_text(d.player.full_name)
+                    button = BasicButton(
+                        getattr(d, a).full_name,
+                    )
+                    button.margin = 5
+                    content = button
+                    # content = create_basic_text(d.player.full_name)
                 case "date_birth":
                     content = create_basic_text(d.player.birth_date)
                 case "team":
