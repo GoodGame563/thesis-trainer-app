@@ -12,7 +12,7 @@ class NormalText(Text):
 
 
 class BigestText(Text):
-    def __init__(self, text, text_align = "center"):
+    def __init__(self, text, text_align="center"):
         super().__init__()
         self.value = text
         self.no_wrap = False
@@ -21,8 +21,9 @@ class BigestText(Text):
         self.size = 40
         self.text_align = text_align
 
+
 class BigerText(Text):
-    def __init__(self, text, text_align = "center"):
+    def __init__(self, text, text_align="center"):
         super().__init__()
         self.value = text
         self.no_wrap = False
@@ -30,4 +31,4 @@ class BigerText(Text):
         self.expand = True
         self.size = 30
         self.text_align = text_align
-        self.margin = 8 
+        self.margin = 8

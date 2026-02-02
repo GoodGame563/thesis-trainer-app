@@ -1,9 +1,9 @@
 from flet import Card, CardVariant, Margin, Row
 
 from .buttons import СomparisonButton
-from .switchs import PositiveColorSwitch, NegativeColorSwitch, NeutralColorSwitch
+from .switchs import NegativeColorSwitch, NeutralColorSwitch, PositiveColorSwitch
+from .text import BigerText, BigestText
 from .text_fields import SmallTextField
-from .text import BigestText, BigerText
 
 
 class PositiveSwitchTextFieldBlock(Card):
@@ -35,6 +35,7 @@ class PositiveSwitchTextFieldBlock(Card):
     def change_switch(self):
         self.field.disabled = not self.switch.value
 
+
 class NegativeSwitchTextFieldBlock(Card):
     def __init__(
         self,
@@ -64,12 +65,13 @@ class NegativeSwitchTextFieldBlock(Card):
     def change_switch(self):
         self.field.disabled = not self.switch.value
 
+
 class SwitchBlock(Card):
     def __init__(
         self,
         label: str,
         value_swith: bool,
-        on_change = None,
+        on_change=None,
         key="value",
     ):
         super().__init__()
@@ -83,13 +85,12 @@ class SwitchBlock(Card):
         self.variant = CardVariant.OUTLINED
         self.elevation = 4
 
+
 class CustomBSContentBlock(Card):
-    def __init__(self,content, expand = None):
-        super().__init__(content=content,
-                         expand=expand,
-                         elevation=8, 
-                         variant = CardVariant.OUTLINED
-                         )
+    def __init__(self, content, expand=None):
+        super().__init__(
+            content=content, expand=expand, elevation=8, variant=CardVariant.OUTLINED
+        )
 
 
 class BigestTextBlock(Card):
@@ -100,13 +101,14 @@ class BigestTextBlock(Card):
             elevation=10,
             variant=CardVariant.OUTLINED,
             content=Row(
-            controls=[
-               data,
-            ],
-            alignment="center",
-            expand=True,
+                controls=[
+                    data,
+                ],
+                alignment="center",
+                expand=True,
+            ),
         )
-        )
+
 
 class BigerTextBlock(Card):
     def __init__(self, text):
@@ -115,15 +117,16 @@ class BigerTextBlock(Card):
             elevation=8,
             variant=CardVariant.OUTLINED,
             content=Row(
-            controls=[
-               data,
-            ],
-            alignment="center",
-            expand=True,
-        ),
-        margin=Margin.only(
-                    left=10,
-                    right=10,
-                    top=10,
-                    bottom=0,)
+                controls=[
+                    data,
+                ],
+                alignment="center",
+                expand=True,
+            ),
+            margin=Margin.only(
+                left=10,
+                right=10,
+                top=10,
+                bottom=0,
+            ),
         )

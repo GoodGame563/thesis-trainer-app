@@ -25,14 +25,14 @@ from models import (
     visible_column_table,
 )
 from utils import (
-    PositiveSwitchTextFieldBlock,
-    NegativeSwitchTextFieldBlock,
-    СomparisonButton,
-    BigestTextBlock, 
+    ActionButton,
     BigerTextBlock,
-    SwitchBlock, 
+    BigestTextBlock,
     CustomBSContentBlock,
-    ActionButton
+    NegativeSwitchTextFieldBlock,
+    PositiveSwitchTextFieldBlock,
+    SwitchBlock,
+    СomparisonButton,
 )
 
 from .overlay import close_overlay, open_overlay
@@ -43,6 +43,7 @@ selectKpiRole = KpiRole.ALL_ROLES
 def open_filter_view():
     filter_view.offset = Offset(0, 0)
     open_overlay()
+
 
 def safe_button(e):
     for c in column_table:
@@ -171,15 +172,14 @@ def safe_tables():
 def select(e):
     update_tables(KpiRole[e.data])
 
+
 positive_table = ListView(controls=[])
 negative_table = ListView(controls=[])
 
 
 column_table = []
 for key, value in visible_column_table.items():
-    column_table.append(
-        SwitchBlock(name_column_table[key], value, None, key)
-    )
+    column_table.append(SwitchBlock(name_column_table[key], value, None, key))
 
 middle_content_left_side = Container(
     content=Column(
@@ -211,7 +211,9 @@ middle_content_right_side = Container(
                     controls=[
                         Column(
                             controls=[
-                                SwitchBlock("Учитывать амплуа", False, None, "check_role"),
+                                SwitchBlock(
+                                    "Учитывать амплуа", False, None, "check_role"
+                                ),
                                 Card(
                                     content=positive_table,
                                     margin=Margin.only(
@@ -230,8 +232,12 @@ middle_content_right_side = Container(
                             controls=[
                                 Card(
                                     content=Dropdown(
-    value="ALL_ROLES", options=get_option(), on_select=select, margin=5, expand=True
-),
+                                        value="ALL_ROLES",
+                                        options=get_option(),
+                                        on_select=select,
+                                        margin=5,
+                                        expand=True,
+                                    ),
                                     margin=Margin.only(
                                         left=10,
                                         right=10,
@@ -271,12 +277,15 @@ middle_content_right_side = Container(
     expand=4,
 )
 
-middle_content_block = CustomBSContentBlock(Row(
+middle_content_block = CustomBSContentBlock(
+    Row(
         controls=[
             middle_content_left_side,
             middle_content_right_side,
         ]
-    ),8)
+    ),
+    8,
+)
 filter_view = Container(
     content=(
         Card(
@@ -285,11 +294,8 @@ filter_view = Container(
                     controls=[
                         BigestTextBlock("Фильтр"),
                         middle_content_block,
-
                         Row(
-                            controls=[
-                                ActionButton("Сохранить", safe_button)
-                            ],
+                            controls=[ActionButton("Сохранить", safe_button)],
                             alignment="center",
                         ),
                     ],

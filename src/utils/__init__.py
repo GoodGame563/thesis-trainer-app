@@ -1,3 +1,10 @@
-from .blocks import PositiveSwitchTextFieldBlock, NegativeSwitchTextFieldBlock, BigestTextBlock, BigerTextBlock, SwitchBlock, CustomBSContentBlock
-from .buttons import BasicButton, СomparisonButton, ActionButton
+from .blocks import (
+    BigerTextBlock,
+    BigestTextBlock,
+    CustomBSContentBlock,
+    NegativeSwitchTextFieldBlock,
+    PositiveSwitchTextFieldBlock,
+    SwitchBlock,
+)
+from .buttons import ActionButton, BasicButton, СomparisonButton
 from .text_helpers import *

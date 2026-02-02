@@ -3,7 +3,7 @@ from datetime import date
 
 from flet import DataCell, DataColumn, DataRow, DataTable
 
-from utils import create_basic_text, BasicButton
+from utils import BasicButton, create_basic_text
 
 from .structs import Player, Role, Team
 
