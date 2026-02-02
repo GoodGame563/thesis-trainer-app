@@ -10,3 +10,5 @@ from .buttons import ActionButton, BasicButton, IconButton, MenuButton, Сompari
 
 # from .text_helpers import *
 from .text import BigestText, NormalText
+
+from .table import InformationTable
