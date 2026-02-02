@@ -65,7 +65,7 @@ class Roles(TableSchema):
 @dataclass
 class AllGames(TableSchema):
     __tablename__ = "all_games"
-    __foreign_keys__ = [
+    __foreign_keys__: ClassVar[list[str]] = [
         "FOREIGN KEY (player_id) REFERENCES players(id)",
         "FOREIGN KEY (team_id) REFERENCES teams(id)",
         "FOREIGN KEY (role_id) REFERENCES roles(id)",
@@ -107,7 +107,7 @@ class AllGames(TableSchema):
 @dataclass
 class Transfers(TableSchema):
     __tablename__ = "transfers"
-    __foreign_keys__ = [
+    __foreign_keys__: ClassVar[list[str]] = [
         "FOREIGN KEY (player_id) REFERENCES players(id)",
         "FOREIGN KEY (team_id) REFERENCES teams(id)",
     ]

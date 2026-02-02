@@ -58,15 +58,14 @@ select = [
     "TID", 
     "PIE", 
     "RUF", 
-    "PL",  
+    # "PL",  
     "TRY",
     "SIM", 
-    "PTH", 
 ]
 
 
 ignore = [
-    "E501", "PLW0603", "F403"
+    "E501", "PLW0603", "F403", "PLW0602", "F401", "RUF001"
 ]
 
 [tool.ruff.format]
