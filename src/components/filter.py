@@ -12,13 +12,10 @@ from flet import (
     Offset,
     Row,
     Switch,
-    Text,
-    TextField,
 )
 
 from models import (
     KpiRole,
-    СomparisonType,
     filter_kpi,
     name_column_table,
     update_table,
@@ -32,7 +29,6 @@ from utils import (
     NegativeSwitchTextFieldBlock,
     PositiveSwitchTextFieldBlock,
     SwitchBlock,
-    СomparisonButton,
 )
 
 from .overlay import close_overlay, open_overlay

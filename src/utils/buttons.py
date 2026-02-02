@@ -9,7 +9,7 @@ from flet import (
 
 from models import СomparisonType
 
-from .text import BigerText, MenuText, NormalText
+from .text import MenuText, NormalText
 
 
 def change_content_button(e):
