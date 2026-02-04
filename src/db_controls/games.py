@@ -1,7 +1,9 @@
 from datetime import date
 
-from models import Player, Role, TableData, Team
 import aiosqlite
+
+from models import Player, Role, TableData, Team
+
 from .db_connection import db_connect
 
 
@@ -72,17 +74,17 @@ async def get_games_statistics() -> list[TableData]:
         db.row_factory = aiosqlite.Row
         async with db.execute(query) as cursor:
             async for row in cursor:
-                birth_date = date.fromisoformat(row['date_birth'])
+                birth_date = date.fromisoformat(row["date_birth"])
 
-                team = Team(name=row['name'], path_to_logo=row['logo'])
+                team = Team(name=row["name"], path_to_logo=row["logo"])
 
                 player = Player(
-                    nst=row['full_name'],
-                    weight=row['weight'],
-                    height=row['height'],
+                    nst=row["full_name"],
+                    weight=row["weight"],
+                    height=row["height"],
                     team=team,
                     birth_date=birth_date,
-                    path_to_photo=row['foto'],
+                    path_to_photo=row["foto"],
                 )
 
                 role = ROLE_MAPPING.get(row[7], Role.NOTHING)
@@ -92,33 +94,33 @@ async def get_games_statistics() -> list[TableData]:
                 table_data = TableData(
                     player=player,
                     role=role,
-                    minutes_played=row['minutes_played'],
-                    passes_accurate=row['passes_accurate'],
-                    passes_inaccurate=row['passes_inaccurate'],
-                    passes_percent=row['passes_percent'],
-                    captures_done=row['captures_done'],
-                    captures_missed=row['captures_missed'],
-                    captures_percent=row['captures_percent'],
-                    rakov_cleared=row['rakov_cleared'],
-                    tackles_done=row['tackles_done'],
-                    meters_covered=row['meters_covered'],
-                    defenders_beaten=row['defenders_beaten'],
-                    breakthroughs=row['breakthroughs'],
-                    attempts_grounded=row['attempts_grounded'],
-                    realizations_scored=row['realizations_scored'],
-                    realizations_attempted=row['realizations_attempted'],
-                    realizations_percent=row['realizations_percent'],
-                    penalties_scored=row['penalties_scored'],
-                    penalties_attempted=row['penalties_attempted'],
-                    penalties_percent=row['penalties_percent'],
-                    dropgoals_scored=row['dropgoals_scored'],
-                    dropgoals_attempted=row['dropgoals_attempted'],
-                    dropgoals_percent=row['dropgoals_percent'],
-                    points_scored=row['points_scored'],
-                    penalties_received=row['penalties_received'],
-                    loss_ball=row['loss_ball'],
-                    yellow_cards=row['yellow_cards'],
-                    red_cards=row[ 'red_cards'],
+                    minutes_played=row["minutes_played"],
+                    passes_accurate=row["passes_accurate"],
+                    passes_inaccurate=row["passes_inaccurate"],
+                    passes_percent=row["passes_percent"],
+                    captures_done=row["captures_done"],
+                    captures_missed=row["captures_missed"],
+                    captures_percent=row["captures_percent"],
+                    rakov_cleared=row["rakov_cleared"],
+                    tackles_done=row["tackles_done"],
+                    meters_covered=row["meters_covered"],
+                    defenders_beaten=row["defenders_beaten"],
+                    breakthroughs=row["breakthroughs"],
+                    attempts_grounded=row["attempts_grounded"],
+                    realizations_scored=row["realizations_scored"],
+                    realizations_attempted=row["realizations_attempted"],
+                    realizations_percent=row["realizations_percent"],
+                    penalties_scored=row["penalties_scored"],
+                    penalties_attempted=row["penalties_attempted"],
+                    penalties_percent=row["penalties_percent"],
+                    dropgoals_scored=row["dropgoals_scored"],
+                    dropgoals_attempted=row["dropgoals_attempted"],
+                    dropgoals_percent=row["dropgoals_percent"],
+                    points_scored=row["points_scored"],
+                    penalties_received=row["penalties_received"],
+                    loss_ball=row["loss_ball"],
+                    yellow_cards=row["yellow_cards"],
+                    red_cards=row["red_cards"],
                     rating=rating,
                 )
                 result.append(table_data)
