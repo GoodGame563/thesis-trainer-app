@@ -14,13 +14,12 @@ from flet import (
 )
 
 from components import (
-    # FilterContainer,
-    PlayerContainer,
+    FilterButtomSheet,
+    PlayerContainer,  # FilterContainer,
     create_black_overlay,
     create_menu,
     create_team_view,
     open_menu,
-    FilterButtomSheet,
 )
 from db_controls import create_db, get_games_statistics
 from theme import dark_theme, light_theme

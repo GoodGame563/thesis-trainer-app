@@ -1,25 +1,25 @@
 from flet import (
     Animation,
     AnimationCurve,
+    BottomSheet,
+    BoxConstraints,
     Button,
     Card,
+    Colors,
     Column,
     Container,
+    CupertinoSlidingSegmentedButton,
     Dropdown,
     DropdownOption,
+    ExpansionPanel,
+    ExpansionPanelList,
     ListView,
     Margin,
     Offset,
+    ResponsiveRow,
     Row,
     Switch,
-    BottomSheet,
-    CupertinoSlidingSegmentedButton,
     VerticalDivider,
-    BoxConstraints,
-    Colors,
-    ResponsiveRow,
-    ExpansionPanelList,
-    ExpansionPanel,
 )
 
 from models import KpiRole, filter_kpi, name_column_table
@@ -30,11 +30,12 @@ from utils import (
     CustomBSContentBlock,
     InformationTable,
     NegativeSwitchTextFieldBlock,
-    PositiveSwitchTextFieldBlock,
-    SwitchBlock,
     NormalText,
+    PositiveSwitchTextFieldBlock,
     SlidingContentBlock,
+    SwitchBlock,
 )
+
 from .overlay import close_overlay, open_overlay
 
 

@@ -1,11 +1,12 @@
 from typing import Tuple
+
 from flet import (
     Card,
     CardVariant,
     Column,
+    CupertinoSlidingSegmentedButton,
     Margin,
     Row,
-    CupertinoSlidingSegmentedButton,
     Tab,
     TabBar,
     TabBarView,

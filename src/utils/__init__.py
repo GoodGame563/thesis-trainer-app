@@ -4,8 +4,8 @@ from .blocks import (
     CustomBSContentBlock,
     NegativeSwitchTextFieldBlock,
     PositiveSwitchTextFieldBlock,
-    SwitchBlock,
     SlidingContentBlock,
+    SwitchBlock,
 )
 from .buttons import ActionButton, BasicButton, IconButton, MenuButton, СomparisonButton
 from .table import InformationTable
