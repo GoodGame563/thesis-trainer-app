@@ -5,20 +5,20 @@ from flet import (
     Card,
     Column,
     Container,
+    CupertinoContextMenu,
+    CupertinoContextMenuAction,
     FloatingActionButtonLocation,
+    Image,
     Page,
     Row,
     Stack,
     icons,
     run,
-    CupertinoContextMenu,
-    Image,
-    CupertinoContextMenuAction
 )
 
+from components import PlayerContainer  # FilterContainer,
 from components import (
     FilterButtomSheet,
-    PlayerContainer,  # FilterContainer,
     create_black_overlay,
     create_menu,
     create_team_view,

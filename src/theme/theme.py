@@ -1,4 +1,5 @@
 from flet import (
+    BottomSheetTheme,
     ButtonStyle,
     ButtonTheme,
     CardTheme,
@@ -12,7 +13,6 @@ from flet import (
     TextStyle,
     TextTheme,
     Theme,
-    BottomSheetTheme
 )
 
 light_color = {
@@ -80,7 +80,6 @@ light_theme = Theme(
         bgcolor=light_color["background"],
         shadow_color=light_color["shadow"],
     ),
-
     text_theme=TextTheme(
         body_large=TextStyle(color=light_color["primary"]),
         body_medium=TextStyle(color=light_color["primary"]),
