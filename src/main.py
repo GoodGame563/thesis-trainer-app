@@ -26,7 +26,7 @@ from utils import IconButton, InformationTable
 
 logging.basicConfig(level=logging.INFO)
 
-create_db()
+# create_db()
 
 
 async def main(page: Page):
@@ -54,7 +54,7 @@ async def main(page: Page):
     # player_view = PlayerContainer()
     main_table = InformationTable(
         # []
-        get_games_statistics(),
+        await get_games_statistics(),
         None,
         # player_view.open,
     )
@@ -92,9 +92,9 @@ async def main(page: Page):
                         left=0,
                     ),
                     black_overlay,
-                    create_team_view(),
+                    # create_team_view(),
                     # player_view,
-                    filter_view,
+                    # filter_view,
                     menu,
                 ]
             ),
