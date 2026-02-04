@@ -201,18 +201,17 @@ class FilterContainer(Container):
 
     def change_switch(self, e):
         self.set(e.control.key, e.control.value)
-        # print(e.content.content.content.controls)
 
     def open_filter_view(self):
         self.offset = Offset(0, 0)
-        open_overlay()
+        # open_overlay()
 
     def safe_button(self, e):
         # print(e.control)
         # for c in self.column_table:
         #     self.connected_table.visible_column_table[c.content.key] = c.content.value
         # self.connected_table.update()
-        close_overlay()
+        # close_overlay()
         self.offset = Offset(0, 1)
 
     def safe_tables(self):

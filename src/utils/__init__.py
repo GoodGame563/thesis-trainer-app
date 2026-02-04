@@ -5,6 +5,7 @@ from .blocks import (
     NegativeSwitchTextFieldBlock,
     PositiveSwitchTextFieldBlock,
     SwitchBlock,
+    SlidingContentBlock,
 )
 from .buttons import ActionButton, BasicButton, IconButton, MenuButton, СomparisonButton
 from .table import InformationTable

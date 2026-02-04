@@ -1,6 +1,7 @@
 import logging
 
 from flet import (
+    BottomSheet,
     Card,
     Column,
     Container,
@@ -13,12 +14,13 @@ from flet import (
 )
 
 from components import (
-    FilterContainer,
+    # FilterContainer,
     PlayerContainer,
     create_black_overlay,
     create_menu,
     create_team_view,
     open_menu,
+    FilterButtomSheet,
 )
 from db_controls import create_db, get_games_statistics
 from theme import dark_theme, light_theme
@@ -58,7 +60,9 @@ async def main(page: Page):
         None,
         # player_view.open,
     )
-    filter_view = FilterContainer(main_table.get_columns(), main_table.set_column)
+    bs = FilterButtomSheet(main_table.get_columns(), main_table.set_column)
+    page.show_dialog(bs)
+    # filter_view = FilterContainer(main_table.get_columns(), main_table.set_column)
     # filter_view.open_filter_view()
     page.add(
         Container(
@@ -81,7 +85,8 @@ async def main(page: Page):
                     Container(
                         content=IconButton(
                             icons.Icons.FILTER_LIST,
-                            filter_view.open_filter_view,
+                            lambda _: page.show_dialog(bs),
+                            # filter_view.open_filter_view,
                         ),
                         right=0,
                         bottom=0,
