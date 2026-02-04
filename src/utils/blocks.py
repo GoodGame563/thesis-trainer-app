@@ -149,7 +149,7 @@ class BigerTextBlock(Card):
 
 
 class SlidingContentBlock(Card):
-    def __init__(self, text_buttons: Tuple[str], controls, expand=None):
+    def __init__(self, text_buttons: tuple[str], controls, expand=None):
         tabs = []
         for el in text_buttons:
             tabs.append(Tab(label=NormalText(el)))

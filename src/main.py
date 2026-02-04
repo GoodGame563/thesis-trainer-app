@@ -16,9 +16,9 @@ from flet import (
     run,
 )
 
-from components import PlayerContainer  # FilterContainer,
 from components import (
     FilterButtomSheet,
+    PlayerContainer,  # FilterContainer,
     create_black_overlay,
     create_menu,
     create_team_view,
