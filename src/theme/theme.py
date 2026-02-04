@@ -1,4 +1,5 @@
 from flet import (
+    BottomSheetTheme,
     ButtonStyle,
     ButtonTheme,
     CardTheme,
@@ -75,6 +76,10 @@ light_theme = Theme(
             padding=5,
         )
     ),
+    bottom_sheet_theme=BottomSheetTheme(
+        bgcolor=light_color["background"],
+        shadow_color=light_color["shadow"],
+    ),
     text_theme=TextTheme(
         body_large=TextStyle(color=light_color["primary"]),
         body_medium=TextStyle(color=light_color["primary"]),
@@ -150,6 +155,10 @@ dark_theme = Theme(
             bgcolor=dark_color["background"],
             padding=5,
         )
+    ),
+    bottom_sheet_theme=BottomSheetTheme(
+        bgcolor=dark_color["background"],
+        shadow_color=dark_color["shadow"],
     ),
     filled_button_theme=FilledButtonTheme(
         style=ButtonStyle(bgcolor=dark_color["accent"])

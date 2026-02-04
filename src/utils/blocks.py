@@ -1,8 +1,21 @@
-from flet import Card, CardVariant, Margin, Row
+from typing import Tuple
+
+from flet import (
+    Card,
+    CardVariant,
+    Column,
+    CupertinoSlidingSegmentedButton,
+    Margin,
+    Row,
+    Tab,
+    TabBar,
+    TabBarView,
+    Tabs,
+)
 
 from .buttons import СomparisonButton
 from .switchs import NegativeColorSwitch, NeutralColorSwitch, PositiveColorSwitch
-from .text import BigerText, BigestText
+from .text import BigerText, BigestText, NormalText
 from .text_fields import SmallTextField
 
 
@@ -73,6 +86,7 @@ class SwitchBlock(Card):
         value_swith: bool,
         on_change=None,
         key="value",
+        expand=None,
     ):
         super().__init__()
         self.content = NeutralColorSwitch(label, value_swith, on_change, key)
@@ -84,6 +98,7 @@ class SwitchBlock(Card):
         )
         self.variant = CardVariant.OUTLINED
         self.elevation = 4
+        self.expand = expand
 
 
 class CustomBSContentBlock(Card):
@@ -94,7 +109,7 @@ class CustomBSContentBlock(Card):
 
 
 class BigestTextBlock(Card):
-    def __init__(self, text):
+    def __init__(self, text, expand=None):
         data = BigestText(text)
         data.margin = 5
         super().__init__(
@@ -107,6 +122,7 @@ class BigestTextBlock(Card):
                 alignment="center",
                 expand=True,
             ),
+            expand=expand,
         )
 
 
@@ -129,4 +145,26 @@ class BigerTextBlock(Card):
                 top=10,
                 bottom=0,
             ),
+        )
+
+
+class SlidingContentBlock(Card):
+    def __init__(self, text_buttons: tuple[str], controls, expand=None):
+        tabs = []
+        for el in text_buttons:
+            tabs.append(Tab(label=NormalText(el)))
+        super().__init__(
+            content=Tabs(
+                length=len(controls),
+                selected_index=0,
+                expand=True,
+                content=Column(
+                    expand=True,
+                    controls=[
+                        TabBar(tabs=tabs),
+                        TabBarView(controls=controls, expand=2),
+                    ],
+                ),
+            ),
+            expand=expand,
         )

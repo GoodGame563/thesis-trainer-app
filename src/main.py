@@ -1,10 +1,14 @@
 import logging
 
 from flet import (
+    BottomSheet,
     Card,
     Column,
     Container,
+    CupertinoContextMenu,
+    CupertinoContextMenuAction,
     FloatingActionButtonLocation,
+    Image,
     Page,
     Row,
     Stack,
@@ -13,23 +17,20 @@ from flet import (
 )
 
 from components import (
+    FilterButtomSheet,
+    PlayerContainer,  # FilterContainer,
     create_black_overlay,
-    create_filter_view,
     create_menu,
     create_team_view,
-    create_user_view,
-    open_filter_view,
     open_menu,
-    open_user_view,
 )
 from db_controls import create_db, get_games_statistics
-from models import create_table
 from theme import dark_theme, light_theme
-from utils import IconButton
+from utils import IconButton, InformationTable
 
 logging.basicConfig(level=logging.INFO)
 
-create_db()
+# create_db()
 
 
 async def main(page: Page):
@@ -54,8 +55,14 @@ async def main(page: Page):
 
     page.floating_action_button = theme_button
     page.floating_action_button_location = FloatingActionButtonLocation.END_TOP
-
-    filter_view = create_filter_view()
+    # player_view = PlayerContainer()
+    main_table = InformationTable(
+        # []
+        await get_games_statistics(),
+        None,
+        # player_view.open,
+    )
+    bs = FilterButtomSheet(main_table.get_columns(), main_table.set_column)
     page.add(
         Container(
             Stack(
@@ -63,11 +70,7 @@ async def main(page: Page):
                     Card(
                         content=Row(
                             controls=Column(
-                                controls=create_table(
-                                    # []
-                                    get_games_statistics(),
-                                    open_user_view,
-                                ),
+                                controls=main_table,
                                 scroll="ALWAYS",
                                 # expand=True
                             ),
@@ -81,7 +84,8 @@ async def main(page: Page):
                     Container(
                         content=IconButton(
                             icons.Icons.FILTER_LIST,
-                            open_filter_view,
+                            lambda _: page.show_dialog(bs),
+                            # filter_view.open_filter_view,
                         ),
                         right=0,
                         bottom=0,
@@ -93,8 +97,8 @@ async def main(page: Page):
                     ),
                     black_overlay,
                     create_team_view(),
-                    create_user_view(),
-                    filter_view,
+                    # player_view,
+                    # filter_view,
                     menu,
                 ]
             ),
@@ -102,6 +106,8 @@ async def main(page: Page):
             clip_behavior="ANTI_ALIAS_WITH_SAVE_LAYER",
         )
     )
+
+    # player_view.open(12)
 
 
 if __name__ == "__main__":
