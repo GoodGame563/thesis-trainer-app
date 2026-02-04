@@ -156,7 +156,7 @@ class SlidingContentBlock(Card):
         super().__init__(
             content=Tabs(
                 length=len(controls),
-                selected_index=1,
+                selected_index=0,
                 expand=True,
                 content=Column(
                     expand=True,

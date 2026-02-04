@@ -11,6 +11,9 @@ from flet import (
     Stack,
     icons,
     run,
+    CupertinoContextMenu,
+    Image,
+    CupertinoContextMenuAction
 )
 
 from components import (
@@ -60,9 +63,6 @@ async def main(page: Page):
         # player_view.open,
     )
     bs = FilterButtomSheet(main_table.get_columns(), main_table.set_column)
-    page.show_dialog(bs)
-    # filter_view = FilterContainer(main_table.get_columns(), main_table.set_column)
-    # filter_view.open_filter_view()
     page.add(
         Container(
             Stack(
@@ -96,7 +96,7 @@ async def main(page: Page):
                         left=0,
                     ),
                     black_overlay,
-                    # create_team_view(),
+                    create_team_view(),
                     # player_view,
                     # filter_view,
                     menu,

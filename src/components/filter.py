@@ -1,17 +1,25 @@
 from flet import (
     Animation,
     AnimationCurve,
+    BottomSheet,
+    BoxConstraints,
     Button,
     Card,
+    Colors,
     Column,
     Container,
+    CupertinoSlidingSegmentedButton,
     Dropdown,
     DropdownOption,
+    ExpansionPanel,
+    ExpansionPanelList,
     ListView,
     Margin,
     Offset,
+    ResponsiveRow,
     Row,
     Switch,
+    VerticalDivider,
 )
 
 from models import KpiRole, filter_kpi, name_column_table
@@ -22,14 +30,16 @@ from utils import (
     CustomBSContentBlock,
     InformationTable,
     NegativeSwitchTextFieldBlock,
+    NormalText,
     PositiveSwitchTextFieldBlock,
+    SlidingContentBlock,
     SwitchBlock,
 )
 
 from .overlay import close_overlay, open_overlay
 
 
-class FilterContainer(Container):
+class FilterButtomSheet(BottomSheet):
     selectKpiRole = KpiRole.ALL_ROLES
 
     def __init__(self, visible_columns: dict[str, bool], set_column):
@@ -67,152 +77,94 @@ class FilterContainer(Container):
             for key, value in visible_columns.items()
         ]
         super().__init__(
-            content=(
-                Card(
-                    content=Container(
-                        content=Column(
-                            controls=[
-                                BigestTextBlock("Фильтр"),
-                                CustomBSContentBlock(
-                                    Row(
-                                        controls=[
-                                            Container(
-                                                content=Column(
-                                                    controls=[
-                                                        BigerTextBlock(
-                                                            "Что отображать"
-                                                        ),
-                                                        Card(
-                                                            content=ListView(
-                                                                controls=self.column_table,
-                                                                spacing=0,
-                                                            ),
-                                                            expand=True,
-                                                            margin=Margin.only(
-                                                                left=10,
-                                                                right=10,
-                                                                top=0,
-                                                                bottom=10,
-                                                            ),
-                                                        ),
-                                                    ],
-                                                    horizontal_alignment="STRETCH",
-                                                    spacing=10,
-                                                ),
-                                                expand=2,
-                                            ),
-                                            Container(
-                                                content=Column(
-                                                    controls=[
-                                                        BigerTextBlock("Подсчет KPI"),
-                                                        Container(
-                                                            content=Row(
-                                                                controls=[
-                                                                    Column(
-                                                                        controls=[
-                                                                            SwitchBlock(
-                                                                                "Учитывать амплуа",
-                                                                                False,
-                                                                                None,
-                                                                                "check_role",
-                                                                            ),
-                                                                            Card(
-                                                                                content=self.positive_table,
-                                                                                margin=Margin.only(
-                                                                                    left=10,
-                                                                                    right=10,
-                                                                                    top=0,
-                                                                                    bottom=10,
-                                                                                ),
-                                                                                expand=True,
-                                                                            ),
-                                                                        ],
-                                                                        expand=1,
-                                                                        horizontal_alignment="STRETCH",
-                                                                    ),
-                                                                    Column(
-                                                                        controls=[
-                                                                            Card(
-                                                                                content=Dropdown(
-                                                                                    value="ALL_ROLES",
-                                                                                    options=get_option(),
-                                                                                    on_select=self.select,
-                                                                                    margin=5,
-                                                                                    expand=True,
-                                                                                ),
-                                                                                margin=Margin.only(
-                                                                                    left=10,
-                                                                                    right=10,
-                                                                                    top=10,
-                                                                                    bottom=0,
-                                                                                ),
-                                                                            ),
-                                                                            Card(
-                                                                                content=self.negative_table,
-                                                                                margin=Margin.only(
-                                                                                    left=10,
-                                                                                    right=10,
-                                                                                    top=0,
-                                                                                    bottom=10,
-                                                                                ),
-                                                                                expand=True,
-                                                                            ),
-                                                                        ],
-                                                                        expand=1,
-                                                                        horizontal_alignment="STRETCH",
-                                                                    ),
-                                                                ]
-                                                            ),
-                                                            expand=True,
-                                                            margin=Margin.only(
-                                                                left=10,
-                                                                right=10,
-                                                                top=0,
-                                                                bottom=10,
-                                                            ),
-                                                            border_radius=8,
-                                                        ),
-                                                    ],
-                                                    horizontal_alignment="STRETCH",
-                                                    spacing=10,
-                                                ),
-                                                expand=4,
-                                            ),
-                                        ]
-                                    ),
-                                    8,
-                                ),
-                                Row(
+            content=Container(
+                content=Column(
+                    controls=[
+                        BigestTextBlock("Фильтр", 1),
+                        SlidingContentBlock(
+                            ("Что отображать", "Подсчет KPI"),
+                            [
+                                ListView(controls=self.column_table, spacing=0),
+                                Column(
                                     controls=[
-                                        ActionButton("Сохранить", self.safe_button)
+                                        Row(
+                                            controls=[
+                                                SwitchBlock(
+                                                    "Учитывать амплуа",
+                                                    False,
+                                                    None,
+                                                    "check_role",
+                                                    1,
+                                                ),
+                                                CustomBSContentBlock(
+                                                    Dropdown(
+                                                        value="ALL_ROLES",
+                                                        options=get_option(),
+                                                        on_select=self.select,
+                                                        margin=5,
+                                                        expand=True,
+                                                    ),
+                                                    1,
+                                                ),
+                                            ],
+                                        ),
+                                        ExpansionPanelList(
+                                            controls=[
+                                                ExpansionPanel(
+                                                    header=NormalText(
+                                                        "Позитивные факторы"
+                                                    ),
+                                                    content=ListView(
+                                                        controls=[
+                                                            self.positive_table,
+                                                        ],
+                                                        scroll="ALWAYS",
+                                                        height=300,
+                                                        expand=1,
+                                                    ),
+                                                    expand=1,
+                                                ),
+                                                ExpansionPanel(
+                                                    header=NormalText(
+                                                        "Негативные факторы"
+                                                    ),
+                                                    content=ListView(
+                                                        controls=[
+                                                            self.negative_table,
+                                                        ],
+                                                        scroll="",
+                                                        expand=1,
+                                                    ),
+                                                    expand=1,
+                                                ),
+                                            ],
+                                            spacing=10,
+                                            expand=8,
+                                            expanded_header_padding=4,
+                                        ),
                                     ],
-                                    alignment="center",
+                                    horizontal_alignment="STRETCH",
                                 ),
                             ],
+                            expand=6,
                         ),
-                        margin=10,
-                    ),
-                )
+                        Row(
+                            controls=[ActionButton("Сохранить", self.safe_button)],
+                            alignment="center",
+                            expand=1,
+                        ),
+                    ],
+                ),
+                margin=10,
             ),
-            padding=30,
-            offset=Offset(0, 1),
-            animate_offset=Animation(300, AnimationCurve.EASE_IN_OUT),
+            fullscreen=True,
         )
 
     def change_switch(self, e):
         self.set(e.control.key, e.control.value)
 
-    def open_filter_view(self):
-        self.offset = Offset(0, 0)
-        # open_overlay()
-
     def safe_button(self, e):
-        # print(e.control)
-        # for c in self.column_table:
-        #     self.connected_table.visible_column_table[c.content.key] = c.content.value
-        # self.connected_table.update()
-        # close_overlay()
-        self.offset = Offset(0, 1)
+        self.parent.page.pop_dialog()
 
     def safe_tables(self):
         for c in self.positive_table.controls:
