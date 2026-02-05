@@ -82,10 +82,9 @@ class InformationTable(DataTable):
             border_radius=9,
             divider_thickness=1,
         )
+
     def open_user(self):
         self.page.show_dialog(self.open_user_view)
-    
-
 
     def update_data(self):
         for i in range(len(self.columns)):

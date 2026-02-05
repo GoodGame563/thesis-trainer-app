@@ -18,10 +18,10 @@ from flet import (
 
 from components import (
     FilterButtomSheet,
-    PlayerContainer,
-    create_black_overlay,
     Menu,
+    PlayerContainer,
     TeamDialog,
+    create_black_overlay,
 )
 from db_controls import create_db, get_games_statistics
 from theme import dark_theme, light_theme
@@ -30,10 +30,9 @@ from utils import IconButton, InformationTable
 logging.basicConfig(level=logging.INFO)
 
 
-
-
 async def main(page: Page):
     await create_db()
+
     async def change_theme(e):
         page.theme = dark_theme if page.theme == light_theme else light_theme
         theme_button.icon = (

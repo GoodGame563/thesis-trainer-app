@@ -81,7 +81,9 @@ async def init_database():
 
         if exists:
             await cur.execute(f"PRAGMA table_info({schema_cls.__tablename__})")
-            existing = [(row[1].lower(), row[2].upper()) for row in await cur.fetchall()]
+            existing = [
+                (row[1].lower(), row[2].upper()) for row in await cur.fetchall()
+            ]
             expected = [
                 (name.lower(), typ.split()[0].upper())
                 for name, typ in schema_cls.get_columns()

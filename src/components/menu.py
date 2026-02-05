@@ -6,7 +6,6 @@ from utils import IconButton, MenuButton
 from .overlay import close_overlay, open_overlay
 from .team import TeamDialog
 
-
 td = TeamDialog()
 
 

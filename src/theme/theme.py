@@ -5,6 +5,7 @@ from flet import (
     CardTheme,
     ColorScheme,
     ControlState,
+    DialogTheme,
     DropdownTheme,
     FilledButtonTheme,
     FloatingActionButtonTheme,
@@ -13,7 +14,6 @@ from flet import (
     TextStyle,
     TextTheme,
     Theme,
-    DialogTheme,
 )
 
 light_color = {

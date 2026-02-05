@@ -1,4 +1,5 @@
 from flet import (
+    AlertDialog,
     Alignment,
     Animation,
     AnimationCurve,
@@ -12,7 +13,6 @@ from flet import (
     Row,
     Text,
     TextField,
-    AlertDialog,
 )
 
 from utils import ActionButton, BasicButton

@@ -1,4 +1,5 @@
 from flet import (
+    AlertDialog,
     Alignment,
     Animation,
     AnimationCurve,
@@ -12,7 +13,6 @@ from flet import (
     ListView,
     Offset,
     Row,
-    AlertDialog
 )
 
 from utils import BigerTextBlock, BigestText, NormalText
@@ -28,89 +28,87 @@ class PlayerContainer(AlertDialog):
         self.weight = "90"
 
         super().__init__(
-            content=
-                Column(
-                    controls=[
-                        Row(
-                            controls=[
-                                Card(
-                                    content=Image(
-                                        src="not-found.jpg",
-                                    ),
-                                    expand=1,
+            content=Column(
+                controls=[
+                    Row(
+                        controls=[
+                            Card(
+                                content=Image(
+                                    src="not-found.jpg",
                                 ),
-                                Card(
-                                    content=Column(
-                                        controls=[
-                                            Container(
-                                                content=BigestText(self.name),
-                                                border=Border(bottom=BorderSide(2.0)),
-                                            ),
-                                            Row(
-                                                controls=[
-                                                    Row(
-                                                        controls=[
-                                                            BigerTextBlock(self.date),
-                                                            BigerTextBlock(
-                                                                self.height + " см"
-                                                            ),
-                                                            BigerTextBlock(
-                                                                self.weight + "кг"
-                                                            ),
-                                                        ],
-                                                        wrap=False,
-                                                        expand=1,
-                                                    ),
-                                                    ListView(
-                                                        controls=[
-                                                            BigerTextBlock(self.date),
-                                                            BigerTextBlock(self.date),
-                                                        ],
-                                                        expand=1,
-                                                        # height=300
-                                                    ),
-                                                ],
-                                                expand=True
-                                            ),
-                                        ],
-                                        horizontal_alignment="STRETCH",
-                                    ),
-                                    expand=3,
-                                ),
-                            ],
-                            expand=1,
-                        ),
-                        Column(
-                            controls=[
-                                CupertinoSlidingSegmentedButton(
+                                expand=1,
+                            ),
+                            Card(
+                                content=Column(
                                     controls=[
-                                        NormalText("Рофл"),
-                                        NormalText("Рофл"),
-                                        NormalText("Рофл"),
-                                        NormalText("Рофл"),
-                                        NormalText("Рофл"),
-                                    ]
-                                ),
-                                Card(
-                                    content=Row(
-                                        controls=Column(
-                                            controls=[],
-                                            # create_table(
-                                            #     []
-                                            #     # get_games_statistics(),
-                                            # ),
-                                            scroll="ALWAYS",
-                                            # expand=True
+                                        Container(
+                                            content=BigestText(self.name),
+                                            border=Border(bottom=BorderSide(2.0)),
                                         ),
-                                        scroll="ADAPTIVE",
-                                        expand=True,
-                                    ),
-                                    clip_behavior="none",
+                                        Row(
+                                            controls=[
+                                                Row(
+                                                    controls=[
+                                                        BigerTextBlock(self.date),
+                                                        BigerTextBlock(
+                                                            self.height + " см"
+                                                        ),
+                                                        BigerTextBlock(
+                                                            self.weight + "кг"
+                                                        ),
+                                                    ],
+                                                    wrap=False,
+                                                    expand=1,
+                                                ),
+                                                ListView(
+                                                    controls=[
+                                                        BigerTextBlock(self.date),
+                                                        BigerTextBlock(self.date),
+                                                    ],
+                                                    expand=1,
+                                                    # height=300
+                                                ),
+                                            ],
+                                            expand=True,
+                                        ),
+                                    ],
+                                    horizontal_alignment="STRETCH",
                                 ),
-                            ],
-                            expand=2,
-                        ),
-                    ]
-                )
+                                expand=3,
+                            ),
+                        ],
+                        expand=1,
+                    ),
+                    Column(
+                        controls=[
+                            CupertinoSlidingSegmentedButton(
+                                controls=[
+                                    NormalText("Рофл"),
+                                    NormalText("Рофл"),
+                                    NormalText("Рофл"),
+                                    NormalText("Рофл"),
+                                    NormalText("Рофл"),
+                                ]
+                            ),
+                            Card(
+                                content=Row(
+                                    controls=Column(
+                                        controls=[],
+                                        # create_table(
+                                        #     []
+                                        #     # get_games_statistics(),
+                                        # ),
+                                        scroll="ALWAYS",
+                                        # expand=True
+                                    ),
+                                    scroll="ADAPTIVE",
+                                    expand=True,
+                                ),
+                                clip_behavior="none",
+                            ),
+                        ],
+                        expand=2,
+                    ),
+                ]
+            )
         )
-
