@@ -13,6 +13,7 @@ from flet import (
     TextStyle,
     TextTheme,
     Theme,
+    DialogTheme,
 )
 
 light_color = {
@@ -75,6 +76,10 @@ light_theme = Theme(
             bgcolor=light_color["background"],
             padding=5,
         )
+    ),
+    dialog_theme=DialogTheme(
+        bgcolor=light_color["background"],
+        shadow_color=light_color["shadow"],
     ),
     bottom_sheet_theme=BottomSheetTheme(
         bgcolor=light_color["background"],
@@ -157,6 +162,10 @@ dark_theme = Theme(
         )
     ),
     bottom_sheet_theme=BottomSheetTheme(
+        bgcolor=dark_color["background"],
+        shadow_color=dark_color["shadow"],
+    ),
+    dialog_theme=DialogTheme(
         bgcolor=dark_color["background"],
         shadow_color=dark_color["shadow"],
     ),

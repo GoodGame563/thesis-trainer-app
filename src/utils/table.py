@@ -44,13 +44,14 @@ class InformationTable(DataTable):
     }
 
     def __init__(self, data_list: list[TableData], open_user_view):
+        self.open_user_view = open_user_view
         rows = []
         for d in data_list:
             cells = []
             for a in self.visible_column_table:
                 match a:
                     case "player":
-                        button = BasicButton(getattr(d, a).full_name, open_user_view)
+                        button = BasicButton(getattr(d, a).full_name, self.open_user)
                         button.margin = 5
                         content = button
                     case "date_birth":
@@ -81,18 +82,22 @@ class InformationTable(DataTable):
             border_radius=9,
             divider_thickness=1,
         )
+    def open_user(self):
+        self.page.show_dialog(self.open_user_view)
+    
 
-    def update(self):
+
+    def update_data(self):
         for i in range(len(self.columns)):
             value = self.visible_column_table[self.columns[i].key]
             self.columns[i].visible = value
             for row in self.rows:
                 row.cells[i].visible = value
-        super().update()
+        # super().update()
 
     def get_columns(self):
         return self.visible_column_table
 
     def set_column(self, name_column, value):
         self.visible_column_table[name_column] = value
-        self.update()
+        self.update_data()

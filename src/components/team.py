@@ -12,29 +12,17 @@ from flet import (
     Row,
     Text,
     TextField,
+    AlertDialog,
 )
 
 from utils import ActionButton, BasicButton
 
 from .overlay import close_overlay, open_overlay
 
-team_view = Card()
 
-
-def open_team_view():
-    team_view.offset = Offset(0, 0)
-    open_overlay()
-
-
-def close_team_view():
-    team_view.offset = Offset(0, 1)
-    close_overlay()
-
-
-def create_team_view() -> Card:
-    global team_view
-    team_view = Container(
-        content=Card(
+class TeamDialog(AlertDialog):
+    def __init__(self):
+        super().__init__(
             content=Container(
                 content=Column(
                     controls=[
@@ -71,20 +59,18 @@ def create_team_view() -> Card:
                                 BasicButton("Загрузить лого"),
                             ]
                         ),
-                        ActionButton("Сохранить", close_team_view),
+                        ActionButton(
+                            "Сохранить",
+                        ),
                     ],
                     alignment=MainAxisAlignment.SPACE_EVENLY,
                     expand=True,
                     horizontal_alignment="STRETCH",
                 ),
                 margin=20,
+                width=600,
+                height=300,
+                expand=False,
             ),
-            width=600,
-            height=300,
-            expand=False,
-        ),
-        offset=Offset(0, 1),
-        alignment=Alignment(0, 0),
-        animate_offset=Animation(300, AnimationCurve.EASE_IN_OUT),
-    )
-    return team_view
+        )
+        # animate_offset=Animation(300, AnimationCurve.EASE_IN_OUT),

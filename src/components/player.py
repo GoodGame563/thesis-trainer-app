@@ -12,6 +12,7 @@ from flet import (
     ListView,
     Offset,
     Row,
+    AlertDialog
 )
 
 from utils import BigerTextBlock, BigestText, NormalText
@@ -19,14 +20,15 @@ from utils import BigerTextBlock, BigestText, NormalText
 from .overlay import open_overlay
 
 
-class PlayerContainer(Container):
+class PlayerContainer(AlertDialog):
     def __init__(self):
         self.name = "Смишня Смишной Смишевич"
         self.date = "01.12.2025"
         self.height = "205"
         self.weight = "90"
+
         super().__init__(
-            content=Card(
+            content=
                 Column(
                     controls=[
                         Row(
@@ -61,11 +63,14 @@ class PlayerContainer(Container):
                                                     ),
                                                     ListView(
                                                         controls=[
-                                                            BigerTextBlock(self.date)
+                                                            BigerTextBlock(self.date),
+                                                            BigerTextBlock(self.date),
                                                         ],
                                                         expand=1,
+                                                        # height=300
                                                     ),
-                                                ]
+                                                ],
+                                                expand=True
                                             ),
                                         ],
                                         horizontal_alignment="STRETCH",
@@ -107,13 +112,5 @@ class PlayerContainer(Container):
                         ),
                     ]
                 )
-            ),
-            offset=Offset(-1, 0),
-            alignment=Alignment(0, 0),
-            margin=50,
-            animate_offset=Animation(300, AnimationCurve.EASE_IN_OUT),
         )
 
-    def open(self, id):
-        self.offset = Offset(0, 0)
-        open_overlay()
