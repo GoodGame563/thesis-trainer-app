@@ -42,8 +42,8 @@ from .overlay import close_overlay, open_overlay
 class FilterButtomSheet(BottomSheet):
     selectKpiRole = KpiRole.ALL_ROLES
 
-    def __init__(self, visible_columns: dict[str, bool], set_column):
-        self.set = set_column
+    def __init__(self, visible_columns: dict[str, bool], table: InformationTable):
+        self.select_table = table
         self.positive_table = ListView(
             controls=[
                 PositiveSwitchTextFieldBlock(
@@ -73,7 +73,7 @@ class FilterButtomSheet(BottomSheet):
             ]
         )
         self.column_table = [
-            SwitchBlock(name_column_table[key], value, self.change_switch, key)
+            SwitchBlock(name_column_table[key], value, None, key)
             for key, value in visible_columns.items()
         ]
         super().__init__(
@@ -164,6 +164,11 @@ class FilterButtomSheet(BottomSheet):
         self.set(e.control.key, e.control.value)
 
     def safe_button(self, e):
+        column_table = {}
+        for s_b in self.column_table:
+            column_table[s_b.content.key] = s_b.content.value
+        self.select_table.set_columns(column_table)
+
         self.parent.page.pop_dialog()
 
     def safe_tables(self):

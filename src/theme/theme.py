@@ -14,6 +14,7 @@ from flet import (
     TextStyle,
     TextTheme,
     Theme,
+    ScrollbarTheme,
 )
 
 light_color = {
@@ -55,7 +56,8 @@ light_theme = Theme(
     floating_action_button_theme=FloatingActionButtonTheme(
         bgcolor=light_color["background"],
         foreground_color=light_color["primary"],
-        elevation=8,
+        disabled_elevation=2,
+        focus_elevation=22,
     ),
     switch_theme=SwitchTheme(
         track_color=light_color["primary"],
@@ -84,6 +86,11 @@ light_theme = Theme(
     bottom_sheet_theme=BottomSheetTheme(
         bgcolor=light_color["background"],
         shadow_color=light_color["shadow"],
+    ),
+    scrollbar_theme=ScrollbarTheme(
+        thumb_color=light_color["accent"],
+        track_color=light_color["spliter"],
+        thickness=7,
     ),
     text_theme=TextTheme(
         body_large=TextStyle(color=light_color["primary"]),
@@ -139,7 +146,10 @@ dark_theme = Theme(
     use_material3=True,
     button_theme=ButtonTheme(ButtonStyle(bgcolor=dark_color["background"])),
     floating_action_button_theme=FloatingActionButtonTheme(
-        bgcolor=dark_color["background"], foreground_color=dark_color["primary"]
+        bgcolor=dark_color["background"],
+        foreground_color=dark_color["primary"],
+        disabled_elevation=2,
+        focus_elevation=22,
     ),
     switch_theme=SwitchTheme(
         track_color=dark_color["primary"],
@@ -171,6 +181,9 @@ dark_theme = Theme(
     ),
     filled_button_theme=FilledButtonTheme(
         style=ButtonStyle(bgcolor=dark_color["accent"])
+    ),
+    scrollbar_theme=ScrollbarTheme(
+        thumb_color=dark_color["accent"], track_color=dark_color["spliter"], thickness=7
     ),
     text_theme=TextTheme(
         body_large=TextStyle(color=dark_color["primary"]),

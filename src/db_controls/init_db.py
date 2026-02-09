@@ -2,13 +2,14 @@ from os import makedirs, path
 
 from .db_connection import db_connect
 from .structure import AllGames, Players, Roles, Teams, Transfers
+from models import Role
 
 data_path = "data"
 
 
 async def create_db():
     if not path.exists(data_path):
-        makedirs("data")
+        makedirs(data_path)
     await init_database()
 
 
@@ -30,7 +31,8 @@ async def _recreate_table(cur, schema_cls):
     new_name = f"{old_name}_new"
 
     await cur.execute("PRAGMA foreign_keys")
-    fk_was_on = await cur.fetchone()[0] == 1
+    # print((await cur.fetchone())[0])
+    fk_was_on = (await cur.fetchone())[0] == 1
     if fk_was_on:
         await cur.execute("PRAGMA foreign_keys = OFF")
 
@@ -48,9 +50,9 @@ async def _recreate_table(cur, schema_cls):
         )
 
         await cur.execute(f"PRAGMA table_info({old_name})")
-        old_cols = [row[1] for row in cur.fetchall()]
+        old_cols = [row[1] for row in await cur.fetchall()]
         await cur.execute(f"PRAGMA table_info({new_name})")
-        new_cols = [row[1] for row in cur.fetchall()]
+        new_cols = [row[1] for row in await cur.fetchall()]
         common = [c for c in old_cols if c in new_cols]
 
         if common:
@@ -64,6 +66,15 @@ async def _recreate_table(cur, schema_cls):
     finally:
         if fk_was_on:
             await cur.execute("PRAGMA foreign_keys = ON")
+
+
+async def _create_default_data(cur):
+    await cur.execute("SELECT COUNT(*) FROM roles")
+    if (await cur.fetchone())[0] == 0:
+        data = []
+        for role in Role:
+            data.append((role.name,))
+        await cur.executemany("INSERT INTO roles (name) VALUES(?)", data)
 
 
 async def init_database():
@@ -92,6 +103,8 @@ async def init_database():
                 await _recreate_table(cur, schema_cls)
         else:
             await _create_table(cur, schema_cls)
+
+    await _create_default_data(cur)
 
     await conn.commit()
     await conn.close()

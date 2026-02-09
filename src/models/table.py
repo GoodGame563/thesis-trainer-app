@@ -39,10 +39,12 @@ name_column_table = {
 }
 
 
-@dataclass
+@dataclass(order=True)
 class TableData:
     player: Player
     role: Role
+    team: str
+    date_birth: date
     minutes_played: int
     passes_accurate: int
     passes_inaccurate: int
@@ -72,6 +74,37 @@ class TableData:
     red_cards: int
     rating: float
 
+@dataclass(order=True)
+class ShortTableData:
+    role: Role
+    minutes_played: int
+    passes_accurate: int
+    passes_inaccurate: int
+    passes_percent: float
+    captures_done: int
+    captures_missed: int
+    captures_percent: float
+    rakov_cleared: int
+    tackles_done: int
+    meters_covered: int
+    defenders_beaten: int
+    breakthroughs: int
+    attempts_grounded: int
+    realizations_scored: int
+    realizations_attempted: int
+    realizations_percent: float
+    penalties_scored: int
+    penalties_attempted: int
+    penalties_percent: float
+    dropgoals_scored: int
+    dropgoals_attempted: int
+    dropgoals_percent: float
+    points_scored: int
+    penalties_received: int
+    loss_ball: int
+    yellow_cards: int
+    red_cards: int
+    rating: float
 
 def create_empty() -> TableData:
     return TableData(

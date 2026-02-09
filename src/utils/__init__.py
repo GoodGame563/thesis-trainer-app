@@ -6,9 +6,11 @@ from .blocks import (
     PositiveSwitchTextFieldBlock,
     SlidingContentBlock,
     SwitchBlock,
+    NormalTextBlock,
+    CustomSSContentBlock,
 )
 from .buttons import ActionButton, BasicButton, IconButton, MenuButton, СomparisonButton
-from .table import InformationTable
+from .table import InformationTable, ShortInformationTable
 
 # from .text_helpers import *
-from .text import BigestText, NormalText
+from .text import BigestText, NormalText, BigerText

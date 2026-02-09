@@ -3,20 +3,22 @@ name = "thesis-trainer-app"
 version = "0.1.0"
 description = ""
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = "==3.12"
 authors = [
     { name = "Flet developer", email = "you@example.com" }
 ]
 dependencies = [
-    "flet>=0.80.3",
-    "aiosqlite>=0.22.1"
+    "flet==0.80.5",
+    "aiosqlite==0.22.1",
+    "flet-datatable2==0.80.5"
 ]
 
 [dependency-groups]
 dev = [
-    "flet-cli>=0.80.3",
-    "flet-desktop>=0.80.3",
-    "flet-web>=0.80.3",
+    "flet-cli==0.80.5",
+    "flet-desktop==0.80.5",
+    "flet-web==0.80.5",
+    "flet-datatable2==0.80.5",
 ]
 
 [tool.flet]

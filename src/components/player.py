@@ -1,3 +1,4 @@
+from turtle import bgcolor
 from flet import (
     AlertDialog,
     Alignment,
@@ -6,6 +7,7 @@ from flet import (
     Border,
     BorderSide,
     Card,
+    Colors,
     Column,
     Container,
     CupertinoSlidingSegmentedButton,
@@ -15,58 +17,84 @@ from flet import (
     Row,
 )
 
-from utils import BigerTextBlock, BigestText, NormalText
-
+from db_controls import get_player_with_roles_and_teams, find_all_teams_by_user_id, get_all_games_by_player_team_id
+from utils import (
+    BigerTextBlock,
+    BigestText,
+    CustomSSContentBlock,
+    NormalText,
+    BigerText,
+    NormalTextBlock,
+    CustomBSContentBlock,
+    SlidingContentBlock,
+    ShortInformationTable
+)
+from models import KpiRole
 from .overlay import open_overlay
 
 
 class PlayerContainer(AlertDialog):
     def __init__(self):
-        self.name = "Смишня Смишной Смишевич"
-        self.date = "01.12.2025"
-        self.height = "205"
-        self.weight = "90"
-
+        self.name_container = Container(
+            content=BigestText("Смишня Смишной Смишевич"),
+            border=Border(bottom=BorderSide(2.0)),
+        )
+        self.date_container = BigerTextBlock("dslfksjlk")
+        self.height_container = BigerTextBlock("100" + " см")
+        self.weight_container = BigerTextBlock("90" + "кг")
+        self.role_team = []
+        self.date_container.margin = 3
+        self.height_container.margin = 3
+        self.weight_container.margin = 3
+        self.image_container = CustomSSContentBlock(Image(src="", expand=1))
+        self.team_name_container = NormalTextBlock("")
+        self.game_stat = SlidingContentBlock(
+            text_buttons=("dsadsad", "sadasdas"),
+            controls=[Container(), Container()],
+            expand=5,
+        )
         super().__init__(
             content=Column(
                 controls=[
                     Row(
                         controls=[
-                            Card(
+                            CustomBSContentBlock(
                                 content=Image(
                                     src="not-found.jpg",
                                 ),
                                 expand=1,
                             ),
-                            Card(
+                            CustomBSContentBlock(
                                 content=Column(
                                     controls=[
-                                        Container(
-                                            content=BigestText(self.name),
-                                            border=Border(bottom=BorderSide(2.0)),
-                                        ),
+                                        self.name_container,
                                         Row(
                                             controls=[
-                                                Row(
+                                                Column(
                                                     controls=[
-                                                        BigerTextBlock(self.date),
-                                                        BigerTextBlock(
-                                                            self.height + " см"
+                                                        Row(
+                                                            controls=[
+                                                                self.date_container,
+                                                                self.height_container,
+                                                                self.weight_container,
+                                                            ],
+                                                            spacing=0,
+                                                            wrap=False,
+                                                            expand=3,
                                                         ),
-                                                        BigerTextBlock(
-                                                            self.weight + "кг"
+                                                        Row(
+                                                            controls=[
+                                                                self.image_container,
+                                                                self.team_name_container,
+                                                            ],
+                                                            expand=4,
                                                         ),
                                                     ],
-                                                    wrap=False,
                                                     expand=1,
                                                 ),
                                                 ListView(
-                                                    controls=[
-                                                        BigerTextBlock(self.date),
-                                                        BigerTextBlock(self.date),
-                                                    ],
+                                                    controls=self.role_team,
                                                     expand=1,
-                                                    # height=300
                                                 ),
                                             ],
                                             expand=True,
@@ -77,38 +105,41 @@ class PlayerContainer(AlertDialog):
                                 expand=3,
                             ),
                         ],
-                        expand=1,
+                        expand=5,
                     ),
-                    Column(
-                        controls=[
-                            CupertinoSlidingSegmentedButton(
-                                controls=[
-                                    NormalText("Рофл"),
-                                    NormalText("Рофл"),
-                                    NormalText("Рофл"),
-                                    NormalText("Рофл"),
-                                    NormalText("Рофл"),
-                                ]
-                            ),
-                            Card(
-                                content=Row(
-                                    controls=Column(
-                                        controls=[],
-                                        # create_table(
-                                        #     []
-                                        #     # get_games_statistics(),
-                                        # ),
-                                        scroll="ALWAYS",
-                                        # expand=True
-                                    ),
-                                    scroll="ADAPTIVE",
-                                    expand=True,
-                                ),
-                                clip_behavior="none",
-                            ),
-                        ],
-                        expand=2,
-                    ),
+                    self.game_stat
                 ]
             )
+
         )
+
+    async def open_user(self, id):
+        pl = await get_player_with_roles_and_teams(id)
+        self.name_container.content = BigestText(pl["player"].full_name)
+        self.date_container.content = BigerText(pl["player"].birth_date)
+        self.weight_container.content = BigerText(str(pl["player"].weight) + " кг")
+        self.height_container.content = BigerText(str(pl["player"].height) + " см")
+        self.role_team.clear()
+        self.role_team.extend(
+            [
+                NormalTextBlock(f"{KpiRole[r_t['role']].value} - {r_t['team']}")
+                for r_t in pl["roles_with_team"]
+            ]
+        )
+        self.image_container.content.src = pl["current_team"].path_to_logo
+        self.team_name_container.content = BigerText(pl["current_team"].name)
+        text_buttons = []
+        contols = []
+        for t in await find_all_teams_by_user_id(id):
+            text_buttons.append(t.name)
+            i_t = ShortInformationTable()
+            i_t.set_data(await get_all_games_by_player_team_id(id, t.id))
+            contols.append(i_t)
+        self.content.controls[1]=SlidingContentBlock(
+            text_buttons=tuple(text_buttons),
+            controls=contols,
+            expand=5,
+        )
+        self.update()
+        print(pl)
+    

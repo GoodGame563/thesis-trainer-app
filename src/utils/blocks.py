@@ -108,6 +108,13 @@ class CustomBSContentBlock(Card):
         )
 
 
+class CustomSSContentBlock(Card):
+    def __init__(self, content, expand=None):
+        super().__init__(
+            content=content, expand=expand, elevation=4, variant=CardVariant.OUTLINED
+        )
+
+
 class BigestTextBlock(Card):
     def __init__(self, text, expand=None):
         data = BigestText(text)
@@ -126,11 +133,12 @@ class BigestTextBlock(Card):
         )
 
 
-class BigerTextBlock(Card):
-    def __init__(self, text):
-        data = BigerText(text)
+class NormalTextBlock(Card):
+    def __init__(self, text, expand=None):
+        data = NormalText(text)
+        data.margin = 5
         super().__init__(
-            elevation=8,
+            elevation=10,
             variant=CardVariant.OUTLINED,
             content=Row(
                 controls=[
@@ -139,6 +147,17 @@ class BigerTextBlock(Card):
                 alignment="center",
                 expand=True,
             ),
+            expand=expand,
+        )
+
+
+class BigerTextBlock(Card):
+    def __init__(self, text):
+        self.data_content = BigerText(text)
+        super().__init__(
+            elevation=8,
+            variant=CardVariant.OUTLINED,
+            content=self.data_content,
             margin=Margin.only(
                 left=10,
                 right=10,

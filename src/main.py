@@ -1,4 +1,5 @@
 import logging
+from flet_datatable2 import DataTable2, DataColumn2
 
 from flet import (
     BottomSheet,
@@ -25,7 +26,7 @@ from components import (
 )
 from db_controls import create_db, get_games_statistics
 from theme import dark_theme, light_theme
-from utils import IconButton, InformationTable
+from utils import IconButton, InformationTable, CustomBSContentBlock
 
 logging.basicConfig(level=logging.INFO)
 
@@ -54,31 +55,15 @@ async def main(page: Page):
     page.floating_action_button = theme_button
     page.floating_action_button_location = FloatingActionButtonLocation.END_TOP
     player_view = PlayerContainer()
-    main_table = InformationTable(
-        # []
-        await get_games_statistics(),
-        # None,
-        player_view,
-    )
-    # page.show_dialog(player_view)
-    bs = FilterButtomSheet(main_table.get_columns(), main_table.set_column)
+    main_table = InformationTable(player_view)
+
+    bs = FilterButtomSheet(main_table.get_columns(), main_table)
+
     page.add(
         Container(
             Stack(
                 controls=[
-                    Card(
-                        content=Row(
-                            controls=Column(
-                                controls=main_table,
-                                scroll="ALWAYS",
-                            ),
-                            scroll="ADAPTIVE",
-                            expand=True,
-                        ),
-                        clip_behavior="none",
-                        margin=40,
-                        expand=True,
-                    ),
+                    Container(content=main_table, margin=20),
                     Container(
                         content=IconButton(
                             icons.Icons.FILTER_LIST,
@@ -102,6 +87,7 @@ async def main(page: Page):
             clip_behavior="ANTI_ALIAS_WITH_SAVE_LAYER",
         )
     )
+    main_table.set_data(await get_games_statistics())
 
     # player_view.open(12)
 

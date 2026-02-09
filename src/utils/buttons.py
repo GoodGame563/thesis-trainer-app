@@ -42,12 +42,13 @@ class СomparisonButton(Button):
 
 
 class BasicButton(Button):
-    def __init__(self, text, on_click=None):
+    def __init__(self, text, on_click=None, key=None):
         super().__init__()
         self.style = ButtonStyle(shape=RoundedRectangleBorder(radius=8))
         self.content = NormalText(text)
         self.on_click = on_click
         self.elevation = 8
+        self.key = key
 
 
 class MenuButton(Button):
