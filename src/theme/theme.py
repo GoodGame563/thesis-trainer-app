@@ -10,11 +10,11 @@ from flet import (
     FilledButtonTheme,
     FloatingActionButtonTheme,
     MenuStyle,
+    ScrollbarTheme,
     SwitchTheme,
     TextStyle,
     TextTheme,
     Theme,
-    ScrollbarTheme,
 )
 
 light_color = {

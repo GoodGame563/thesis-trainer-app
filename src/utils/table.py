@@ -1,27 +1,26 @@
 from typing import Self
+
 from flet import (
     Alignment,
     BorderSide,
+    Card,
+    Colors,
+    Column,
+    Container,
     DataCell,
     DataColumn,
+    DataColumnSortEvent,
     DataRow,
+    GridView,
     Icons,
     ProgressBar,
-    Stack,
-    GridView,
-    Card,
     Row,
-    Column,
-    Colors,
     Shimmer,
-    Container,
-    DataColumnSortEvent,
+    Stack,
 )
+from flet_datatable2 import DataColumn2, DataColumnSize, DataRow2, DataTable2
 
-from flet_datatable2 import DataTable2, DataColumn2, DataColumnSize, DataRow2
-
-from models import ShortTableData, TableData, name_column_table, KpiRole
-from models import Role
+from models import KpiRole, Role, ShortTableData, TableData, name_column_table
 from theme import light_cs
 
 from .buttons import BasicButton, IconButton
@@ -188,7 +187,9 @@ class InformationTable(Card):
             for a in self.visible_column_table:
                 match a:
                     case "player":
-                        button = BasicButton(getattr(d, a).full_name, self.open_user, getattr(d, a).id)
+                        button = BasicButton(
+                            getattr(d, a).full_name, self.open_user, getattr(d, a).id
+                        )
                         button.margin = 5
                         content = button
                     case "date_birth":
@@ -221,7 +222,7 @@ class InformationTable(Card):
 
     def get_columns(self):
         return self.visible_column_table
-    
+
     def set_column(self, name_column, value):
         self.visible_column_table[name_column] = value
         self.update_data()
@@ -230,6 +231,7 @@ class InformationTable(Card):
         for key, value in column_table.items():
             self.visible_column_table[key] = value
         self.update_columns()
+
 
 class ShortInformationTable(InformationTable):
     data_table: list[ShortTableData] = []

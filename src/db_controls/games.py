@@ -2,9 +2,10 @@ from datetime import date
 
 import aiosqlite
 
-from models import Player, Role, TableData, Team, KpiRole, ShortTableData
+from models import KpiRole, Player, Role, ShortTableData, TableData, Team
 
 from .db_connection import db_connect
+
 
 async def get_games_statistics() -> list[TableData]:
     query = """
@@ -115,7 +116,10 @@ async def get_games_statistics() -> list[TableData]:
 
     return result
 
-async def get_all_games_by_player_team_id(player_id: int, team_id: int) -> list[ShortTableData]:
+
+async def get_all_games_by_player_team_id(
+    player_id: int, team_id: int
+) -> list[ShortTableData]:
     query = """
                SELECT
             g.*,
@@ -132,7 +136,7 @@ async def get_all_games_by_player_team_id(player_id: int, team_id: int) -> list[
         async with db.execute(query, (player_id, team_id)) as cursor:
             async for row in cursor:
                 table_data = ShortTableData(
-                    role= Role[row["role"]],
+                    role=Role[row["role"]],
                     minutes_played=row["minutes_played"],
                     passes_accurate=row["passes_accurate"],
                     passes_inaccurate=row["passes_inaccurate"],

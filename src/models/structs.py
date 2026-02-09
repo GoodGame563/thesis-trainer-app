@@ -1,6 +1,6 @@
-from datetime import date
-from enum import IntEnum, Enum
 from dataclasses import dataclass
+from datetime import date
+from enum import Enum, IntEnum
 
 
 class Role(IntEnum):

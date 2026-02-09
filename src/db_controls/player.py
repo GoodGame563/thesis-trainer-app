@@ -1,8 +1,10 @@
-import aiosqlite
 from datetime import date
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
+
+import aiosqlite
 
 from models import Player, Team
+
 from .db_connection import db_connect
 
 

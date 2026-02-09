@@ -1,8 +1,9 @@
 from os import makedirs, path
 
+from models import Role
+
 from .db_connection import db_connect
 from .structure import AllGames, Players, Roles, Teams, Transfers
-from models import Role
 
 data_path = "data"
 

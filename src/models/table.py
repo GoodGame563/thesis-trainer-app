@@ -74,6 +74,7 @@ class TableData:
     red_cards: int
     rating: float
 
+
 @dataclass(order=True)
 class ShortTableData:
     role: Role
@@ -105,6 +106,7 @@ class ShortTableData:
     yellow_cards: int
     red_cards: int
     rating: float
+
 
 def create_empty() -> TableData:
     return TableData(

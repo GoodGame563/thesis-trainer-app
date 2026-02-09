@@ -1,4 +1,5 @@
 from turtle import bgcolor
+
 from flet import (
     AlertDialog,
     Alignment,
@@ -17,19 +18,24 @@ from flet import (
     Row,
 )
 
-from db_controls import get_player_with_roles_and_teams, find_all_teams_by_user_id, get_all_games_by_player_team_id
-from utils import (
-    BigerTextBlock,
-    BigestText,
-    CustomSSContentBlock,
-    NormalText,
-    BigerText,
-    NormalTextBlock,
-    CustomBSContentBlock,
-    SlidingContentBlock,
-    ShortInformationTable
+from db_controls import (
+    find_all_teams_by_user_id,
+    get_all_games_by_player_team_id,
+    get_player_with_roles_and_teams,
 )
 from models import KpiRole
+from utils import (
+    BigerText,
+    BigerTextBlock,
+    BigestText,
+    CustomBSContentBlock,
+    CustomSSContentBlock,
+    NormalText,
+    NormalTextBlock,
+    ShortInformationTable,
+    SlidingContentBlock,
+)
+
 from .overlay import open_overlay
 
 
@@ -107,10 +113,9 @@ class PlayerContainer(AlertDialog):
                         ],
                         expand=5,
                     ),
-                    self.game_stat
+                    self.game_stat,
                 ]
             )
-
         )
 
     async def open_user(self, id):
@@ -135,11 +140,10 @@ class PlayerContainer(AlertDialog):
             i_t = ShortInformationTable()
             i_t.set_data(await get_all_games_by_player_team_id(id, t.id))
             contols.append(i_t)
-        self.content.controls[1]=SlidingContentBlock(
+        self.content.controls[1] = SlidingContentBlock(
             text_buttons=tuple(text_buttons),
             controls=contols,
             expand=5,
         )
         self.update()
         print(pl)
-    

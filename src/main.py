@@ -1,5 +1,4 @@
 import logging
-from flet_datatable2 import DataTable2, DataColumn2
 
 from flet import (
     BottomSheet,
@@ -16,6 +15,7 @@ from flet import (
     icons,
     run,
 )
+from flet_datatable2 import DataColumn2, DataTable2
 
 from components import (
     FilterButtomSheet,
@@ -26,7 +26,7 @@ from components import (
 )
 from db_controls import create_db, get_games_statistics
 from theme import dark_theme, light_theme
-from utils import IconButton, InformationTable, CustomBSContentBlock
+from utils import CustomBSContentBlock, IconButton, InformationTable
 
 logging.basicConfig(level=logging.INFO)
 
