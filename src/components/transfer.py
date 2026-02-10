@@ -20,13 +20,10 @@ from flet import (
     TextField,
 )
 
-from db_controls import get_all_teams
+from db_controls import get_all_players, get_all_teams, get_latest_transfer
 from utils import ActionButton, BasicButton, NormalText
 
 from .overlay import close_overlay, open_overlay
-
-from db_controls import get_all_teams, get_all_players, get_latest_transfer
-
 
 
 class TransferDialog(AlertDialog):

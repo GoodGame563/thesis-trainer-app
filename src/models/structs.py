@@ -39,14 +39,13 @@ class Player:
     birth_date: date
     path_to_photo: str = ""
 
+
 @dataclass
 class Transfer:
     id: int
     player: Player
     team: Team
     date: date
-
-
 
 
 class ComparisonValue:
