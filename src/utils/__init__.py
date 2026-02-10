@@ -15,3 +15,4 @@ from .table import InformationTable
 
 # from .text_helpers import *
 from .text import BigerText, BigestText, NormalText
+from .shimmer import CustomShimmer

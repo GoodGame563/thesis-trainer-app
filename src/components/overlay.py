@@ -27,3 +27,4 @@ def close_overlay():
 def open_overlay():
     overlay.offset = Offset(0, 0)
     overlay.opacity = 1.0
+    overlay.update()

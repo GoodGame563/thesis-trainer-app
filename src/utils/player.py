@@ -1,4 +1,5 @@
 from turtle import bgcolor
+from types import NoneType
 
 from flet import (
     AlertDialog,
@@ -32,6 +33,7 @@ from utils import (
     SlidingContentBlock,
 )
 
+from .shimmer import CustomShimmer
 from .short_table import ShortInformationTable
 from .text import BigerText, BigestText
 
@@ -45,17 +47,20 @@ class PlayerContainer(AlertDialog):
         self.date_container = BigerTextBlock("dslfksjlk")
         self.height_container = BigerTextBlock("100" + " см")
         self.weight_container = BigerTextBlock("90" + "кг")
-        self.role_team = []
+        self.role_team = [
+            CustomShimmer(content=NormalTextBlock("Роль - Команда"),) for _ in range(8)
+        ]
         self.date_container.margin = 3
         self.height_container.margin = 3
         self.weight_container.margin = 3
         self.image_container = CustomSSContentBlock(Image(src="", expand=1))
         self.team_name_container = NormalTextBlock("")
-        self.game_stat = SlidingContentBlock(
+        self.game_stat =  CustomShimmer(SlidingContentBlock(
             text_buttons=("dsadsad", "sadasdas"),
             controls=[Container(), Container()],
             expand=5,
-        )
+        ),
+        expand=5,)
         super().__init__(
             content=Column(
                 controls=[
@@ -132,13 +137,14 @@ class PlayerContainer(AlertDialog):
                 for r_t in pl["roles_with_team"]
             ]
         )
+
         self.image_container.content.src = (
             pl["current_team"].path_to_logo
-            if pl["current_team"].path_to_logo is not None
+            if pl["current_team"]
             else "not-found.jpg"
         )
         self.image_container.update()
-        self.team_name_container.content = BigerText(pl["current_team"].name)
+        self.team_name_container.content = BigerText(pl["current_team"].name if pl["current_team"] else "Нет команды")
         self.team_name_container.update()
         text_buttons = []
         contols = []

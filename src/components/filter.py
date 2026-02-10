@@ -42,40 +42,21 @@ from .overlay import close_overlay, open_overlay
 class FilterButtomSheet(BottomSheet):
     selectKpiRole = KpiRole.ALL_ROLES
 
-    def __init__(self, visible_columns: dict[str, bool], table: InformationTable):
-        self.select_table = table
+    def __init__(self, on_dismiss):
         self.positive_table = ListView(
-            controls=[
-                PositiveSwitchTextFieldBlock(
-                    name_column_table[key],
-                    value.enabled,
-                    value.comprasion,
-                    value.value,
-                    key,
-                )
-                for key, value in filter_kpi[
-                    self.selectKpiRole
-                ].positive_indicators.items()
-            ]
-        )
-        self.negative_table = ListView(
-            controls=[
-                NegativeSwitchTextFieldBlock(
-                    name_column_table[key],
-                    value.enabled,
-                    value.comprasion,
-                    value.value,
-                    key,
-                )
-                for key, value in filter_kpi[
-                    self.selectKpiRole
-                ].negative_indicators.items()
-            ]
-        )
-        self.column_table = [
-            SwitchBlock(name_column_table[key], value, None, key)
-            for key, value in visible_columns.items()
-        ]
+                                        controls=[],
+                                        scroll="ALWAYS",
+                                        height=300,
+                                        expand=1,
+                                    )
+        self.negative_table =ListView(
+                                        controls=[],
+                                        scroll="ALWAYS",
+                                        height=300,
+                                        expand=1,
+                                    )
+    
+        self.column_table = []
         super().__init__(
             content=Container(
                 content=Column(
@@ -114,27 +95,14 @@ class FilterButtomSheet(BottomSheet):
                                                     header=NormalText(
                                                         "Позитивные факторы"
                                                     ),
-                                                    content=ListView(
-                                                        controls=[
-                                                            self.positive_table,
-                                                        ],
-                                                        scroll="ALWAYS",
-                                                        height=300,
-                                                        expand=1,
-                                                    ),
+                                                    content=self.positive_table,
                                                     expand=1,
                                                 ),
                                                 ExpansionPanel(
                                                     header=NormalText(
                                                         "Негативные факторы"
                                                     ),
-                                                    content=ListView(
-                                                        controls=[
-                                                            self.negative_table,
-                                                        ],
-                                                        scroll="",
-                                                        expand=1,
-                                                    ),
+                                                    content=self.negative_table,
                                                     expand=1,
                                                 ),
                                             ],
@@ -158,16 +126,47 @@ class FilterButtomSheet(BottomSheet):
                 margin=10,
             ),
             fullscreen=True,
+            on_dismiss=on_dismiss,
+        )
+
+
+    async def set_data(self, visible_columns):
+        self.column_table.extend([
+            SwitchBlock(name_column_table[key], value, None, key)
+            for key, value in visible_columns.items()
+        ])
+        self.positive_table.controls.extend( [
+                PositiveSwitchTextFieldBlock(
+                    name_column_table[key],
+                    value.enabled,
+                    value.comprasion,
+                    value.value,
+                    key,
+                )
+                for key, value in filter_kpi[
+                    self.selectKpiRole
+                ].positive_indicators.items()
+            ])
+        
+        self.negative_table .controls.extend([
+                NegativeSwitchTextFieldBlock(
+                    name_column_table[key],
+                    value.enabled,
+                    value.comprasion,
+                    value.value,
+                    key,
+                )
+                for key, value in filter_kpi[
+                    self.selectKpiRole
+                ].negative_indicators.items()
+            ]
         )
 
     def change_switch(self, e):
         self.set(e.control.key, e.control.value)
 
     def safe_button(self, e):
-        column_table = {}
-        for s_b in self.column_table:
-            column_table[s_b.content.key] = s_b.content.value
-        self.select_table.set_columns(column_table)
+
 
         self.parent.page.pop_dialog()
 

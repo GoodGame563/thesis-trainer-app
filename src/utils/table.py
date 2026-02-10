@@ -125,6 +125,7 @@ class InformationTable(Card):
             for row in self.rows:
                 row.cells[i].visible = value
         self.main_table.min_width = visible * 218
+        self.main_table.update()
 
     def to_left(self, e):
         self.index -= self.step if self.step - self.index <= 0 else 0
@@ -208,6 +209,12 @@ class InformationTable(Card):
         self.update_data()
 
     def set_columns(self, column_table: dict[str, bool]):
+        self.main_table.disabled = True
+        self.main_table.update()
+
         for key, value in column_table.items():
             self.visible_column_table[key] = value
         self.update_columns()
+        self.main_table.disabled = False
+        self.main_table.update()
+

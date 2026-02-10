@@ -47,14 +47,15 @@ class Menu(Row):
 
     def close_menu(self, e):
         self.offset = Offset(-1, 0)
-        close_overlay()
+        # close_overlay()
 
     def close_menu_without_overlay(self):
         self.offset = Offset(-1, 0)
 
     def open_menu(self, e):
         self.offset = Offset(0, 0)
-        open_overlay()
+        # open_overlay()
+        self.update()
 
     def element_open_team(self):
         td = TeamDialog()

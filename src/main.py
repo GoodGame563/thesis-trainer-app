@@ -36,10 +36,23 @@ async def main(page: Page):
 
     async def change_theme(e):
         page.theme = dark_theme if page.theme == light_theme else light_theme
+        page.update()
         theme_button.icon = (
             icons.Icons.SUNNY if page.theme == light_theme else icons.Icons.DARK_MODE
         )
         page.update()
+
+    def on_dismiss_filter(e):
+        column_table = {}
+        for s_b in e.control.column_table:
+            column_table[s_b.content.key] = s_b.content.value
+        main_table.set_columns(column_table)
+
+    async def open_filter(e):
+        f = FilterButtomSheet(on_dismiss_filter)
+        page.show_dialog(f)
+        await f.set_data(main_table.visible_column_table)
+
 
     logging.getLogger("flet_core").setLevel(logging.INFO)
     page.title = "Таблица с фильтром"
@@ -64,9 +77,7 @@ async def main(page: Page):
                     Container(
                         content=IconButton(
                             icons.Icons.FILTER_LIST,
-                            lambda _: page.show_dialog(
-                                FilterButtomSheet(main_table.get_columns(), main_table)
-                            ),
+                            open_filter,
                         ),
                         right=0,
                         bottom=0,
@@ -76,7 +87,7 @@ async def main(page: Page):
                         top=0,
                         left=0,
                     ),
-                    black_overlay,
+                    # black_overlay,
                     # filter_view,
                     menu,
                 ]
