@@ -63,51 +63,14 @@ async def get_latest_transfer(player_id: int) -> Optional[Transfer]:
 
 async def create_transfer(
     player_id: int, team_id: int, transfer_date: date
-) -> Transfer:
+):
     async with db_connect() as db:
         db.row_factory = aiosqlite.Row
-
-        async with db.execute(
-            """
-            SELECT id, full_name, height, weight, date_birth, foto
-            FROM players
-            WHERE id = ?
-        """,
-            (player_id,),
-        ) as cursor:
-            player_row = await cursor.fetchone()
-
-        player = Player(
-            id=player_row["id"],
-            full_name=player_row["full_name"],
-            weight=float(player_row["weight"]),
-            height=float(player_row["height"]),
-            birth_date=date.fromisoformat(player_row["date_birth"]),
-            path_to_photo=player_row["foto"],
-        )
-
-        async with db.execute(
-            """
-            SELECT id, name, logo
-            FROM teams
-            WHERE id = ?
-        """,
-            (team_id,),
-        ) as cursor:
-            team_row = await cursor.fetchone()
-
-        team = Team(
-            id=team_row["id"], name=team_row["name"], path_to_logo=team_row["logo"]
-        )
-
         async with db.execute(
             """
             INSERT INTO transfers (player_id, team_id, date)
             VALUES (?, ?, ?)
         """,
-            (player_id, team_id, transfer_date.isoformat()),
-        ) as cursor:
+            (player_id, team_id, transfer_date.strftime("%Y-%m-%d")),
+        ):
             await db.commit()
-            transfer_id = cursor.lastrowid
-
-        return Transfer(id=transfer_id, player=player, team=team, date=transfer_date)

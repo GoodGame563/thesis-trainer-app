@@ -103,14 +103,14 @@ class GameDialog(AlertDialog):
             return
         teams = await get_all_teams()
         self.teams.clear()
-        self.teams.extend([NormalText(team.name) for team in teams])
+        self.teams.extend([NormalText(team.name, team.id) for team in teams])
 
     async def select_team(self, e):
         await self._set_teams()
 
         def set_button(d):
-            e.control.content = self.teams[d.data]
-            e.control.key = d.data
+            e.control.content = self.teams[d.control.selected_index].value
+            e.control.key = self.teams[d.control.selected_index].key
 
         picker = CupertinoPicker(
             controls=self.teams,
