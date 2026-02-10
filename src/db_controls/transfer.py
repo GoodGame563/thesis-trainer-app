@@ -61,9 +61,7 @@ async def get_latest_transfer(player_id: int) -> Optional[Transfer]:
         )
 
 
-async def create_transfer(
-    player_id: int, team_id: int, transfer_date: date
-):
+async def create_transfer(player_id: int, team_id: int, transfer_date: date):
     async with db_connect() as db:
         db.row_factory = aiosqlite.Row
         async with db.execute(

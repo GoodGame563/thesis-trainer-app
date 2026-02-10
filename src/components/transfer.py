@@ -1,4 +1,6 @@
 import re
+from datetime import datetime
+
 from flet import (
     AlertDialog,
     Alignment,
@@ -22,9 +24,13 @@ from flet import (
     TextField,
 )
 
-from db_controls import create_transfer, get_all_players, get_all_teams, get_latest_transfer
+from db_controls import (
+    create_transfer,
+    get_all_players,
+    get_all_teams,
+    get_latest_transfer,
+)
 from utils import ActionButton, BasicButton, NormalText
-from datetime import datetime
 
 from .overlay import close_overlay, open_overlay
 
@@ -77,7 +83,9 @@ class TransferDialog(AlertDialog):
                         Row(
                             controls=[
                                 self._date_field,
-                                BasicButton("Выбрать дату трансфера", self._select_date),
+                                BasicButton(
+                                    "Выбрать дату трансфера", self._select_date
+                                ),
                             ],
                             expand=1,
                         ),
@@ -108,14 +116,17 @@ class TransferDialog(AlertDialog):
             return
         players = await get_all_players()
         self._players.clear()
-        self._players.extend([NormalText(player.full_name, player.id) for player in players])
+        self._players.extend(
+            [NormalText(player.full_name, player.id) for player in players]
+        )
 
     def _select_date(self, e):
         def close_date_picker(d):
-            if d.name == 'dismiss': 
+            if d.name == "dismiss":
                 return
             self._date_field.value = d.data.strftime("%d.%m.%Y")
             self._date_field.update()
+
         dp = DatePicker(
             cancel_text="Отмена",
             confirm_text="Выбрать",
@@ -123,7 +134,7 @@ class TransferDialog(AlertDialog):
             error_invalid_text="Неверная дата",
             help_text="Выберите дату",
             on_dismiss=close_date_picker,
-            on_change=  close_date_picker, 
+            on_change=close_date_picker,
         )
         self.page.show_dialog(dp)
 
@@ -159,7 +170,6 @@ class TransferDialog(AlertDialog):
             e.control.key = self._teams[d.control.selected_index].key
             self._team_id = self._teams[d.control.selected_index].key
 
-
         picker = CupertinoPicker(
             controls=self._teams,
             expand=1,
@@ -177,7 +187,13 @@ class TransferDialog(AlertDialog):
         self.page.show_dialog(bs)
 
     async def _save(self):
-        print(await create_transfer(self._player_id, self._team_id, datetime.strptime(self._date_field.value, '%d.%m.%Y')))
+        print(
+            await create_transfer(
+                self._player_id,
+                self._team_id,
+                datetime.strptime(self._date_field.value, "%d.%m.%Y"),
+            )
+        )
         self.open = False
 
     def _dissmiss(self):
