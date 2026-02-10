@@ -39,6 +39,15 @@ class Player:
     birth_date: date
     path_to_photo: str = ""
 
+@dataclass
+class Transfer:
+    id: int
+    player: Player
+    team: Team
+    date: date
+
+
+
 
 class ComparisonValue:
     def __init__(self, comparison_type: СomparisonType, value: int):

@@ -24,7 +24,7 @@ from utils import ActionButton, BasicButton, NormalText
 
 from .overlay import close_overlay, open_overlay
 
-from db_controls import get_all_teams
+from db_controls import get_all_teams, get_all_players, get_latest_transfer
 
 
 
@@ -67,7 +67,7 @@ class TransferDialog(AlertDialog):
                         ),
                         Row(
                             controls=[
-                                ActionButton("Выбрать игрока", self.select_team, 1),
+                                ActionButton("Выбрать игрока", self.select_player, 1),
                                 ActionButton("Выбрать команду", self.select_team, 1),
                             ],
                             expand=1,
@@ -104,7 +104,7 @@ class TransferDialog(AlertDialog):
         self.teams.clear()
         self.teams.extend([NormalText(team.name) for team in teams])
 
-    async def select_team(self, e):
+    async def select_player(self, e):
         await self._set_teams()
         def set_button(d):
             e.control.content = self.teams[d.data]

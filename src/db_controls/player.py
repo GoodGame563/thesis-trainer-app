@@ -105,3 +105,20 @@ async def update_player(
         await db.execute(query, params)
         await db.commit()
         return db.total_changes > 0
+
+async def get_all_players() -> List[Player]:
+    async with db_connect() as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute("SELECT * FROM players") as cursor:
+            rows = await cursor.fetchall()
+            return [
+                Player(
+                    id=row["id"],
+                    birth_date=row["date_birth"],
+                    full_name=row["full_name"],
+                    height=row["height"],
+                    weight=row["weight"],
+                    path_to_photo=row["foto"],
+                )
+                for row in rows
+            ]
