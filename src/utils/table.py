@@ -217,4 +217,3 @@ class InformationTable(Card):
         self.update_columns()
         self.main_table.disabled = False
         self.main_table.update()
-

@@ -44,18 +44,18 @@ class FilterButtomSheet(BottomSheet):
 
     def __init__(self, on_dismiss):
         self.positive_table = ListView(
-                                        controls=[],
-                                        scroll="ALWAYS",
-                                        height=300,
-                                        expand=1,
-                                    )
-        self.negative_table =ListView(
-                                        controls=[],
-                                        scroll="ALWAYS",
-                                        height=300,
-                                        expand=1,
-                                    )
-    
+            controls=[],
+            scroll="ALWAYS",
+            height=300,
+            expand=1,
+        )
+        self.negative_table = ListView(
+            controls=[],
+            scroll="ALWAYS",
+            height=300,
+            expand=1,
+        )
+
         self.column_table = []
         super().__init__(
             content=Container(
@@ -129,13 +129,15 @@ class FilterButtomSheet(BottomSheet):
             on_dismiss=on_dismiss,
         )
 
-
     async def set_data(self, visible_columns):
-        self.column_table.extend([
-            SwitchBlock(name_column_table[key], value, None, key)
-            for key, value in visible_columns.items()
-        ])
-        self.positive_table.controls.extend( [
+        self.column_table.extend(
+            [
+                SwitchBlock(name_column_table[key], value, None, key)
+                for key, value in visible_columns.items()
+            ]
+        )
+        self.positive_table.controls.extend(
+            [
                 PositiveSwitchTextFieldBlock(
                     name_column_table[key],
                     value.enabled,
@@ -146,9 +148,11 @@ class FilterButtomSheet(BottomSheet):
                 for key, value in filter_kpi[
                     self.selectKpiRole
                 ].positive_indicators.items()
-            ])
-        
-        self.negative_table .controls.extend([
+            ]
+        )
+
+        self.negative_table.controls.extend(
+            [
                 NegativeSwitchTextFieldBlock(
                     name_column_table[key],
                     value.enabled,
@@ -166,7 +170,6 @@ class FilterButtomSheet(BottomSheet):
         self.set(e.control.key, e.control.value)
 
     def safe_button(self, e):
-
 
         self.parent.page.pop_dialog()
 

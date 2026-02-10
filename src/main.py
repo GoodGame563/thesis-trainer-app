@@ -53,7 +53,6 @@ async def main(page: Page):
         page.show_dialog(f)
         await f.set_data(main_table.visible_column_table)
 
-
     logging.getLogger("flet_core").setLevel(logging.INFO)
     page.title = "Таблица с фильтром"
     page.padding = 0

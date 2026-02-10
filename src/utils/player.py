@@ -48,19 +48,24 @@ class PlayerContainer(AlertDialog):
         self.height_container = BigerTextBlock("100" + " см")
         self.weight_container = BigerTextBlock("90" + "кг")
         self.role_team = [
-            CustomShimmer(content=NormalTextBlock("Роль - Команда"),) for _ in range(8)
+            CustomShimmer(
+                content=NormalTextBlock("Роль - Команда"),
+            )
+            for _ in range(8)
         ]
         self.date_container.margin = 3
         self.height_container.margin = 3
         self.weight_container.margin = 3
         self.image_container = CustomSSContentBlock(Image(src="", expand=1))
         self.team_name_container = NormalTextBlock("")
-        self.game_stat =  CustomShimmer(SlidingContentBlock(
-            text_buttons=("dsadsad", "sadasdas"),
-            controls=[Container(), Container()],
+        self.game_stat = CustomShimmer(
+            SlidingContentBlock(
+                text_buttons=("dsadsad", "sadasdas"),
+                controls=[Container(), Container()],
+                expand=5,
+            ),
             expand=5,
-        ),
-        expand=5,)
+        )
         super().__init__(
             content=Column(
                 controls=[
@@ -139,12 +144,12 @@ class PlayerContainer(AlertDialog):
         )
 
         self.image_container.content.src = (
-            pl["current_team"].path_to_logo
-            if pl["current_team"]
-            else "not-found.jpg"
+            pl["current_team"].path_to_logo if pl["current_team"] else "not-found.jpg"
         )
         self.image_container.update()
-        self.team_name_container.content = BigerText(pl["current_team"].name if pl["current_team"] else "Нет команды")
+        self.team_name_container.content = BigerText(
+            pl["current_team"].name if pl["current_team"] else "Нет команды"
+        )
         self.team_name_container.update()
         text_buttons = []
         contols = []
