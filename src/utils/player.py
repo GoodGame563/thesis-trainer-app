@@ -24,19 +24,16 @@ from db_controls import (
     get_player_with_roles_and_teams,
 )
 from models import KpiRole
+from .text import BigerText, BigestText
+from .short_table import ShortInformationTable
+
 from utils import (
-    BigerText,
     BigerTextBlock,
-    BigestText,
     CustomBSContentBlock,
     CustomSSContentBlock,
-    NormalText,
     NormalTextBlock,
-    ShortInformationTable,
     SlidingContentBlock,
 )
-
-from .overlay import open_overlay
 
 
 class PlayerContainer(AlertDialog):
@@ -121,9 +118,13 @@ class PlayerContainer(AlertDialog):
     async def open_user(self, id):
         pl = await get_player_with_roles_and_teams(id)
         self.name_container.content = BigestText(pl["player"].full_name)
+        self.name_container.update()
         self.date_container.content = BigerText(pl["player"].birth_date)
+        self.date_container.update()
         self.weight_container.content = BigerText(str(pl["player"].weight) + " кг")
+        self.weight_container.update()
         self.height_container.content = BigerText(str(pl["player"].height) + " см")
+        self.height_container.update()
         self.role_team.clear()
         self.role_team.extend(
             [
@@ -131,8 +132,10 @@ class PlayerContainer(AlertDialog):
                 for r_t in pl["roles_with_team"]
             ]
         )
-        self.image_container.content.src = pl["current_team"].path_to_logo
+        self.image_container.content.src = pl["current_team"].path_to_logo if pl["current_team"].path_to_logo is not None else "not-found.jpg"
+        self.image_container.update()
         self.team_name_container.content = BigerText(pl["current_team"].name)
+        self.team_name_container.update()
         text_buttons = []
         contols = []
         for t in await find_all_teams_by_user_id(id):
@@ -146,4 +149,3 @@ class PlayerContainer(AlertDialog):
             expand=5,
         )
         self.update()
-        print(pl)

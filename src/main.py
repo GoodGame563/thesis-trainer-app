@@ -21,7 +21,6 @@ from components import (
     FilterButtomSheet,
     GameDialog,
     Menu,
-    PlayerContainer,
     TransferDialog,
     create_black_overlay,
 )
@@ -55,10 +54,7 @@ async def main(page: Page):
 
     page.floating_action_button = theme_button
     page.floating_action_button_location = FloatingActionButtonLocation.END_TOP
-    player_view = PlayerContainer()
-    main_table = InformationTable(player_view)
-
-    bs = FilterButtomSheet(main_table.get_columns(), main_table)
+    main_table = InformationTable()
 
     page.add(
         Container(
@@ -68,7 +64,7 @@ async def main(page: Page):
                     Container(
                         content=IconButton(
                             icons.Icons.FILTER_LIST,
-                            lambda _: page.show_dialog(bs),
+                            lambda _: page.show_dialog(FilterButtomSheet(main_table.get_columns(), main_table)),
                         ),
                         right=0,
                         bottom=0,
@@ -79,7 +75,6 @@ async def main(page: Page):
                         left=0,
                     ),
                     black_overlay,
-                    player_view,
                     # filter_view,
                     menu,
                 ]
@@ -88,10 +83,8 @@ async def main(page: Page):
             clip_behavior="ANTI_ALIAS_WITH_SAVE_LAYER",
         )
     )
+    main_table.set_data(await get_games_statistics())
 
-    tm = TransferDialog()
-    page.show_dialog(tm)
-    # main_table.set_data(await get_games_statistics())
 
 
 if __name__ == "__main__":
