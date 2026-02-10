@@ -7,6 +7,9 @@ from flet import (
     CardVariant,
     Column,
     Container,
+    CupertinoBottomSheet,
+    CupertinoPicker,
+    FilePicker,
     FilePickerFileType,
     ListView,
     MainAxisAlignment,
@@ -15,32 +18,26 @@ from flet import (
     Row,
     Text,
     TextField,
-    FilePicker,
-    CupertinoPicker,
-    CupertinoBottomSheet
 )
 
+from db_controls import get_all_teams
 from utils import ActionButton, BasicButton, NormalText
 
 from .overlay import close_overlay, open_overlay
-
-from db_controls import get_all_teams
 
 
 class GameDialog(AlertDialog):
     def __init__(self):
         self.teams = []
-        self.path_file_field =  TextField(
-                                    content_padding=2,
-                                    disabled=True,
-                                    value="",
-                                    label="Путь",
-                                    margin=Margin.only(
-                                        left=10, right=10, top=5, bottom=0
-                                    ),
-                                    expand=True,
-                                )
-       
+        self.path_file_field = TextField(
+            content_padding=2,
+            disabled=True,
+            value="",
+            label="Путь",
+            margin=Margin.only(left=10, right=10, top=5, bottom=0),
+            expand=True,
+        )
+
         super().__init__(
             content=Container(
                 content=Column(
@@ -76,12 +73,9 @@ class GameDialog(AlertDialog):
                                 self.path_file_field,
                                 BasicButton("Загрузить игру", self.open_select_window),
                             ],
-                             expand=1,
+                            expand=1,
                         ),
-                        ActionButton(
-                            "Загрузить",
-                            self.save
-                        ),
+                        ActionButton("Загрузить", self.save),
                     ],
                     alignment=MainAxisAlignment.SPACE_EVENLY,
                     expand=True,
@@ -93,9 +87,9 @@ class GameDialog(AlertDialog):
                 expand=True,
             ),
             modal=False,
-            on_dismiss=self.dissmiss
+            on_dismiss=self.dissmiss,
         )
-    
+
     async def open_select_window(self):
         file = await FilePicker().pick_files(
             file_type=FilePickerFileType.CUSTOM,
@@ -113,24 +107,25 @@ class GameDialog(AlertDialog):
 
     async def select_team(self, e):
         await self._set_teams()
+
         def set_button(d):
             e.control.content = self.teams[d.data]
             e.control.key = d.data
 
         picker = CupertinoPicker(
-                                    controls=self.teams,
-                                    expand=1,
-                                    selected_index=5,
-                                    magnification=1.22,
-                                    squeeze=1.2,
-                                    use_magnifier=True,
-                                    on_change= set_button
-                                )
+            controls=self.teams,
+            expand=1,
+            selected_index=5,
+            magnification=1.22,
+            squeeze=1.2,
+            use_magnifier=True,
+            on_change=set_button,
+        )
         bs = CupertinoBottomSheet(
-                            picker,
-                            height=216,
-                        )
-        
+            picker,
+            height=216,
+        )
+
         self.page.show_dialog(bs)
 
     def save(self):
