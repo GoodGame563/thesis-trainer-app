@@ -97,7 +97,6 @@ class ShortInformationTable(Card):
 
     def sort_column(self, e: DataColumnSortEvent):
         if isinstance(self.data_table[0], ShortTableData):
-            pass
             return
         self.data_table.sort(
             key=lambda element: getattr(element, e.control.key), reverse=not e.ascending

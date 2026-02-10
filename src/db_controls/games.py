@@ -61,9 +61,7 @@ async def get_games_statistics() -> list[TableData]:
             async for row in cursor:
                 birth_date = date.fromisoformat(row["date_birth"])
 
-                team = Team(
-                    id=row["t_id"], name=row["command"], path_to_logo=row["logo"]
-                )
+                Team(id=row["t_id"], name=row["command"], path_to_logo=row["logo"])
 
                 player = Player(
                     id=row["pl_id"],

@@ -7,7 +7,7 @@ from models import Team
 from .db_connection import db_connect
 
 
-async def find_all_teams_by_user_id(player_id: int) -> List[Team]:
+async def find_all_teams_by_user_id(player_id: int) -> list[Team]:
     async with db_connect() as db:
         db.row_factory = aiosqlite.Row
         async with db.execute(
@@ -23,7 +23,7 @@ async def find_all_teams_by_user_id(player_id: int) -> List[Team]:
     return teams
 
 
-async def get_all_teams() -> List[Team]:
+async def get_all_teams() -> list[Team]:
     async with db_connect() as db:
         db.row_factory = aiosqlite.Row
         async with db.execute(

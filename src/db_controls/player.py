@@ -8,7 +8,7 @@ from models import Player, Team
 from .db_connection import db_connect
 
 
-async def get_player_with_roles_and_teams(player_id: int) -> Optional[Dict]:
+async def get_player_with_roles_and_teams(player_id: int) -> dict | None:
     async with db_connect() as db:
         db.row_factory = aiosqlite.Row
         async with db.execute(
@@ -70,11 +70,11 @@ async def get_player_with_roles_and_teams(player_id: int) -> Optional[Dict]:
 async def update_player(
     db_path: str,
     player_id: int,
-    full_name: Optional[str] = None,
-    height: Optional[int] = None,
-    weight: Optional[int] = None,
-    date_birth: Optional[date] = None,
-    foto: Optional[str] = None,
+    full_name: str | None = None,
+    height: int | None = None,
+    weight: int | None = None,
+    date_birth: date | None = None,
+    foto: str | None = None,
 ) -> bool:
     updates = []
     params = []
@@ -107,7 +107,7 @@ async def update_player(
         return db.total_changes > 0
 
 
-async def get_all_players() -> List[Player]:
+async def get_all_players() -> list[Player]:
     async with db_connect() as db:
         db.row_factory = aiosqlite.Row
         async with db.execute("SELECT * FROM players") as cursor:

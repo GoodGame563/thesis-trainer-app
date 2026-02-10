@@ -8,7 +8,7 @@ from models import Player, Team, Transfer
 from .db_connection import db_connect
 
 
-async def get_latest_transfer(player_id: int) -> Optional[Transfer]:
+async def get_latest_transfer(player_id: int) -> Transfer | None:
     async with db_connect() as db:
         db.row_factory = aiosqlite.Row
 
