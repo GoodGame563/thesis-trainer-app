@@ -80,7 +80,7 @@ class BigBasicButton(Button):
 
 
 class ActionButton(FilledButton):
-    def __init__(self, text, on_click=None, expand =False):
+    def __init__(self, text, on_click=None, expand=False):
         super().__init__()
         self.style = ButtonStyle(shape=RoundedRectangleBorder(radius=8))
         self.content = NormalText(text)

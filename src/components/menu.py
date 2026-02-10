@@ -3,12 +3,10 @@ from flet import Animation, AnimationCurve, Column, Container, Offset, Row, icon
 from theme import light_theme
 from utils import IconButton, MenuButton
 
+from .game import GameDialog
 from .overlay import close_overlay, open_overlay
 from .team import TeamDialog
-from .game import GameDialog
 from .transfer import TransferDialog
-
-
 
 
 class Menu(Row):
@@ -69,4 +67,3 @@ class Menu(Row):
     def element_open_transfer(self):
         td = TransferDialog()
         self.page.show_dialog(td)
-
