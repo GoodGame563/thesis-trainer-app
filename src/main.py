@@ -21,8 +21,9 @@ from components import (
     FilterButtomSheet,
     Menu,
     PlayerContainer,
-    TeamDialog,
     create_black_overlay,
+    TransferDialog,
+    GameDialog
 )
 from db_controls import create_db, get_games_statistics
 from theme import dark_theme, light_theme
@@ -87,9 +88,10 @@ async def main(page: Page):
             clip_behavior="ANTI_ALIAS_WITH_SAVE_LAYER",
         )
     )
-    main_table.set_data(await get_games_statistics())
 
-    # player_view.open(12)
+    tm = TransferDialog()
+    page.show_dialog(tm)
+    # main_table.set_data(await get_games_statistics())
 
 
 if __name__ == "__main__":

@@ -80,7 +80,7 @@ class BigBasicButton(Button):
 
 
 class ActionButton(FilledButton):
-    def __init__(self, text, on_click=None):
+    def __init__(self, text, on_click=None, expand =False):
         super().__init__()
         self.style = ButtonStyle(shape=RoundedRectangleBorder(radius=8))
         self.content = NormalText(text)
@@ -88,3 +88,4 @@ class ActionButton(FilledButton):
         self.on_click = on_click
         self.elevation = 8
         self.margin = Margin.only(left=10, right=10, top=5, bottom=0)
+        self.expand = expand

@@ -21,3 +21,15 @@ async def find_all_teams_by_user_id(player_id: int) -> List[Team]:
         ) as cursor:
             teams = [Team(row["id"], row["name"], row["logo"]) async for row in cursor]
     return teams
+
+async def get_all_teams() -> List[Team]:
+    async with db_connect() as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute(
+            """
+                SELECT id, name, logo
+                FROM teams
+            """,
+        ) as cursor:
+            teams = [Team(row["id"], row["name"], row["logo"]) async for row in cursor]
+    return teams
