@@ -64,7 +64,9 @@ async def main(page: Page):
                     Container(
                         content=IconButton(
                             icons.Icons.FILTER_LIST,
-                            lambda _: page.show_dialog(FilterButtomSheet(main_table.get_columns(), main_table)),
+                            lambda _: page.show_dialog(
+                                FilterButtomSheet(main_table.get_columns(), main_table)
+                            ),
                         ),
                         right=0,
                         bottom=0,
@@ -84,7 +86,6 @@ async def main(page: Page):
         )
     )
     main_table.set_data(await get_games_statistics())
-
 
 
 if __name__ == "__main__":

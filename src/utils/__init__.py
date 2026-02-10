@@ -10,7 +10,8 @@ from .blocks import (
     SwitchBlock,
 )
 from .buttons import ActionButton, BasicButton, IconButton, MenuButton, СomparisonButton
-from .table import InformationTable
 from .short_table import ShortInformationTable
+from .table import InformationTable
+
 # from .text_helpers import *
 from .text import BigerText, BigestText, NormalText

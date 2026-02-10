@@ -24,9 +24,6 @@ from db_controls import (
     get_player_with_roles_and_teams,
 )
 from models import KpiRole
-from .text import BigerText, BigestText
-from .short_table import ShortInformationTable
-
 from utils import (
     BigerTextBlock,
     CustomBSContentBlock,
@@ -34,6 +31,9 @@ from utils import (
     NormalTextBlock,
     SlidingContentBlock,
 )
+
+from .short_table import ShortInformationTable
+from .text import BigerText, BigestText
 
 
 class PlayerContainer(AlertDialog):
@@ -132,7 +132,11 @@ class PlayerContainer(AlertDialog):
                 for r_t in pl["roles_with_team"]
             ]
         )
-        self.image_container.content.src = pl["current_team"].path_to_logo if pl["current_team"].path_to_logo is not None else "not-found.jpg"
+        self.image_container.content.src = (
+            pl["current_team"].path_to_logo
+            if pl["current_team"].path_to_logo is not None
+            else "not-found.jpg"
+        )
         self.image_container.update()
         self.team_name_container.content = BigerText(pl["current_team"].name)
         self.team_name_container.update()

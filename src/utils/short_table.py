@@ -1,4 +1,3 @@
-
 from flet import (
     Alignment,
     BorderSide,
@@ -16,6 +15,7 @@ from theme import light_cs
 
 from .buttons import BasicButton, IconButton
 from .text import NormalText
+
 
 class ShortInformationTable(Card):
     data_table: list[ShortTableData] = []
@@ -94,7 +94,6 @@ class ShortInformationTable(Card):
             ),
             clip_behavior="HARD",
         )
-
 
     def sort_column(self, e: DataColumnSortEvent):
         if isinstance(self.data_table[0], ShortTableData):
@@ -182,7 +181,7 @@ class ShortInformationTable(Card):
 
             data_rows.append(DataRow2(cells=cells))
         return data_rows
-    
+
     def set_data(self, data_list: list[TableData]):
         self.data_table = data_list
         self.update_data()

@@ -1,4 +1,3 @@
-
 from flet import (
     Alignment,
     BorderSide,
@@ -15,8 +14,8 @@ from models import ShortTableData, TableData, name_column_table
 from theme import light_cs
 
 from .buttons import BasicButton, IconButton
-from .text import NormalText
 from .player import PlayerContainer
+from .text import NormalText
 
 
 class InformationTable(Card):
