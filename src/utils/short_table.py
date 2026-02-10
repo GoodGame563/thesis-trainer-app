@@ -14,18 +14,14 @@ from models import ShortTableData, TableData, name_column_table
 from theme import light_cs
 
 from .buttons import BasicButton, IconButton
-from .player import PlayerContainer
 from .text import NormalText
 
 
-class InformationTable(Card):
-    data_table: list[TableData] = []
+class ShortInformationTable(Card):
+    data_table: list[ShortTableData] = []
     index = 0
     step = 15
     visible_column_table = {
-        "player": True,
-        "date_birth": True,
-        "team": True,
         "role": True,
         "minutes_played": True,
         "passes_accurate": True,
@@ -70,7 +66,6 @@ class InformationTable(Card):
                     size=DataColumnSize.M,
                 )
             )
-
         self.right_button = IconButton(Icons.ARROW_FORWARD, self.to_right)
         self.left_button = IconButton(Icons.ARROW_BACK, self.to_left)
         self.main_table = DataTable2(
@@ -109,11 +104,6 @@ class InformationTable(Card):
         self.main_table.sort_column_index = e.column_index
         self.main_table.sort_ascending = e.ascending
         self.update_data()
-
-    async def open_user(self, e):
-        p_c = PlayerContainer()
-        self.page.show_dialog(p_c)
-        await p_c.open_user(e.control.key)
 
     def update_columns(self):
         visible = 0

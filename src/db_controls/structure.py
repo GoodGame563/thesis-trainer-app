@@ -115,4 +115,4 @@ class Transfers(TableSchema):
     id: int = pk()
     player_id: int = nn_int()
     team_id: int = nn_int()
-    data: str = nn_date()
+    date: str = nn_date()

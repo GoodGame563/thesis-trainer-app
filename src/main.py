@@ -15,25 +15,25 @@ from flet import (
     icons,
     run,
 )
+from flet_datatable2 import DataColumn2, DataTable2
 
 from components import (
     FilterButtomSheet,
-    PlayerContainer,  # FilterContainer,
+    GameDialog,
+    Menu,
+    TransferDialog,
     create_black_overlay,
-    create_menu,
-    create_team_view,
-    open_menu,
 )
 from db_controls import create_db, get_games_statistics
 from theme import dark_theme, light_theme
-from utils import IconButton, InformationTable
+from utils import CustomBSContentBlock, IconButton, InformationTable
 
 logging.basicConfig(level=logging.INFO)
 
-# create_db()
-
 
 async def main(page: Page):
+    await create_db()
+
     async def change_theme(e):
         page.theme = dark_theme if page.theme == light_theme else light_theme
         theme_button.icon = (
@@ -47,57 +47,36 @@ async def main(page: Page):
     is_dark = {"value": False}
     page.theme_mode = "light"
     page.theme = dark_theme if is_dark["value"] else light_theme
-    menu = create_menu()
+    menu = Menu()
     black_overlay = create_black_overlay()
-    # print(data)
 
     theme_button = IconButton(icons.Icons.SUNNY, change_theme)
 
     page.floating_action_button = theme_button
     page.floating_action_button_location = FloatingActionButtonLocation.END_TOP
-    # player_view = PlayerContainer()
-    main_table = InformationTable(
-        # []
-        await get_games_statistics(),
-        None,
-        # player_view.open,
-    )
-    bs = FilterButtomSheet(main_table.get_columns(), main_table.set_column)
+    main_table = InformationTable()
+
     page.add(
         Container(
             Stack(
                 controls=[
-                    Card(
-                        content=Row(
-                            controls=Column(
-                                controls=main_table,
-                                scroll="ALWAYS",
-                                # expand=True
-                            ),
-                            scroll="ADAPTIVE",
-                            expand=True,
-                        ),
-                        clip_behavior="none",
-                        margin=40,
-                        expand=True,
-                    ),
+                    Container(content=main_table, margin=20),
                     Container(
                         content=IconButton(
                             icons.Icons.FILTER_LIST,
-                            lambda _: page.show_dialog(bs),
-                            # filter_view.open_filter_view,
+                            lambda _: page.show_dialog(
+                                FilterButtomSheet(main_table.get_columns(), main_table)
+                            ),
                         ),
                         right=0,
                         bottom=0,
                     ),
                     Container(
-                        content=IconButton(icons.Icons.MENU, open_menu),
+                        content=IconButton(icons.Icons.MENU, menu.open_menu),
                         top=0,
                         left=0,
                     ),
                     black_overlay,
-                    create_team_view(),
-                    # player_view,
                     # filter_view,
                     menu,
                 ]
@@ -106,8 +85,7 @@ async def main(page: Page):
             clip_behavior="ANTI_ALIAS_WITH_SAVE_LAYER",
         )
     )
-
-    # player_view.open(12)
+    main_table.set_data(await get_games_statistics())
 
 
 if __name__ == "__main__":

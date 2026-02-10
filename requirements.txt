@@ -1,2 +1,4 @@
-flet==0.80.3
+flet==0.80.5
 aiosqlite==0.22.1
+flet-datatable2==0.80.5
+flet-rive==0.80.5
