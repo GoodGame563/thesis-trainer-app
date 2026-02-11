@@ -1,14 +1,14 @@
 from flet import (
+    Alignment,
     Animation,
     AnimationCurve,
     Column,
     Container,
+    MenuBar,
+    MenuStyle,
     Offset,
     Row,
     icons,
-    MenuBar,
-    Alignment,
-    MenuStyle
 )
 
 from theme import light_theme
@@ -23,7 +23,7 @@ from .transfer import TransferDialog
 class Menu(MenuBar):
     def __init__(self):
         super().__init__(
-             style=MenuStyle(
+            style=MenuStyle(
                 alignment=Alignment.CENTER,
             ),
             controls=[

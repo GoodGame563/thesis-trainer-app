@@ -5,6 +5,7 @@ from flet import (
     Card,
     Column,
     Container,
+    CrossAxisAlignment,
     CupertinoContextMenu,
     CupertinoContextMenuAction,
     FloatingActionButtonLocation,
@@ -14,7 +15,6 @@ from flet import (
     Stack,
     icons,
     run,
-    CrossAxisAlignment
 )
 from flet_datatable2 import DataColumn2, DataTable2
 
@@ -77,7 +77,7 @@ async def main(page: Page):
                                 Menu(),
                                 CustomBSContentBlock(content=main_table, expand=9),
                             ],
-                            horizontal_alignment= CrossAxisAlignment.STRETCH
+                            horizontal_alignment=CrossAxisAlignment.STRETCH,
                         ),
                         margin=20,
                     ),

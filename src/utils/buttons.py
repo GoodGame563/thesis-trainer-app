@@ -45,15 +45,15 @@ class СomparisonButton(Button):
             case СomparisonType.EQUALLY:
                 self.value = СomparisonType.MORE
             case СomparisonType.MORE:
-                 self.value = СomparisonType.LESS
+                self.value = СomparisonType.LESS
             case СomparisonType.LESS:
-                 self.value = СomparisonType.EQUALLY_MORE
+                self.value = СomparisonType.EQUALLY_MORE
             case СomparisonType.MORE:
-                 self.value = СomparisonType.EQUALLY_MORE
+                self.value = СomparisonType.EQUALLY_MORE
             case СomparisonType.EQUALLY_MORE:
-                 self.value = СomparisonType.EQUALLY_LESS
+                self.value = СomparisonType.EQUALLY_LESS
             case СomparisonType.EQUALLY_LESS:
-                 self.value = СomparisonType.EQUALLY
+                self.value = СomparisonType.EQUALLY
         self.update()
 
 
