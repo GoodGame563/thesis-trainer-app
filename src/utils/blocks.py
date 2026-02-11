@@ -30,8 +30,7 @@ class PositiveSwitchTextFieldBlock(Card):
     ):
         super().__init__()
         self.field = SmallTextField(value_field)
-        self.switch = PositiveColorSwitch(label, value_swith, self.change_switch)
-        self.field.disabled = not self.switch.value
+        self.switch = PositiveColorSwitch(label, value_swith)
         self.content = Row(
             controls=[self.switch, СomparisonButton(value_button), self.field]
         )
@@ -44,9 +43,6 @@ class PositiveSwitchTextFieldBlock(Card):
         self.key = key
         self.variant = CardVariant.OUTLINED
         self.elevation = 4
-
-    def change_switch(self):
-        self.field.disabled = not self.switch.value
 
 
 class NegativeSwitchTextFieldBlock(Card):
@@ -60,8 +56,7 @@ class NegativeSwitchTextFieldBlock(Card):
     ):
         super().__init__()
         self.field = SmallTextField(value_field)
-        self.switch = NegativeColorSwitch(label, value_swith, self.change_switch)
-        self.field.disabled = not self.switch.value
+        self.switch = NegativeColorSwitch(label, value_swith)
         self.content = Row(
             controls=[self.switch, СomparisonButton(value_button), self.field]
         )
@@ -74,9 +69,6 @@ class NegativeSwitchTextFieldBlock(Card):
         self.key = key
         self.variant = CardVariant.OUTLINED
         self.elevation = 4
-
-    def change_switch(self):
-        self.field.disabled = not self.switch.value
 
 
 class SwitchBlock(Card):

@@ -40,6 +40,22 @@ class СomparisonButton(Button):
         self.width = 35
         self.key = "comprasion"
 
+    def change_content_button(self):
+        match self.value:
+            case СomparisonType.EQUALLY:
+                self.value = СomparisonType.MORE
+            case СomparisonType.MORE:
+                 self.value = СomparisonType.LESS
+            case СomparisonType.LESS:
+                 self.value = СomparisonType.EQUALLY_MORE
+            case СomparisonType.MORE:
+                 self.value = СomparisonType.EQUALLY_MORE
+            case СomparisonType.EQUALLY_MORE:
+                 self.value = СomparisonType.EQUALLY_LESS
+            case СomparisonType.EQUALLY_LESS:
+                 self.value = СomparisonType.EQUALLY
+        self.update()
+
 
 class BasicButton(Button):
     def __init__(self, text, on_click=None, key=None):
@@ -58,6 +74,8 @@ class MenuButton(Button):
         self.content = MenuText(text)
         self.on_click = on_click
         self.elevation = 8
+        self.margin = 4
+        self.expand = 1
 
 
 class IconButton(FloatingActionButton):

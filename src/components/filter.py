@@ -170,7 +170,6 @@ class FilterButtomSheet(BottomSheet):
         self.set(e.control.key, e.control.value)
 
     def safe_button(self, e):
-
         self.parent.page.pop_dialog()
 
     def safe_tables(self):
@@ -215,7 +214,6 @@ class FilterButtomSheet(BottomSheet):
                             filter_kpi[self.selectKpiRole].positive_indicators[c.key],
                             element.key,
                         )
-                        element.on_change()
                     case _:
                         element.value = getattr(
                             filter_kpi[self.selectKpiRole].positive_indicators[c.key],
@@ -234,7 +232,6 @@ class FilterButtomSheet(BottomSheet):
                             filter_kpi[self.selectKpiRole].negative_indicators[c.key],
                             element.key,
                         )
-                        element.on_change()
                     case _:
                         element.value = getattr(
                             filter_kpi[self.selectKpiRole].negative_indicators[c.key],

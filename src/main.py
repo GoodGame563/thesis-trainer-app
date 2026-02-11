@@ -14,6 +14,7 @@ from flet import (
     Stack,
     icons,
     run,
+    CrossAxisAlignment
 )
 from flet_datatable2 import DataColumn2, DataTable2
 
@@ -59,8 +60,6 @@ async def main(page: Page):
     is_dark = {"value": False}
     page.theme_mode = "light"
     page.theme = dark_theme if is_dark["value"] else light_theme
-    menu = Menu()
-    black_overlay = create_black_overlay()
 
     theme_button = IconButton(icons.Icons.SUNNY, change_theme)
 
@@ -72,7 +71,16 @@ async def main(page: Page):
         Container(
             Stack(
                 controls=[
-                    Container(content=main_table, margin=20),
+                    Container(
+                        content=Column(
+                            controls=[
+                                Menu(),
+                                CustomBSContentBlock(content=main_table, expand=9),
+                            ],
+                            horizontal_alignment= CrossAxisAlignment.STRETCH
+                        ),
+                        margin=20,
+                    ),
                     Container(
                         content=IconButton(
                             icons.Icons.FILTER_LIST,
@@ -81,14 +89,6 @@ async def main(page: Page):
                         right=0,
                         bottom=0,
                     ),
-                    Container(
-                        content=IconButton(icons.Icons.MENU, menu.open_menu),
-                        top=0,
-                        left=0,
-                    ),
-                    # black_overlay,
-                    # filter_view,
-                    menu,
                 ]
             ),
             expand=True,
