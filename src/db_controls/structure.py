@@ -76,63 +76,63 @@ class AllGames(TableSchema):
     team_id: int = nn_int()
     role_id: int = nn_int()
     minutes_played: int = nn_int()
-    
+
     # ============= ПЕРЕДАЧИ =============
-    successful_passes: int = nn_int()      # Successful Passes × 1.25
-    bad_passes: int = nn_int()             # Bad Passes × -0.3
-    
+    successful_passes: int = nn_int()  # Successful Passes × 1.25
+    bad_passes: int = nn_int()  # Bad Passes × -0.3
+
     # ============= ЗАХВАТЫ =============
-    successful_tackle: int = nn_int()      # Successful Tackle × 2.1
-    dominant_tackles: int = nn_int()       # Dominant Tackles × 4.75
-    miss_tackle: int = nn_int()            # Miss Tackle × -0.6
-    
+    successful_tackle: int = nn_int()  # Successful Tackle × 2.1
+    dominant_tackles: int = nn_int()  # Dominant Tackles × 4.75
+    miss_tackle: int = nn_int()  # Miss Tackle × -0.6
+
     # ============= РАКИ И ОТБОРЫ =============
-    ruck_cleared: int = nn_int()           # Ruck cleared × 1.75
-    steals: int = nn_int()                 # Steals × 5
-    
+    ruck_cleared: int = nn_int()  # Ruck cleared × 1.75
+    steals: int = nn_int()  # Steals × 5
+
     # ============= ПРОНОС И ОБЫГРЫВАНИЕ =============
-    metres_carried: int = nn_int()         # Metres Carried × 0.9
-    defenders_beaten: int = nn_int()       # Defenders Beaten × 2.5
-    carriers: int = nn_int()               # Carriers × 1.75
-    
+    metres_carried: int = nn_int()  # Metres Carried × 0.9
+    defenders_beaten: int = nn_int()  # Defenders Beaten × 2.5
+    carriers: int = nn_int()  # Carriers × 1.75
+
     # ============= ПРОРЫВЫ =============
-    line_breaks: int = nn_int()            # Line Breaks × 3.15
-    line_break_assists: int = nn_int()     # Line Break assists × 1.2
-    
+    line_breaks: int = nn_int()  # Line Breaks × 3.15
+    line_break_assists: int = nn_int()  # Line Break assists × 1.2
+
     # ============= ПОПЫТКИ И АССИСТЫ =============
-    tries: int = nn_int()                  # Tries × 5
-    try_assists: int = nn_int()            # Try assists × 2.5
-    
+    tries: int = nn_int()  # Tries × 5
+    try_assists: int = nn_int()  # Try assists × 2.5
+
     # ============= УДАРЫ: УСПЕШНЫЕ =============
-    successful_conversions: int = nn_int() # Successful Conversions × 2
-    successful_penalties: int = nn_int()   # Successful Penalties × 3
-    successful_drop_goal: int = nn_int()   # Successful Drop-goal × 5
-    
+    successful_conversions: int = nn_int()  # Successful Conversions × 2
+    successful_penalties: int = nn_int()  # Successful Penalties × 3
+    successful_drop_goal: int = nn_int()  # Successful Drop-goal × 5
+
     # ============= УДАРЫ: НЕУДАЧНЫЕ =============
-    miss_conversions: int = nn_int()       # Miss Conversions × -0.2
-    miss_penalties: int = nn_int()         # Miss Penalties × -1
-    miss_drop_goal: int = nn_int()         # Miss Drop-goal × -5
-    
+    miss_conversions: int = nn_int()  # Miss Conversions × -0.2
+    miss_penalties: int = nn_int()  # Miss Penalties × -1
+    miss_drop_goal: int = nn_int()  # Miss Drop-goal × -5
+
     # ============= ОЧКИ =============
-    points: int = nn_int()                 # Points × 1 (или × 2.5 - уточнить)
-    
+    points: int = nn_int()  # Points × 1 (или × 2.5 - уточнить)
+
     # ============= СХВАТКИ =============
-    scrums_win: int = nn_int()             # Scrums win × 1
-    scrums_steal: int = nn_int()           # Scrums steal × 3
-    scrums_lose: int = nn_int()            # Scrums lose × -1
-    
+    scrums_win: int = nn_int()  # Scrums win × 1
+    scrums_steal: int = nn_int()  # Scrums steal × 3
+    scrums_lose: int = nn_int()  # Scrums lose × -1
+
     # ============= КОРИДОРЫ (ЛИНЕЙ-АУТЫ) =============
-    lineout_win: int = nn_int()            # Lineout win × 1
-    lineout_steal: int = nn_int()          # Lineout steal × 3
-    lineout_lose: int = nn_int()           # Lineout lose × -1
-    
+    lineout_win: int = nn_int()  # Lineout win × 1
+    lineout_steal: int = nn_int()  # Lineout steal × 3
+    lineout_lose: int = nn_int()  # Lineout lose × -1
+
     # ============= НАРУШЕНИЯ И ПОТЕРИ =============
-    ball_losses: int = nn_int()            # Ball losses × -5
-    penalty: int = nn_int()                # Penalty × -10
-    
+    ball_losses: int = nn_int()  # Ball losses × -5
+    penalty: int = nn_int()  # Penalty × -10
+
     # ============= КАРТОЧКИ =============
-    yellow_card: int = nn_int()            # Yellow card × -20
-    red_card: int = nn_int()               # Red card × -50
+    yellow_card: int = nn_int()  # Yellow card × -20
+    red_card: int = nn_int()  # Red card × -50
 
 
 @dataclass

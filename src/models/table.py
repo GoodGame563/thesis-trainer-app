@@ -51,64 +51,64 @@ class TableData:
     team: str
     date_birth: date
     minutes_played: int
-    
+
     # ============= ПЕРЕДАЧИ =============
-    successful_passes: int          
-    bad_passes: int                
-    
+    successful_passes: int
+    bad_passes: int
+
     # ============= ЗАХВАТЫ =============
-    successful_tackle: int          
-    dominant_tackles: int           
-    miss_tackle: int                
-    
+    successful_tackle: int
+    dominant_tackles: int
+    miss_tackle: int
+
     # ============= РАКИ И ОТБОРЫ =============
-    ruck_cleared: int              
-    steals: int                    
-    
+    ruck_cleared: int
+    steals: int
+
     # ============= ПРОНОС И ОБЫГРЫВАНИЕ =============
-    metres_carried: int            
-    defenders_beaten: int           
-    carriers: int                   
-    
+    metres_carried: int
+    defenders_beaten: int
+    carriers: int
+
     # ============= ПРОРЫВЫ =============
-    line_breaks: int               
-    line_break_assists: int         
-    
+    line_breaks: int
+    line_break_assists: int
+
     # ============= ПОПЫТКИ И АССИСТЫ =============
-    tries: int                      
-    try_assists: int              
-    
+    tries: int
+    try_assists: int
+
     # ============= УДАРЫ: УСПЕШНЫЕ =============
-    successful_conversions: int     
-    successful_penalties: int       
-    successful_drop_goal: int      
-    
+    successful_conversions: int
+    successful_penalties: int
+    successful_drop_goal: int
+
     # ============= УДАРЫ: НЕУДАЧНЫЕ =============
-    miss_conversions: int           
-    miss_penalties: int            
-    miss_drop_goal: int            
-    
+    miss_conversions: int
+    miss_penalties: int
+    miss_drop_goal: int
+
     # ============= ОЧКИ =============
-    points: int                     
-    
+    points: int
+
     # ============= СХВАТКИ =============
-    scrums_win: int                
-    scrums_steal: int              
-    scrums_lose: int                
-    
+    scrums_win: int
+    scrums_steal: int
+    scrums_lose: int
+
     # ============= КОРИДОРЫ (ЛИНЕЙ-АУТЫ) =============
-    lineout_win: int                
-    lineout_steal: int              
-    lineout_lose: int              
-    
+    lineout_win: int
+    lineout_steal: int
+    lineout_lose: int
+
     # ============= НАРУШЕНИЯ И ПОТЕРИ =============
-    ball_losses: int                
-    penalty: int                    
-    
+    ball_losses: int
+    penalty: int
+
     # ============= КАРТОЧКИ =============
-    yellow_card: int                
-    red_card: int                  
-    
+    yellow_card: int
+    red_card: int
+
     rating: float
 
 
@@ -118,61 +118,60 @@ class ShortTableData:
     role: Role
     minutes_played: int
     # ============= ПЕРЕДАЧИ =============
-    successful_passes: int          
-    bad_passes: int                
-    
-    # ============= ЗАХВАТЫ =============
-    successful_tackle: int          
-    dominant_tackles: int           
-    miss_tackle: int                
-    
-    # ============= РАКИ И ОТБОРЫ =============
-    ruck_cleared: int              
-    steals: int                    
-    
-    # ============= ПРОНОС И ОБЫГРЫВАНИЕ =============
-    metres_carried: int            
-    defenders_beaten: int           
-    carriers: int                   
-    
-    # ============= ПРОРЫВЫ =============
-    line_breaks: int               
-    line_break_assists: int         
-    
-    # ============= ПОПЫТКИ И АССИСТЫ =============
-    tries: int                      
-    try_assists: int              
-    
-    # ============= УДАРЫ: УСПЕШНЫЕ =============
-    successful_conversions: int     
-    successful_penalties: int       
-    successful_drop_goal: int      
-    
-    # ============= УДАРЫ: НЕУДАЧНЫЕ =============
-    miss_conversions: int           
-    miss_penalties: int            
-    miss_drop_goal: int            
-    
-    # ============= ОЧКИ =============
-    points: int                     
-    
-    # ============= СХВАТКИ =============
-    scrums_win: int                
-    scrums_steal: int              
-    scrums_lose: int                
-    
-    # ============= КОРИДОРЫ (ЛИНЕЙ-АУТЫ) =============
-    lineout_win: int                
-    lineout_steal: int              
-    lineout_lose: int              
-    
-    # ============= НАРУШЕНИЯ И ПОТЕРИ =============
-    ball_losses: int                
-    penalty: int                    
-    
-    # ============= КАРТОЧКИ =============
-    yellow_card: int                
-    red_card: int                  
-    
-    rating: float
+    successful_passes: int
+    bad_passes: int
 
+    # ============= ЗАХВАТЫ =============
+    successful_tackle: int
+    dominant_tackles: int
+    miss_tackle: int
+
+    # ============= РАКИ И ОТБОРЫ =============
+    ruck_cleared: int
+    steals: int
+
+    # ============= ПРОНОС И ОБЫГРЫВАНИЕ =============
+    metres_carried: int
+    defenders_beaten: int
+    carriers: int
+
+    # ============= ПРОРЫВЫ =============
+    line_breaks: int
+    line_break_assists: int
+
+    # ============= ПОПЫТКИ И АССИСТЫ =============
+    tries: int
+    try_assists: int
+
+    # ============= УДАРЫ: УСПЕШНЫЕ =============
+    successful_conversions: int
+    successful_penalties: int
+    successful_drop_goal: int
+
+    # ============= УДАРЫ: НЕУДАЧНЫЕ =============
+    miss_conversions: int
+    miss_penalties: int
+    miss_drop_goal: int
+
+    # ============= ОЧКИ =============
+    points: int
+
+    # ============= СХВАТКИ =============
+    scrums_win: int
+    scrums_steal: int
+    scrums_lose: int
+
+    # ============= КОРИДОРЫ (ЛИНЕЙ-АУТЫ) =============
+    lineout_win: int
+    lineout_steal: int
+    lineout_lose: int
+
+    # ============= НАРУШЕНИЯ И ПОТЕРИ =============
+    ball_losses: int
+    penalty: int
+
+    # ============= КАРТОЧКИ =============
+    yellow_card: int
+    red_card: int
+
+    rating: float

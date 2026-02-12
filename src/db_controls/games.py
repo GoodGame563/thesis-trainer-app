@@ -51,7 +51,7 @@ async def get_games_statistics() -> list[TableData]:
                 rating = 0.0
 
                 table_data = TableData(
-                   player=player,
+                    player=player,
                     role=role,
                     date_birth=birth_date,
                     team=row["command"],
