@@ -9,32 +9,37 @@ name_column_table = {
     "team": "Команда",
     "role": "Амплуа",
     "minutes_played": "Минут сыграно",
-    "passes_accurate": "Передач отдано (точных)",
-    "passes_inaccurate": "Передач не точных",
-    "passes_percent": "% точности передач",
-    "captures_done": "Захватов выполнено",
-    "captures_missed": "Захватов мимо",
-    "captures_percent": "% захватов",
-    "rakov_cleared": "Раков зачищено",
-    "tackles_done": "Отборов выполнено",
-    "meters_covered": "Метров пройдено",
+    "successful_passes": "Точных передач",
+    "bad_passes": "Неточных передач",
+    "successful_tackle": "Успешных захватов",
+    "dominant_tackles": "Подавляющих захватов",
+    "miss_tackle": "Неуспешных захватов",
+    "ruck_cleared": "Раков зачищено",
+    "steals": "Мячей отобрано",
+    "metres_carried": "Метров пройдено с мячом",
     "defenders_beaten": "Защитников обыграно",
-    "breakthroughs": "Прорывов",
-    "attempts_grounded": "Попыток занесено",
-    "realizations_scored": "Реализаций забито",
-    "realizations_attempted": "Реализаций пробивалось",
-    "realizations_percent": "% точности реализаций",
-    "penalties_scored": "Штрафных забито",
-    "penalties_attempted": "Штрафных пробивалось",
-    "penalties_percent": "% точности штрафных",
-    "dropgoals_scored": "Дроп-голов забито",
-    "dropgoals_attempted": "Дроп-голов пробивалось",
-    "dropgoals_percent": "% точности Дроп-голов",
-    "points_scored": "Очков набрано",
-    "penalties_received": "Штрафных получено",
-    "loss_ball": "Потерь мяча",
-    "yellow_cards": "Желтых карточек",
-    "red_cards": "Красных карточек",
+    "carriers": "Входов в линию защиты",
+    "line_breaks": "Прорывов линии обороны",
+    "line_break_assists": "Ассистов прорывов",
+    "tries": "Попыток занесено",
+    "try_assists": "Ассистов попыток",
+    "successful_conversions": "Точных реализаций",
+    "successful_penalties": "Точных штрафных",
+    "successful_drop_goal": "Точных дроп-голов",
+    "miss_conversions": "Неточных реализаций",
+    "miss_penalties": "Неточных штрафных",
+    "miss_drop_goal": "Неточных дроп-голов",
+    "points": "Очков набрано",
+    "scrums_win": "Выигранных своих схваток",
+    "scrums_steal": "Выигранных схваток соперника",
+    "scrums_lose": "Проигранных своих схваток",
+    "lineout_win": "Выигранных своих коридоров",
+    "lineout_steal": "Выигранных коридоров соперника",
+    "lineout_lose": "Проигранных своих коридоров",
+    "ball_losses": "Потерь мяча",
+    "penalty": "Штрафных получено",
+    "yellow_card": "Жёлтых карточек",
+    "red_card": "Красных карточек",
     "rating": "Рейтинговые баллы",
 }
 
@@ -46,104 +51,128 @@ class TableData:
     team: str
     date_birth: date
     minutes_played: int
-    passes_accurate: int
-    passes_inaccurate: int
-    passes_percent: float
-    captures_done: int
-    captures_missed: int
-    captures_percent: float
-    rakov_cleared: int
-    tackles_done: int
-    meters_covered: int
-    defenders_beaten: int
-    breakthroughs: int
-    attempts_grounded: int
-    realizations_scored: int
-    realizations_attempted: int
-    realizations_percent: float
-    penalties_scored: int
-    penalties_attempted: int
-    penalties_percent: float
-    dropgoals_scored: int
-    dropgoals_attempted: int
-    dropgoals_percent: float
-    points_scored: int
-    penalties_received: int
-    loss_ball: int
-    yellow_cards: int
-    red_cards: int
+    
+    # ============= ПЕРЕДАЧИ =============
+    successful_passes: int          
+    bad_passes: int                
+    
+    # ============= ЗАХВАТЫ =============
+    successful_tackle: int          
+    dominant_tackles: int           
+    miss_tackle: int                
+    
+    # ============= РАКИ И ОТБОРЫ =============
+    ruck_cleared: int              
+    steals: int                    
+    
+    # ============= ПРОНОС И ОБЫГРЫВАНИЕ =============
+    metres_carried: int            
+    defenders_beaten: int           
+    carriers: int                   
+    
+    # ============= ПРОРЫВЫ =============
+    line_breaks: int               
+    line_break_assists: int         
+    
+    # ============= ПОПЫТКИ И АССИСТЫ =============
+    tries: int                      
+    try_assists: int              
+    
+    # ============= УДАРЫ: УСПЕШНЫЕ =============
+    successful_conversions: int     
+    successful_penalties: int       
+    successful_drop_goal: int      
+    
+    # ============= УДАРЫ: НЕУДАЧНЫЕ =============
+    miss_conversions: int           
+    miss_penalties: int            
+    miss_drop_goal: int            
+    
+    # ============= ОЧКИ =============
+    points: int                     
+    
+    # ============= СХВАТКИ =============
+    scrums_win: int                
+    scrums_steal: int              
+    scrums_lose: int                
+    
+    # ============= КОРИДОРЫ (ЛИНЕЙ-АУТЫ) =============
+    lineout_win: int                
+    lineout_steal: int              
+    lineout_lose: int              
+    
+    # ============= НАРУШЕНИЯ И ПОТЕРИ =============
+    ball_losses: int                
+    penalty: int                    
+    
+    # ============= КАРТОЧКИ =============
+    yellow_card: int                
+    red_card: int                  
+    
     rating: float
 
 
 @dataclass(order=True)
 class ShortTableData:
     role: Role
+    role: Role
     minutes_played: int
-    passes_accurate: int
-    passes_inaccurate: int
-    passes_percent: float
-    captures_done: int
-    captures_missed: int
-    captures_percent: float
-    rakov_cleared: int
-    tackles_done: int
-    meters_covered: int
-    defenders_beaten: int
-    breakthroughs: int
-    attempts_grounded: int
-    realizations_scored: int
-    realizations_attempted: int
-    realizations_percent: float
-    penalties_scored: int
-    penalties_attempted: int
-    penalties_percent: float
-    dropgoals_scored: int
-    dropgoals_attempted: int
-    dropgoals_percent: float
-    points_scored: int
-    penalties_received: int
-    loss_ball: int
-    yellow_cards: int
-    red_cards: int
+    # ============= ПЕРЕДАЧИ =============
+    successful_passes: int          
+    bad_passes: int                
+    
+    # ============= ЗАХВАТЫ =============
+    successful_tackle: int          
+    dominant_tackles: int           
+    miss_tackle: int                
+    
+    # ============= РАКИ И ОТБОРЫ =============
+    ruck_cleared: int              
+    steals: int                    
+    
+    # ============= ПРОНОС И ОБЫГРЫВАНИЕ =============
+    metres_carried: int            
+    defenders_beaten: int           
+    carriers: int                   
+    
+    # ============= ПРОРЫВЫ =============
+    line_breaks: int               
+    line_break_assists: int         
+    
+    # ============= ПОПЫТКИ И АССИСТЫ =============
+    tries: int                      
+    try_assists: int              
+    
+    # ============= УДАРЫ: УСПЕШНЫЕ =============
+    successful_conversions: int     
+    successful_penalties: int       
+    successful_drop_goal: int      
+    
+    # ============= УДАРЫ: НЕУДАЧНЫЕ =============
+    miss_conversions: int           
+    miss_penalties: int            
+    miss_drop_goal: int            
+    
+    # ============= ОЧКИ =============
+    points: int                     
+    
+    # ============= СХВАТКИ =============
+    scrums_win: int                
+    scrums_steal: int              
+    scrums_lose: int                
+    
+    # ============= КОРИДОРЫ (ЛИНЕЙ-АУТЫ) =============
+    lineout_win: int                
+    lineout_steal: int              
+    lineout_lose: int              
+    
+    # ============= НАРУШЕНИЯ И ПОТЕРИ =============
+    ball_losses: int                
+    penalty: int                    
+    
+    # ============= КАРТОЧКИ =============
+    yellow_card: int                
+    red_card: int                  
+    
     rating: float
 
-
-def create_empty() -> TableData:
-    return TableData(
-        player=Player(
-            nst="Иванов Иван Иванович",
-            weight=85.0,
-            height=190.0,
-            team=Team(name="Рубин"),
-            birth_date=date(1995, 5, 15),
-        ),
-        role=Role.NOTHING,
-        minutes_played=0,
-        passes_accurate=0,
-        passes_inaccurate=0,
-        captures_done=0,
-        captures_missed=0,
-        rakov_cleared=0,
-        tackles_done=0,
-        meters_covered=0,
-        defenders_beaten=0,
-        breakthroughs=0,
-        attempts_grounded=0,
-        realizations_scored=0,
-        realizations_attempted=0,
-        penalties_scored=0,
-        penalties_attempted=0,
-        dropgoals_scored=0,
-        dropgoals_attempted=0,
-        points_scored=0,
-        penalties_received=0,
-        loss_ball=0,
-        yellow_cards=0,
-        red_cards=0,
-        passes_percent=0.0,
-        captures_percent=0.0,
-        realizations_percent=0.0,
-        penalties_percent=0.0,
-        dropgoals_percent=0.0,
-        rating=0.0,
-    )
