@@ -13,6 +13,6 @@ from .buttons import ActionButton, BasicButton, IconButton, MenuButton, Сompari
 from .shimmer import CustomShimmer
 from .short_table import ShortInformationTable
 from .table import InformationTable
+from .picker import Picker
 
-# from .text_helpers import *
 from .text import BigerText, BigestText, NormalText

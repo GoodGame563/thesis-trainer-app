@@ -1,3 +1,4 @@
+import asyncio
 from flet import (
     Alignment,
     BorderSide,
@@ -208,9 +209,10 @@ class InformationTable(Card):
         self.visible_column_table[name_column] = value
         self.update_data()
 
-    def set_columns(self, column_table: dict[str, bool]):
+    async def set_columns(self, column_table: dict[str, bool]):
         self.main_table.disabled = True
         self.main_table.update()
+        await asyncio.sleep(1)
 
         for key, value in column_table.items():
             self.visible_column_table[key] = value

@@ -1,3 +1,4 @@
+import asyncio
 import logging
 
 from flet import (
@@ -43,15 +44,16 @@ async def main(page: Page):
         )
         page.update()
 
-    def on_dismiss_filter(e):
+    async def on_dismiss_filter(e):
         column_table = {}
-        for s_b in e.control.column_table:
+        for s_b in e.control.column_table_container.content.controls:
             column_table[s_b.content.key] = s_b.content.value
-        main_table.set_columns(column_table)
+        await main_table.set_columns(column_table)
 
     async def open_filter(e):
         f = FilterButtomSheet(on_dismiss_filter)
         page.show_dialog(f)
+        await asyncio.sleep(1)
         await f.set_data(main_table.visible_column_table)
 
     logging.getLogger("flet_core").setLevel(logging.INFO)

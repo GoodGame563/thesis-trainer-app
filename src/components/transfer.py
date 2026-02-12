@@ -1,3 +1,4 @@
+import asyncio
 import re
 from datetime import datetime
 
@@ -30,17 +31,13 @@ from db_controls import (
     get_all_teams,
     get_latest_transfer,
 )
-from utils import ActionButton, BasicButton, NormalText
+from utils import ActionButton, BasicButton, NormalText, Picker
 
 from .overlay import close_overlay, open_overlay
 
 
 class TransferDialog(AlertDialog):
     def __init__(self):
-        self._player_id = None
-        self._team_id = None
-        self._teams = []
-        self._players = []
         self._date_field = TextField(
             content_padding=2,
             disabled=True,
@@ -48,8 +45,9 @@ class TransferDialog(AlertDialog):
             label="Дата трансфера",
             margin=Margin.only(left=10, right=10, top=5, bottom=0),
             expand=True,
-        )
-
+        )   
+        self.player_button = ActionButton("Выбрать игрока", self._select_player, 1)
+        self.team_button = ActionButton("Выбрать команду", self._select_team, 1)
         super().__init__(
             content=Container(
                 content=Column(
@@ -75,8 +73,8 @@ class TransferDialog(AlertDialog):
                         ),
                         Row(
                             controls=[
-                                ActionButton("Выбрать игрока", self._select_player, 1),
-                                ActionButton("Выбрать команду", self._select_team, 1),
+                                self.player_button,
+                                self.team_button,
                             ],
                             expand=1,
                         ),
@@ -104,28 +102,18 @@ class TransferDialog(AlertDialog):
             on_dismiss=self._dissmiss,
         )
 
-    async def _set_teams(self):
-        if len(self._teams) > 0:
-            return
-        teams = await get_all_teams()
-        self._teams.clear()
-        self._teams.extend([NormalText(team.name, team.id) for team in teams])
+    async def _get_teams(self):
+        return [NormalText(team.name, team.id) for team in await get_all_teams()]
 
-    async def _set_players(self):
-        if len(self._players) > 0:
-            return
-        players = await get_all_players()
-        self._players.clear()
-        self._players.extend(
-            [NormalText(player.full_name, player.id) for player in players]
-        )
+    async def _get_players(self):
+        return [NormalText(player.full_name, player.id) for player in  await get_all_players()]
+        
 
-    def _select_date(self, e):
-        def close_date_picker(d):
-            if d.name == "dismiss":
-                return
+    async def _select_date(self, e):
+        async def close_date_picker(d):
             self._date_field.value = d.data.strftime("%d.%m.%Y")
             self._date_field.update()
+            await asyncio.sleep(0.2)
 
         dp = DatePicker(
             cancel_text="Отмена",
@@ -133,68 +121,32 @@ class TransferDialog(AlertDialog):
             error_format_text="Неверный формат даты",
             error_invalid_text="Неверная дата",
             help_text="Выберите дату",
-            on_dismiss=close_date_picker,
             on_change=close_date_picker,
         )
         self.page.show_dialog(dp)
+        await asyncio.sleep(0.2)
+
 
     async def _select_player(self, e):
-        await self._set_players()
-
-        def set_button(d):
-            e.control.content = self._players[d.control.selected_index].value
-            e.control.key = self._players[d.control.selected_index].key
-            self._player_id = self._players[d.control.selected_index].key
-
-        picker = CupertinoPicker(
-            controls=self._players,
-            expand=1,
-            selected_index=5,
-            magnification=1.22,
-            squeeze=1.2,
-            use_magnifier=True,
-            on_change=set_button,
-        )
-        bs = CupertinoBottomSheet(
-            picker,
-            height=216,
-        )
-
-        self.page.show_dialog(bs)
+        picker = Picker(e.control)
+        self.page.show_dialog(picker)
+        await picker.set_data(await self._get_players())
 
     async def _select_team(self, e):
-        await self._set_teams()
-
-        def set_button(d):
-            e.control.content = self._teams[d.control.selected_index].value
-            e.control.key = self._teams[d.control.selected_index].key
-            self._team_id = self._teams[d.control.selected_index].key
-
-        picker = CupertinoPicker(
-            controls=self._teams,
-            expand=1,
-            selected_index=5,
-            magnification=1.22,
-            squeeze=1.2,
-            use_magnifier=True,
-            on_change=set_button,
-        )
-        bs = CupertinoBottomSheet(
-            picker,
-            height=216,
-        )
-
-        self.page.show_dialog(bs)
+        picker = Picker(e.control)
+        self.page.show_dialog(picker)
+        await picker.set_data(await self._get_teams())
 
     async def _save(self):
-        print(
-            await create_transfer(
-                self._player_id,
-                self._team_id,
-                datetime.strptime(self._date_field.value, "%d.%m.%Y"),
-            )
-        )
+        if self.player_button.content.key is None or self.team_button.content.key is None or re.match(r'\d{2}.\d{2}.\d{4}' ,self._date_field.value) is None:
+            return
         self.open = False
+        await asyncio.sleep(0.2)
+        await create_transfer(
+            self.player_button.content.key,
+            self.team_button.content.key,
+            datetime.strptime(self._date_field.value, "%d.%m.%Y"),
+        )
 
     def _dissmiss(self):
         del self

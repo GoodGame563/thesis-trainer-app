@@ -1,13 +1,18 @@
 from flet import (
     Button,
     ButtonStyle,
+    Colors,
     FilledButton,
     FloatingActionButton,
     Margin,
+    Offset,
     RoundedRectangleBorder,
+    Animation,
+    AnimationCurve
 )
 
 from models import СomparisonType
+from theme import light_cs
 
 from .text import MenuText, NormalText
 
@@ -107,3 +112,4 @@ class ActionButton(FilledButton):
         self.elevation = 8
         self.margin = Margin.only(left=10, right=10, top=5, bottom=0)
         self.expand = expand
+

@@ -34,6 +34,7 @@ from utils import (
     PositiveSwitchTextFieldBlock,
     SlidingContentBlock,
     SwitchBlock,
+    CustomShimmer,
 )
 
 from .overlay import close_overlay, open_overlay
@@ -43,20 +44,44 @@ class FilterButtomSheet(BottomSheet):
     selectKpiRole = KpiRole.ALL_ROLES
 
     def __init__(self, on_dismiss):
-        self.positive_table = ListView(
-            controls=[],
-            scroll="ALWAYS",
-            height=300,
-            expand=1,
+        self.positive_table_container = Container(
+            content=CustomShimmer(
+                ListView(
+                    controls=[SwitchBlock("Wait", True) for _ in range(10)],
+                    scroll="ALWAYS",
+                    height=300,
+                    expand=1,
+                )
+            )
         )
-        self.negative_table = ListView(
-            controls=[],
-            scroll="ALWAYS",
-            height=300,
-            expand=1,
+        self.negative_table_container = Container(
+            content=CustomShimmer(
+                ListView(
+                    controls=[SwitchBlock("Wait", True) for _ in range(10)],
+                    scroll="ALWAYS",
+                    height=300,
+                    expand=1,
+                )
+            )
         )
 
-        self.column_table = []
+        self.column_table_container = Container(
+            content=CustomShimmer(
+                ListView(
+                    controls=[SwitchBlock("Wait", True) for _ in range(10)], spacing=0
+                )
+            )
+        )
+        self.dropdown_container = Container(
+            content=CustomShimmer(
+                Dropdown(
+                    value="Wait",
+                    options=[DropdownOption(text="Wait") for _ in range(10)],
+                    margin=5,
+                    expand=True,
+                )
+            )
+        )
         super().__init__(
             content=Container(
                 content=Column(
@@ -65,7 +90,7 @@ class FilterButtomSheet(BottomSheet):
                         SlidingContentBlock(
                             ("Что отображать", "Подсчет KPI"),
                             [
-                                ListView(controls=self.column_table, spacing=0),
+                                self.column_table_container,
                                 Column(
                                     controls=[
                                         Row(
@@ -78,13 +103,7 @@ class FilterButtomSheet(BottomSheet):
                                                     1,
                                                 ),
                                                 CustomBSContentBlock(
-                                                    Dropdown(
-                                                        value="ALL_ROLES",
-                                                        options=get_option(),
-                                                        on_select=self.select,
-                                                        margin=5,
-                                                        expand=True,
-                                                    ),
+                                                    self.dropdown_container,
                                                     1,
                                                 ),
                                             ],
@@ -95,14 +114,14 @@ class FilterButtomSheet(BottomSheet):
                                                     header=NormalText(
                                                         "Позитивные факторы"
                                                     ),
-                                                    content=self.positive_table,
+                                                    content=self.positive_table_container,
                                                     expand=1,
                                                 ),
                                                 ExpansionPanel(
                                                     header=NormalText(
                                                         "Негативные факторы"
                                                     ),
-                                                    content=self.negative_table,
+                                                    content=self.negative_table_container,
                                                     expand=1,
                                                 ),
                                             ],
@@ -130,14 +149,23 @@ class FilterButtomSheet(BottomSheet):
         )
 
     async def set_data(self, visible_columns):
-        self.column_table.extend(
-            [
+        self.dropdown_container.content = Dropdown(
+            value="ALL_ROLES",
+            options=get_option(),
+            on_select=self.select,
+            margin=5,
+            expand=True,
+        )
+
+        self.column_table_container.content = ListView(
+            controls=[
                 SwitchBlock(name_column_table[key], value, None, key)
                 for key, value in visible_columns.items()
-            ]
+            ],
+            spacing=0,
         )
-        self.positive_table.controls.extend(
-            [
+        self.positive_table_container.content = ListView(
+            controls=[
                 PositiveSwitchTextFieldBlock(
                     name_column_table[key],
                     value.enabled,
@@ -148,11 +176,13 @@ class FilterButtomSheet(BottomSheet):
                 for key, value in filter_kpi[
                     self.selectKpiRole
                 ].positive_indicators.items()
-            ]
+            ],
+            scroll="ALWAYS",
+            height=300,
+            expand=1,
         )
-
-        self.negative_table.controls.extend(
-            [
+        self.negative_table_container.content = ListView(
+            controls=[
                 NegativeSwitchTextFieldBlock(
                     name_column_table[key],
                     value.enabled,
@@ -163,7 +193,10 @@ class FilterButtomSheet(BottomSheet):
                 for key, value in filter_kpi[
                     self.selectKpiRole
                 ].negative_indicators.items()
-            ]
+            ],
+            scroll="ALWAYS",
+            height=300,
+            expand=1,
         )
 
     def change_switch(self, e):
@@ -173,7 +206,7 @@ class FilterButtomSheet(BottomSheet):
         self.parent.page.pop_dialog()
 
     def safe_tables(self):
-        for c in self.positive_table.controls:
+        for c in self.positive_table_container.content.controls:
             for element in c.content.controls:
                 value = None
                 match element:
@@ -186,7 +219,7 @@ class FilterButtomSheet(BottomSheet):
                     element.key,
                     value,
                 )
-        for c in self.negative_table.controls:
+        for c in self.negative_table_container.content.controls:
             for element in c.content.controls:
                 value = None
                 match element:
@@ -201,7 +234,7 @@ class FilterButtomSheet(BottomSheet):
                 )
 
     def set_tables(self):
-        for c in self.positive_table.controls:
+        for c in self.positive_table_container.content.controls:
             for element in c.content.controls:
                 match element:
                     case Button():
@@ -219,7 +252,8 @@ class FilterButtomSheet(BottomSheet):
                             filter_kpi[self.selectKpiRole].positive_indicators[c.key],
                             element.key,
                         )
-        for c in self.negative_table.controls:
+        self.positive_table_container.update()
+        for c in self.negative_table_container.content.controls:
             for element in c.content.controls:
                 match element:
                     case Button():
@@ -237,6 +271,7 @@ class FilterButtomSheet(BottomSheet):
                             filter_kpi[self.selectKpiRole].negative_indicators[c.key],
                             element.key,
                         )
+        self.negative_table_container.update()
 
     def update_tables(self, new_role: KpiRole):
         self.safe_tables()

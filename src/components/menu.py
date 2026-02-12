@@ -1,3 +1,4 @@
+import asyncio
 from flet import (
     Alignment,
     Animation,
@@ -41,14 +42,18 @@ class Menu(MenuBar):
             expand=1,
         )
 
-    def element_open_team(self):
+    async def element_open_team(self):
         td = TeamDialog()
         self.page.show_dialog(td)
+        await asyncio.sleep(0.3)
 
     async def element_open_game(self):
         gd = GameDialog()
         self.page.show_dialog(gd)
+        await asyncio.sleep(0.1)
+        # await gd._set_teams()
 
-    def element_open_transfer(self):
+    async def element_open_transfer(self):
         td = TransferDialog()
         self.page.show_dialog(td)
+        await asyncio.sleep(0.3)
