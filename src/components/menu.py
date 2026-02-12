@@ -1,10 +1,6 @@
 import asyncio
 
-from flet import (
-    Alignment,
-    MenuBar,
-    MenuStyle,
-)
+from flet import Alignment, MenuBar, MenuStyle
 
 from utils import MenuButton
 

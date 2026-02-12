@@ -16,13 +16,8 @@ from flet import (
     TextField,
 )
 
-from db_controls import (
-    create_transfer,
-    get_all_players,
-    get_all_teams,
-)
+from db_controls import create_transfer, get_all_players, get_all_teams
 from utils import ActionButton, BasicButton, NormalText, Picker
-
 
 
 class TransferDialog(AlertDialog):

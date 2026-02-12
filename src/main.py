@@ -12,10 +12,7 @@ from flet import (
     run,
 )
 
-from components import (
-    FilterButtomSheet,
-    Menu,
-)
+from components import FilterButtomSheet, Menu
 from db_controls import create_db, get_games_statistics
 from theme import dark_theme, light_theme
 from utils import CustomBSContentBlock, IconButton, InformationTable

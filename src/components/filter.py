@@ -26,7 +26,6 @@ from utils import (
 )
 
 
-
 class FilterButtomSheet(BottomSheet):
     selectKpiRole = KpiRole.ALL_ROLES
 

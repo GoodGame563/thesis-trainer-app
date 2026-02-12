@@ -1,4 +1,3 @@
-
 from flet import (
     AlertDialog,
     Border,

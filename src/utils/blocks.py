@@ -1,15 +1,4 @@
-
-from flet import (
-    Card,
-    CardVariant,
-    Column,
-    Margin,
-    Row,
-    Tab,
-    TabBar,
-    TabBarView,
-    Tabs,
-)
+from flet import Card, CardVariant, Column, Margin, Row, Tab, TabBar, TabBarView, Tabs
 
 from .buttons import СomparisonButton
 from .switchs import NegativeColorSwitch, NeutralColorSwitch, PositiveColorSwitch

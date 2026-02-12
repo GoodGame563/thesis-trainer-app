@@ -19,7 +19,6 @@ from db_controls import get_all_teams
 from utils import ActionButton, BasicButton, NormalText, Picker
 
 
-
 class GameDialog(AlertDialog):
     def __init__(self):
         self.path_file_field = TextField(
