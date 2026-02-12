@@ -1,8 +1,8 @@
-from flet import Card, CardVariant, Margin, Row
+from flet import Card, CardVariant, Column, Margin, Row, Tab, TabBar, TabBarView, Tabs
 
-from .buttons import СomparisonButton
+from .buttons import ComparisonButton
 from .switchs import NegativeColorSwitch, NeutralColorSwitch, PositiveColorSwitch
-from .text import BigerText, BigestText
+from .text import BigerText, BigestText, NormalText
 from .text_fields import SmallTextField
 
 
@@ -17,10 +17,9 @@ class PositiveSwitchTextFieldBlock(Card):
     ):
         super().__init__()
         self.field = SmallTextField(value_field)
-        self.switch = PositiveColorSwitch(label, value_swith, self.change_switch)
-        self.field.disabled = not self.switch.value
+        self.switch = PositiveColorSwitch(label, value_swith)
         self.content = Row(
-            controls=[self.switch, СomparisonButton(value_button), self.field]
+            controls=[self.switch, ComparisonButton(value_button), self.field]
         )
         self.margin = Margin.only(
             left=10,
@@ -31,9 +30,6 @@ class PositiveSwitchTextFieldBlock(Card):
         self.key = key
         self.variant = CardVariant.OUTLINED
         self.elevation = 4
-
-    def change_switch(self):
-        self.field.disabled = not self.switch.value
 
 
 class NegativeSwitchTextFieldBlock(Card):
@@ -47,10 +43,9 @@ class NegativeSwitchTextFieldBlock(Card):
     ):
         super().__init__()
         self.field = SmallTextField(value_field)
-        self.switch = NegativeColorSwitch(label, value_swith, self.change_switch)
-        self.field.disabled = not self.switch.value
+        self.switch = NegativeColorSwitch(label, value_swith)
         self.content = Row(
-            controls=[self.switch, СomparisonButton(value_button), self.field]
+            controls=[self.switch, ComparisonButton(value_button), self.field]
         )
         self.margin = Margin.only(
             left=10,
@@ -62,9 +57,6 @@ class NegativeSwitchTextFieldBlock(Card):
         self.variant = CardVariant.OUTLINED
         self.elevation = 4
 
-    def change_switch(self):
-        self.field.disabled = not self.switch.value
-
 
 class SwitchBlock(Card):
     def __init__(
@@ -73,6 +65,7 @@ class SwitchBlock(Card):
         value_swith: bool,
         on_change=None,
         key="value",
+        expand=None,
     ):
         super().__init__()
         self.content = NeutralColorSwitch(label, value_swith, on_change, key)
@@ -84,6 +77,7 @@ class SwitchBlock(Card):
         )
         self.variant = CardVariant.OUTLINED
         self.elevation = 4
+        self.expand = expand
 
 
 class CustomBSContentBlock(Card):
@@ -93,8 +87,15 @@ class CustomBSContentBlock(Card):
         )
 
 
+class CustomSSContentBlock(Card):
+    def __init__(self, content, expand=None):
+        super().__init__(
+            content=content, expand=expand, elevation=4, variant=CardVariant.OUTLINED
+        )
+
+
 class BigestTextBlock(Card):
-    def __init__(self, text):
+    def __init__(self, text, expand=None):
         data = BigestText(text)
         data.margin = 5
         super().__init__(
@@ -107,14 +108,16 @@ class BigestTextBlock(Card):
                 alignment="center",
                 expand=True,
             ),
+            expand=expand,
         )
 
 
-class BigerTextBlock(Card):
-    def __init__(self, text):
-        data = BigerText(text)
+class NormalTextBlock(Card):
+    def __init__(self, text, expand=None):
+        data = NormalText(text)
+        data.margin = 5
         super().__init__(
-            elevation=8,
+            elevation=10,
             variant=CardVariant.OUTLINED,
             content=Row(
                 controls=[
@@ -123,10 +126,43 @@ class BigerTextBlock(Card):
                 alignment="center",
                 expand=True,
             ),
+            expand=expand,
+        )
+
+
+class BigerTextBlock(Card):
+    def __init__(self, text):
+        self.data_content = BigerText(text)
+        super().__init__(
+            elevation=8,
+            variant=CardVariant.OUTLINED,
+            content=self.data_content,
             margin=Margin.only(
                 left=10,
                 right=10,
                 top=10,
                 bottom=0,
             ),
+        )
+
+
+class SlidingContentBlock(Card):
+    def __init__(self, text_buttons: tuple[str], controls, expand=None):
+        tabs = []
+        for el in text_buttons:
+            tabs.append(Tab(label=NormalText(el)))
+        super().__init__(
+            content=Tabs(
+                length=len(controls),
+                selected_index=0,
+                expand=True,
+                content=Column(
+                    expand=True,
+                    controls=[
+                        TabBar(tabs=tabs),
+                        TabBarView(controls=controls, expand=2),
+                    ],
+                ),
+            ),
+            expand=expand,
         )

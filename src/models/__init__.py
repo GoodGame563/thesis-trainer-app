@@ -1,3 +1,3 @@
 from .filter import *
-from .structs import ComparisonValue, Player, Role, Team, СomparisonType
+from .structs import ComparisonType, ComparisonValue, Player, Role, Team, Transfer
 from .table import *

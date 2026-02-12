@@ -1,20 +1,21 @@
+from dataclasses import dataclass
 from datetime import date
-from enum import Enum
+from enum import Enum, IntEnum
 
 
-class Role(Enum):
-    FIRST_LINE = "Первая линия"
-    SECOND_LINE = "Вторая линия"
-    THIRD_LINE = "Третья линия"
-    SCRUM_HALF = "Полузащитник схватки"
-    FLY_HALF = "Полузащитник веера"
-    CENTER = "Центр"
-    WING = "Крайний"
-    FULLBACK = "Фуллбэк"
-    NOTHING = "Не указано"
+class Role(IntEnum):
+    FIRST_LINE = 1
+    SECOND_LINE = 2
+    THIRD_LINE = 3
+    SCRUM_HALF = 4
+    FLY_HALF = 5
+    CENTER = 6
+    WING = 7
+    FULLBACK = 8
+    NOTHING = 9
 
 
-class СomparisonType(Enum):
+class ComparisonType(Enum):
     EQUALLY = "="
     LESS = ">"
     MORE = "<"
@@ -22,31 +23,32 @@ class СomparisonType(Enum):
     EQUALLY_LESS = ">="
 
 
+@dataclass(order=True)
 class Team:
-    def __init__(self, name: str, path_to_logo: str = ""):
-        self.path_to_logo = path_to_logo
-        self.name = name
+    id: int
+    name: str
+    path_to_logo: str = ""
 
 
+@dataclass(order=True)
 class Player:
-    def __init__(
-        self,
-        nst: str,
-        weight: float,
-        height: float,
-        team: Team,
-        birth_date: date,
-        path_to_photo: str = "",
-    ):
-        self.full_name = nst
-        self.weight = weight
-        self.height = height
-        self.path_to_photo = path_to_photo
-        self.team = team
-        self.birth_date = birth_date
+    id: int
+    full_name: str
+    weight: float
+    height: float
+    birth_date: date
+    path_to_photo: str = ""
+
+
+@dataclass
+class Transfer:
+    id: int
+    player: Player
+    team: Team
+    date: date
 
 
 class ComparisonValue:
-    def __init__(self, comparison_type: СomparisonType, value: int):
+    def __init__(self, comparison_type: ComparisonType, value: int):
         self.comparison_type = comparison_type
         self.value = value

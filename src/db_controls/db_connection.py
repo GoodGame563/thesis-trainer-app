@@ -1,7 +1,7 @@
-from sqlite3 import Connection, connect
+import aiosqlite
 
 db_path = "data\\base.db"
 
 
-def db_connect() -> Connection:
-    return connect(db_path)
+def db_connect():
+    return aiosqlite.connect(db_path)

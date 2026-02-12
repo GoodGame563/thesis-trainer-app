@@ -1,36 +1,25 @@
 from datetime import date
 
-from models import Player, Role, TableData, Team
+import aiosqlite
+
+from models import Player, Role, ShortTableData, TableData, Team
 
 from .db_connection import db_connect
 
 
-def get_games_statistics() -> list[TableData]:
-    ROLE_MAPPING = {
-        "First line": Role.FIRST_LINE,
-        "Second line": Role.SECOND_LINE,
-        "Third line": Role.THIRD_LINE,
-        "Scrum-half": Role.SCRUM_HALF,
-        "Fly-half": Role.FLY_HALF,
-        "Center": Role.CENTER,
-        "Wing": Role.WING,
-        "Fullback": Role.FULLBACK,
-        "Nothing": Role.NOTHING,
-    }
-
-    conn = db_connect()
-    cur = conn.cursor()
-
+async def get_games_statistics() -> list[TableData]:
     query = """
         SELECT
+            p.id as pl_id,
             p.full_name,
             p.weight,
             p.height,
             p.date_birth,
             p.foto,
-            t.name,
+            t.id as t_id,
+            t.name as command,
             t.logo,
-            r.name,
+            r.name as role,
             g.minutes_played,
             g.passes_accurate,
             g.passes_inaccurate,
@@ -63,64 +52,118 @@ def get_games_statistics() -> list[TableData]:
         JOIN teams t ON g.team_id = t.id
         JOIN roles r ON g.role_id = r.id
         ORDER BY g.id
-        LIMIT 30
     """
 
-    cur.execute(query)
-    rows = cur.fetchall()
-    conn.close()
+    result = []
+    async with db_connect() as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute(query) as cursor:
+            async for row in cursor:
+                birth_date = date.fromisoformat(row["date_birth"])
+
+                Team(id=row["t_id"], name=row["command"], path_to_logo=row["logo"])
+
+                player = Player(
+                    id=row["pl_id"],
+                    full_name=row["full_name"],
+                    weight=row["weight"],
+                    height=row["height"],
+                    birth_date=birth_date,
+                    path_to_photo=row["foto"],
+                )
+
+                role = Role[row["role"]]
+
+                rating = 0.0
+
+                table_data = TableData(
+                    player=player,
+                    role=role,
+                    date_birth=birth_date,
+                    team=row["command"],
+                    minutes_played=row["minutes_played"],
+                    passes_accurate=row["passes_accurate"],
+                    passes_inaccurate=row["passes_inaccurate"],
+                    passes_percent=row["passes_percent"],
+                    captures_done=row["captures_done"],
+                    captures_missed=row["captures_missed"],
+                    captures_percent=row["captures_percent"],
+                    rakov_cleared=row["rakov_cleared"],
+                    tackles_done=row["tackles_done"],
+                    meters_covered=row["meters_covered"],
+                    defenders_beaten=row["defenders_beaten"],
+                    breakthroughs=row["breakthroughs"],
+                    attempts_grounded=row["attempts_grounded"],
+                    realizations_scored=row["realizations_scored"],
+                    realizations_attempted=row["realizations_attempted"],
+                    realizations_percent=row["realizations_percent"],
+                    penalties_scored=row["penalties_scored"],
+                    penalties_attempted=row["penalties_attempted"],
+                    penalties_percent=row["penalties_percent"],
+                    dropgoals_scored=row["dropgoals_scored"],
+                    dropgoals_attempted=row["dropgoals_attempted"],
+                    dropgoals_percent=row["dropgoals_percent"],
+                    points_scored=row["points_scored"],
+                    penalties_received=row["penalties_received"],
+                    loss_ball=row["loss_ball"],
+                    yellow_cards=row["yellow_cards"],
+                    red_cards=row["red_cards"],
+                    rating=rating,
+                )
+                result.append(table_data)
+
+    return result
+
+
+async def get_all_games_by_player_team_id(
+    player_id: int, team_id: int
+) -> list[ShortTableData]:
+    query = """
+               SELECT
+            g.*,
+			r.name as role
+        FROM all_games g
+		JOIN roles r on g.role_id = r.id
+        WHERE g.player_id = ? AND g.team_id = ?
+        ORDER BY g.id
+    """
 
     result = []
-    for row in rows:
-        birth_date = date.fromisoformat(row[3]) if row[3] else date.today()
-
-        team = Team(name=row[5], path_to_logo=row[6])
-
-        player = Player(
-            nst=row[0],
-            weight=row[1],
-            height=row[2],
-            team=team,
-            birth_date=birth_date,
-            path_to_photo=row[4],
-        )
-
-        role = ROLE_MAPPING.get(row[7], Role.NOTHING)
-
-        rating = 0.0
-
-        table_data = TableData(
-            player=player,
-            role=role,
-            minutes_played=row[8],
-            passes_accurate=row[9],
-            passes_inaccurate=row[10],
-            passes_percent=row[11],
-            captures_done=row[12],
-            captures_missed=row[13],
-            captures_percent=row[14],
-            rakov_cleared=row[15],
-            tackles_done=row[16],
-            meters_covered=row[17],
-            defenders_beaten=row[18],
-            breakthroughs=row[19],
-            attempts_grounded=row[20],
-            realizations_scored=row[21],
-            realizations_attempted=row[22],
-            realizations_percent=row[23],
-            penalties_scored=row[24],
-            penalties_attempted=row[25],
-            penalties_percent=row[26],
-            dropgoals_scored=row[27],
-            dropgoals_attempted=row[28],
-            dropgoals_percent=row[29],
-            points_scored=row[30],
-            penalties_received=row[31],
-            loss_ball=row[32],
-            yellow_cards=row[33],
-            red_cards=row[34],
-            rating=rating,
-        )
-        result.append(table_data)
+    async with db_connect() as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute(query, (player_id, team_id)) as cursor:
+            async for row in cursor:
+                table_data = ShortTableData(
+                    role=Role[row["role"]],
+                    minutes_played=row["minutes_played"],
+                    passes_accurate=row["passes_accurate"],
+                    passes_inaccurate=row["passes_inaccurate"],
+                    passes_percent=row["passes_percent"],
+                    captures_done=row["captures_done"],
+                    captures_missed=row["captures_missed"],
+                    captures_percent=row["captures_percent"],
+                    rakov_cleared=row["rakov_cleared"],
+                    tackles_done=row["tackles_done"],
+                    meters_covered=row["meters_covered"],
+                    defenders_beaten=row["defenders_beaten"],
+                    breakthroughs=row["breakthroughs"],
+                    attempts_grounded=row["attempts_grounded"],
+                    realizations_scored=row["realizations_scored"],
+                    realizations_attempted=row["realizations_attempted"],
+                    realizations_percent=row["realizations_percent"],
+                    penalties_scored=row["penalties_scored"],
+                    penalties_attempted=row["penalties_attempted"],
+                    penalties_percent=row["penalties_percent"],
+                    dropgoals_scored=row["dropgoals_scored"],
+                    dropgoals_attempted=row["dropgoals_attempted"],
+                    dropgoals_percent=row["dropgoals_percent"],
+                    points_scored=row["points_scored"],
+                    penalties_received=row["penalties_received"],
+                    loss_ball=row["loss_ball"],
+                    yellow_cards=row["yellow_cards"],
+                    red_cards=row["red_cards"],
+                    rating=0.0,
+                )
+                result.append(table_data)
 
     return result

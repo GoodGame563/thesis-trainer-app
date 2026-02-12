@@ -168,3 +168,7 @@ data/
 *.ignore
 
 .ruff_cache
+
+.VSCodeCounter
+
+logo_*
