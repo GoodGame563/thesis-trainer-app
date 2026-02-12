@@ -1,4 +1,5 @@
 import asyncio
+
 from flet import (
     AlertDialog,
     Alignment,
@@ -22,7 +23,7 @@ from flet import (
 )
 
 from db_controls import get_all_teams
-from utils import ActionButton, BasicButton, NormalText, CustomShimmer, Picker
+from utils import ActionButton, BasicButton, CustomShimmer, NormalText, Picker
 
 from .overlay import close_overlay, open_overlay
 
@@ -110,7 +111,6 @@ class GameDialog(AlertDialog):
         picker = Picker(e.control)
         self.page.show_dialog(picker)
         await picker.set_data(await self._get_teams())
-
 
     def save(self):
         self.open = False

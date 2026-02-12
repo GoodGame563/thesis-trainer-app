@@ -1,4 +1,6 @@
 from flet import (
+    Animation,
+    AnimationCurve,
     Button,
     ButtonStyle,
     Colors,
@@ -7,8 +9,6 @@ from flet import (
     Margin,
     Offset,
     RoundedRectangleBorder,
-    Animation,
-    AnimationCurve
 )
 
 from models import СomparisonType
@@ -112,4 +112,3 @@ class ActionButton(FilledButton):
         self.elevation = 8
         self.margin = Margin.only(left=10, right=10, top=5, bottom=0)
         self.expand = expand
-

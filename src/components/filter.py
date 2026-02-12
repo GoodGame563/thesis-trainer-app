@@ -28,13 +28,13 @@ from utils import (
     BigerTextBlock,
     BigestTextBlock,
     CustomBSContentBlock,
+    CustomShimmer,
     InformationTable,
     NegativeSwitchTextFieldBlock,
     NormalText,
     PositiveSwitchTextFieldBlock,
     SlidingContentBlock,
     SwitchBlock,
-    CustomShimmer,
 )
 
 from .overlay import close_overlay, open_overlay

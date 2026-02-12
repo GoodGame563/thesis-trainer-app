@@ -45,7 +45,7 @@ class TransferDialog(AlertDialog):
             label="Дата трансфера",
             margin=Margin.only(left=10, right=10, top=5, bottom=0),
             expand=True,
-        )   
+        )
         self.player_button = ActionButton("Выбрать игрока", self._select_player, 1)
         self.team_button = ActionButton("Выбрать команду", self._select_team, 1)
         super().__init__(
@@ -106,8 +106,10 @@ class TransferDialog(AlertDialog):
         return [NormalText(team.name, team.id) for team in await get_all_teams()]
 
     async def _get_players(self):
-        return [NormalText(player.full_name, player.id) for player in  await get_all_players()]
-        
+        return [
+            NormalText(player.full_name, player.id)
+            for player in await get_all_players()
+        ]
 
     async def _select_date(self, e):
         async def close_date_picker(d):
@@ -126,7 +128,6 @@ class TransferDialog(AlertDialog):
         self.page.show_dialog(dp)
         await asyncio.sleep(0.2)
 
-
     async def _select_player(self, e):
         picker = Picker(e.control)
         self.page.show_dialog(picker)
@@ -138,7 +139,11 @@ class TransferDialog(AlertDialog):
         await picker.set_data(await self._get_teams())
 
     async def _save(self):
-        if self.player_button.content.key is None or self.team_button.content.key is None or re.match(r'\d{2}.\d{2}.\d{4}' ,self._date_field.value) is None:
+        if (
+            self.player_button.content.key is None
+            or self.team_button.content.key is None
+            or re.match(r"\d{2}.\d{2}.\d{4}", self._date_field.value) is None
+        ):
             return
         self.open = False
         await asyncio.sleep(0.2)
