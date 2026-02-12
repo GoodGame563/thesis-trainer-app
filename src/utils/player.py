@@ -1,21 +1,12 @@
-from turtle import bgcolor
-from types import NoneType
 
 from flet import (
     AlertDialog,
-    Alignment,
-    Animation,
-    AnimationCurve,
     Border,
     BorderSide,
-    Card,
-    Colors,
     Column,
     Container,
-    CupertinoSlidingSegmentedButton,
     Image,
     ListView,
-    Offset,
     Row,
 )
 

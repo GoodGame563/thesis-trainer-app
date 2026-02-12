@@ -117,7 +117,7 @@ class InformationTable(Card):
         self.page.show_dialog(p_c)
         await p_c.open_user(e.control.key)
 
-    def update_columns(self):
+    async def update_columns(self):
         visible = 0
         for i in range(len(self.columns)):
             value = self.visible_column_table[self.columns[i].key]
@@ -213,10 +213,11 @@ class InformationTable(Card):
     async def set_columns(self, column_table: dict[str, bool]):
         self.main_table.disabled = True
         self.main_table.update()
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.3)
 
         for key, value in column_table.items():
             self.visible_column_table[key] = value
-        self.update_columns()
+        await self.update_columns()
         self.main_table.disabled = False
         self.main_table.update()
+        await asyncio.sleep(0.3)

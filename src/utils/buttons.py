@@ -1,18 +1,13 @@
 from flet import (
-    Animation,
-    AnimationCurve,
     Button,
     ButtonStyle,
-    Colors,
     FilledButton,
     FloatingActionButton,
     Margin,
-    Offset,
     RoundedRectangleBorder,
 )
 
 from models import СomparisonType
-from theme import light_cs
 
 from .text import MenuText, NormalText
 

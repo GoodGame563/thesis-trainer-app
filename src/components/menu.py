@@ -2,22 +2,13 @@ import asyncio
 
 from flet import (
     Alignment,
-    Animation,
-    AnimationCurve,
-    Column,
-    Container,
     MenuBar,
     MenuStyle,
-    Offset,
-    Row,
-    icons,
 )
 
-from theme import light_theme
-from utils import IconButton, MenuButton
+from utils import MenuButton
 
 from .game import GameDialog
-from .overlay import close_overlay, open_overlay
 from .team import TeamDialog
 from .transfer import TransferDialog
 

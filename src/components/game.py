@@ -2,30 +2,22 @@ import asyncio
 
 from flet import (
     AlertDialog,
-    Alignment,
-    Animation,
-    AnimationCurve,
     Card,
     CardVariant,
     Column,
     Container,
-    CupertinoBottomSheet,
-    CupertinoPicker,
     FilePicker,
     FilePickerFileType,
-    ListView,
     MainAxisAlignment,
     Margin,
-    Offset,
     Row,
     Text,
     TextField,
 )
 
 from db_controls import get_all_teams
-from utils import ActionButton, BasicButton, CustomShimmer, NormalText, Picker
+from utils import ActionButton, BasicButton, NormalText, Picker
 
-from .overlay import close_overlay, open_overlay
 
 
 class GameDialog(AlertDialog):

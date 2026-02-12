@@ -34,3 +34,14 @@ async def get_all_teams() -> list[Team]:
         ) as cursor:
             teams = [Team(row["id"], row["name"], row["logo"]) async for row in cursor]
     return teams
+
+async def create_teams(name:str, logo:str):
+    async with db_connect() as db:
+        async with db.execute(
+            """
+            INSERT INTO teams (name, logo)
+            VALUES (?, ?)
+        """,
+            (name, logo),
+        ):
+            await db.commit()

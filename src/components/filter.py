@@ -1,35 +1,23 @@
 from flet import (
-    Animation,
-    AnimationCurve,
     BottomSheet,
-    BoxConstraints,
     Button,
-    Card,
-    Colors,
     Column,
     Container,
-    CupertinoSlidingSegmentedButton,
     Dropdown,
     DropdownOption,
     ExpansionPanel,
     ExpansionPanelList,
     ListView,
-    Margin,
-    Offset,
-    ResponsiveRow,
     Row,
     Switch,
-    VerticalDivider,
 )
 
 from models import KpiRole, filter_kpi, name_column_table
 from utils import (
     ActionButton,
-    BigerTextBlock,
     BigestTextBlock,
     CustomBSContentBlock,
     CustomShimmer,
-    InformationTable,
     NegativeSwitchTextFieldBlock,
     NormalText,
     PositiveSwitchTextFieldBlock,
@@ -37,7 +25,6 @@ from utils import (
     SwitchBlock,
 )
 
-from .overlay import close_overlay, open_overlay
 
 
 class FilterButtomSheet(BottomSheet):

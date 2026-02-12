@@ -170,3 +170,5 @@ data/
 .ruff_cache
 
 .VSCodeCounter
+
+logo_*

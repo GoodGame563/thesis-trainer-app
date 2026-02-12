@@ -2,29 +2,19 @@ import asyncio
 import logging
 
 from flet import (
-    BottomSheet,
-    Card,
     Column,
     Container,
     CrossAxisAlignment,
-    CupertinoContextMenu,
-    CupertinoContextMenuAction,
     FloatingActionButtonLocation,
-    Image,
     Page,
-    Row,
     Stack,
     icons,
     run,
 )
-from flet_datatable2 import DataColumn2, DataTable2
 
 from components import (
     FilterButtomSheet,
-    GameDialog,
     Menu,
-    TransferDialog,
-    create_black_overlay,
 )
 from db_controls import create_db, get_games_statistics
 from theme import dark_theme, light_theme

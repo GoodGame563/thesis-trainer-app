@@ -4,22 +4,13 @@ from datetime import datetime
 
 from flet import (
     AlertDialog,
-    Alignment,
-    Animation,
-    AnimationCurve,
     Card,
     CardVariant,
     Column,
     Container,
-    CupertinoBottomSheet,
-    CupertinoPicker,
     DatePicker,
-    FilePicker,
-    FilePickerFileType,
-    ListView,
     MainAxisAlignment,
     Margin,
-    Offset,
     Row,
     Text,
     TextField,
@@ -29,11 +20,9 @@ from db_controls import (
     create_transfer,
     get_all_players,
     get_all_teams,
-    get_latest_transfer,
 )
 from utils import ActionButton, BasicButton, NormalText, Picker
 
-from .overlay import close_overlay, open_overlay
 
 
 class TransferDialog(AlertDialog):
