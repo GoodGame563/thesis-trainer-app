@@ -67,13 +67,11 @@ async def get_player_with_roles_and_teams(player_id: int) -> dict | None:
 
 
 async def update_player(
-    db_path: str,
     player_id: int,
     full_name: str | None = None,
     height: int | None = None,
     weight: int | None = None,
     date_birth: date | None = None,
-    foto: str | None = None,
 ) -> bool:
     updates = []
     params = []
@@ -90,9 +88,6 @@ async def update_player(
     if date_birth is not None:
         updates.append("date_birth = ?")
         params.append(date_birth)
-    if foto is not None:
-        updates.append("foto = ?")
-        params.append(foto)
 
     if not updates:
         return False
@@ -100,7 +95,7 @@ async def update_player(
     params.append(player_id)
     query = f"UPDATE players SET {', '.join(updates)} WHERE id = ?"
 
-    async with aiosqlite.connect(db_path) as db:
+    async with db_connect() as db:
         await db.execute(query, params)
         await db.commit()
         return db.total_changes > 0

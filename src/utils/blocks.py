@@ -1,6 +1,6 @@
 from flet import Card, CardVariant, Column, Margin, Row, Tab, TabBar, TabBarView, Tabs
 
-from .buttons import СomparisonButton
+from .buttons import ComparisonButton
 from .switchs import NegativeColorSwitch, NeutralColorSwitch, PositiveColorSwitch
 from .text import BigerText, BigestText, NormalText
 from .text_fields import SmallTextField
@@ -19,7 +19,7 @@ class PositiveSwitchTextFieldBlock(Card):
         self.field = SmallTextField(value_field)
         self.switch = PositiveColorSwitch(label, value_swith)
         self.content = Row(
-            controls=[self.switch, СomparisonButton(value_button), self.field]
+            controls=[self.switch, ComparisonButton(value_button), self.field]
         )
         self.margin = Margin.only(
             left=10,
@@ -45,7 +45,7 @@ class NegativeSwitchTextFieldBlock(Card):
         self.field = SmallTextField(value_field)
         self.switch = NegativeColorSwitch(label, value_swith)
         self.content = Row(
-            controls=[self.switch, СomparisonButton(value_button), self.field]
+            controls=[self.switch, ComparisonButton(value_button), self.field]
         )
         self.margin = Margin.only(
             left=10,

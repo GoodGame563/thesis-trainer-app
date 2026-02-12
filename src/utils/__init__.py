@@ -9,7 +9,7 @@ from .blocks import (
     SlidingContentBlock,
     SwitchBlock,
 )
-from .buttons import ActionButton, BasicButton, IconButton, MenuButton, СomparisonButton
+from .buttons import ActionButton, BasicButton, ComparisonButton, IconButton, MenuButton
 from .picker import Picker
 from .shimmer import CustomShimmer
 from .short_table import ShortInformationTable

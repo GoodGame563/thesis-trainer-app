@@ -61,7 +61,7 @@ select = [
     "TID", 
     "PIE", 
     "RUF", 
-    # "PL",  
+    "PL",  
     "TRY",
     "SIM", 
 ]
