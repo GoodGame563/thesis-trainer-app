@@ -37,12 +37,14 @@ async def get_all_teams() -> list[Team]:
 
 
 async def create_teams(name: str, logo: str):
-    async with db_connect() as db:
-        async with db.execute(
+    async with (
+        db_connect() as db,
+        db.execute(
             """
             INSERT INTO teams (name, logo)
             VALUES (?, ?)
         """,
             (name, logo),
-        ):
-            await db.commit()
+        ),
+    ):
+        await db.commit()

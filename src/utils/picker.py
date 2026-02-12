@@ -51,7 +51,7 @@ class Picker(CupertinoBottomSheet):
             modal=True,
         )
 
-    async def set_data(self, data: List[NormalText]):
+    async def set_data(self, data: list[NormalText]):
         picker = self.content.content.controls[0]
         picker.controls = data
         picker.update()
