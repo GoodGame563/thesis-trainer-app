@@ -15,7 +15,7 @@ class Role(IntEnum):
     NOTHING = 9
 
 
-class СomparisonType(Enum):
+class ComparisonType(Enum):
     EQUALLY = "="
     LESS = ">"
     MORE = "<"
@@ -49,6 +49,6 @@ class Transfer:
 
 
 class ComparisonValue:
-    def __init__(self, comparison_type: СomparisonType, value: int):
+    def __init__(self, comparison_type: ComparisonType, value: int):
         self.comparison_type = comparison_type
         self.value = value

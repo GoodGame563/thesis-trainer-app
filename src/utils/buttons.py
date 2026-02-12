@@ -7,28 +7,28 @@ from flet import (
     RoundedRectangleBorder,
 )
 
-from models import СomparisonType
+from models import ComparisonType
 
 from .text import MenuText, NormalText
 
 
 def change_content_button(e):
     match e.control.content.value:
-        case СomparisonType.EQUALLY:
-            e.control.content.value = СomparisonType.MORE
-        case СomparisonType.MORE:
-            e.control.content.value = СomparisonType.LESS
-        case СomparisonType.LESS:
-            e.control.content.value = СomparisonType.EQUALLY_MORE
-        case СomparisonType.MORE:
-            e.control.content.value = СomparisonType.EQUALLY_MORE
-        case СomparisonType.EQUALLY_MORE:
-            e.control.content.value = СomparisonType.EQUALLY_LESS
-        case СomparisonType.EQUALLY_LESS:
-            e.control.content.value = СomparisonType.EQUALLY
+        case ComparisonType.EQUALLY:
+            e.control.content.value = ComparisonType.MORE
+        case ComparisonType.MORE:
+            e.control.content.value = ComparisonType.LESS
+        case ComparisonType.LESS:
+            e.control.content.value = ComparisonType.EQUALLY_MORE
+        case ComparisonType.MORE:
+            e.control.content.value = ComparisonType.EQUALLY_MORE
+        case ComparisonType.EQUALLY_MORE:
+            e.control.content.value = ComparisonType.EQUALLY_LESS
+        case ComparisonType.EQUALLY_LESS:
+            e.control.content.value = ComparisonType.EQUALLY
 
 
-class СomparisonButton(Button):
+class ComparisonButton(Button):
     def __init__(self, text):
         super().__init__()
         self.style = ButtonStyle(shape=RoundedRectangleBorder(radius=8), padding=0)
@@ -42,18 +42,18 @@ class СomparisonButton(Button):
 
     def change_content_button(self):
         match self.value:
-            case СomparisonType.EQUALLY:
-                self.value = СomparisonType.MORE
-            case СomparisonType.MORE:
-                self.value = СomparisonType.LESS
-            case СomparisonType.LESS:
-                self.value = СomparisonType.EQUALLY_MORE
-            case СomparisonType.MORE:
-                self.value = СomparisonType.EQUALLY_MORE
-            case СomparisonType.EQUALLY_MORE:
-                self.value = СomparisonType.EQUALLY_LESS
-            case СomparisonType.EQUALLY_LESS:
-                self.value = СomparisonType.EQUALLY
+            case ComparisonType.EQUALLY:
+                self.value = ComparisonType.MORE
+            case ComparisonType.MORE:
+                self.value = ComparisonType.LESS
+            case ComparisonType.LESS:
+                self.value = ComparisonType.EQUALLY_MORE
+            case ComparisonType.MORE:
+                self.value = ComparisonType.EQUALLY_MORE
+            case ComparisonType.EQUALLY_MORE:
+                self.value = ComparisonType.EQUALLY_LESS
+            case ComparisonType.EQUALLY_LESS:
+                self.value = ComparisonType.EQUALLY
         self.update()
 
 

@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from flet import (
     Alignment,
     BorderSide,
@@ -18,10 +20,10 @@ from .text import NormalText
 
 
 class ShortInformationTable(Card):
-    data_table: list[ShortTableData] = []
+    data_table: ClassVar[list[ShortTableData]] = []
     index = 0
     step = 15
-    visible_column_table = {
+    visible_column_table: ClassVar[bool] = {
         "role": True,
         "minutes_played": True,
         "passes_accurate": True,
