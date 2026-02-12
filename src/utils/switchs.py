@@ -4,7 +4,7 @@ from theme import light_cs
 
 
 class PositiveColorSwitch(Switch):
-    def __init__(self, label: str, value: bool, on_change, key="enabled"):
+    def __init__(self, label: str, value: bool, on_change=None, key="enabled"):
         super().__init__()
         self.label = label
         self.key = key
@@ -14,7 +14,7 @@ class PositiveColorSwitch(Switch):
 
 
 class NegativeColorSwitch(Switch):
-    def __init__(self, label: str, value: bool, on_change, key="enabled"):
+    def __init__(self, label: str, value: bool, on_change=None, key="enabled"):
         super().__init__()
         self.label = label
         self.key = key

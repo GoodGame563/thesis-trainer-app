@@ -1,34 +1,26 @@
+import asyncio
+
 from flet import (
     AlertDialog,
-    Alignment,
-    Animation,
-    AnimationCurve,
     Card,
     CardVariant,
     Column,
     Container,
-    CupertinoBottomSheet,
-    CupertinoPicker,
     FilePicker,
     FilePickerFileType,
-    ListView,
     MainAxisAlignment,
     Margin,
-    Offset,
     Row,
     Text,
     TextField,
 )
 
 from db_controls import get_all_teams
-from utils import ActionButton, BasicButton, NormalText
-
-from .overlay import close_overlay, open_overlay
+from utils import ActionButton, BasicButton, NormalText, Picker
 
 
 class GameDialog(AlertDialog):
     def __init__(self):
-        self.teams = []
         self.path_file_field = TextField(
             content_padding=2,
             disabled=True,
@@ -37,6 +29,8 @@ class GameDialog(AlertDialog):
             margin=Margin.only(left=10, right=10, top=5, bottom=0),
             expand=True,
         )
+        self.f_team_button = ActionButton("Выбрать команду", self.select_team, 1)
+        self.s_team_button = ActionButton("Выбрать команду", self.select_team, 1)
 
         super().__init__(
             content=Container(
@@ -63,8 +57,8 @@ class GameDialog(AlertDialog):
                         ),
                         Row(
                             controls=[
-                                ActionButton("Выбрать команду", self.select_team, 1),
-                                ActionButton("Выбрать команду", self.select_team, 1),
+                                self.f_team_button,
+                                self.s_team_button,
                             ],
                             expand=1,
                         ),
@@ -97,36 +91,17 @@ class GameDialog(AlertDialog):
             allowed_extensions=["xlsx", "xls"],
         )
         self.path_file_field.value = file[0].path
+        self.path_file_field.update()
+        await asyncio.sleep(0.1)
 
-    async def _set_teams(self):
-        if len(self.teams) > 0:
-            return
+    async def _get_teams(self):
         teams = await get_all_teams()
-        self.teams.clear()
-        self.teams.extend([NormalText(team.name, team.id) for team in teams])
+        return [NormalText(team.name, team.id) for team in teams]
 
     async def select_team(self, e):
-        await self._set_teams()
-
-        def set_button(d):
-            e.control.content = self.teams[d.control.selected_index].value
-            e.control.key = self.teams[d.control.selected_index].key
-
-        picker = CupertinoPicker(
-            controls=self.teams,
-            expand=1,
-            selected_index=5,
-            magnification=1.22,
-            squeeze=1.2,
-            use_magnifier=True,
-            on_change=set_button,
-        )
-        bs = CupertinoBottomSheet(
-            picker,
-            height=216,
-        )
-
-        self.page.show_dialog(bs)
+        picker = Picker(e.control)
+        self.page.show_dialog(picker)
+        await picker.set_data(await self._get_teams())
 
     def save(self):
         self.open = False

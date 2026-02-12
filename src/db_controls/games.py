@@ -2,7 +2,7 @@ from datetime import date
 
 import aiosqlite
 
-from models import KpiRole, Player, Role, ShortTableData, TableData, Team
+from models import Player, Role, ShortTableData, TableData, Team
 
 from .db_connection import db_connect
 

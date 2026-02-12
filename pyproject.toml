@@ -10,15 +10,15 @@ authors = [
 dependencies = [
     "flet==0.80.5",
     "aiosqlite==0.22.1",
-    "flet-datatable2==0.80.5"
+    "flet-datatable2==0.80.5",
+    "aioshutil==1.6"
 ]
 
 [dependency-groups]
 dev = [
     "flet-cli==0.80.5",
     "flet-desktop==0.80.5",
-    "flet-web==0.80.5",
-    "flet-datatable2==0.80.5",
+    "flet-web==0.80.5"
 ]
 
 [tool.flet]

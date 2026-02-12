@@ -1,29 +1,18 @@
+import asyncio
 import logging
 
 from flet import (
-    BottomSheet,
-    Card,
     Column,
     Container,
-    CupertinoContextMenu,
-    CupertinoContextMenuAction,
+    CrossAxisAlignment,
     FloatingActionButtonLocation,
-    Image,
     Page,
-    Row,
     Stack,
     icons,
     run,
 )
-from flet_datatable2 import DataColumn2, DataTable2
 
-from components import (
-    FilterButtomSheet,
-    GameDialog,
-    Menu,
-    TransferDialog,
-    create_black_overlay,
-)
+from components import FilterButtomSheet, Menu
 from db_controls import create_db, get_games_statistics
 from theme import dark_theme, light_theme
 from utils import CustomBSContentBlock, IconButton, InformationTable
@@ -36,10 +25,23 @@ async def main(page: Page):
 
     async def change_theme(e):
         page.theme = dark_theme if page.theme == light_theme else light_theme
+        page.update()
         theme_button.icon = (
             icons.Icons.SUNNY if page.theme == light_theme else icons.Icons.DARK_MODE
         )
         page.update()
+
+    async def on_dismiss_filter(e):
+        column_table = {}
+        for s_b in e.control.column_table_container.content.controls:
+            column_table[s_b.content.key] = s_b.content.value
+        await main_table.set_columns(column_table)
+
+    async def open_filter(e):
+        f = FilterButtomSheet(on_dismiss_filter)
+        page.show_dialog(f)
+        await asyncio.sleep(1)
+        await f.set_data(main_table.visible_column_table)
 
     logging.getLogger("flet_core").setLevel(logging.INFO)
     page.title = "Таблица с фильтром"
@@ -47,8 +49,6 @@ async def main(page: Page):
     is_dark = {"value": False}
     page.theme_mode = "light"
     page.theme = dark_theme if is_dark["value"] else light_theme
-    menu = Menu()
-    black_overlay = create_black_overlay()
 
     theme_button = IconButton(icons.Icons.SUNNY, change_theme)
 
@@ -60,25 +60,24 @@ async def main(page: Page):
         Container(
             Stack(
                 controls=[
-                    Container(content=main_table, margin=20),
+                    Container(
+                        content=Column(
+                            controls=[
+                                Menu(),
+                                CustomBSContentBlock(content=main_table, expand=9),
+                            ],
+                            horizontal_alignment=CrossAxisAlignment.STRETCH,
+                        ),
+                        margin=20,
+                    ),
                     Container(
                         content=IconButton(
                             icons.Icons.FILTER_LIST,
-                            lambda _: page.show_dialog(
-                                FilterButtomSheet(main_table.get_columns(), main_table)
-                            ),
+                            open_filter,
                         ),
                         right=0,
                         bottom=0,
                     ),
-                    Container(
-                        content=IconButton(icons.Icons.MENU, menu.open_menu),
-                        top=0,
-                        left=0,
-                    ),
-                    black_overlay,
-                    # filter_view,
-                    menu,
                 ]
             ),
             expand=True,
