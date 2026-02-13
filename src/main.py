@@ -12,7 +12,7 @@ from flet import (
     run,
 )
 
-from components import FilterButtomSheet, Menu
+from components import FilterButtomSheet, Menu, PlayerAddDialog
 from db_controls import create_db, get_games_statistics
 from theme import dark_theme, light_theme
 from utils import CustomBSContentBlock, IconButton, InformationTable
@@ -51,6 +51,7 @@ async def main(page: Page):
     page.theme = dark_theme if is_dark["value"] else light_theme
 
     theme_button = IconButton(icons.Icons.SUNNY, change_theme)
+    # page.show_dialog(PlayerAddDialog())
 
     page.floating_action_button = theme_button
     page.floating_action_button_location = FloatingActionButtonLocation.END_TOP

@@ -117,3 +117,18 @@ async def get_all_players() -> list[Player]:
                 )
                 for row in rows
             ]
+
+
+async def create_player(player: Player):
+    async with db_connect() as db:
+        await db.execute(
+            """INSERT INTO players (full_name, height, weight, date_birth, foto) VALUES (?, ?, ?, ?, ?)""",
+            (
+                player.full_name,
+                player.height,
+                player.weight,
+                player.birth_date,
+                player.path_to_photo,
+            ),
+        )
+        await db.commit()

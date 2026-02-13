@@ -7,6 +7,7 @@ from utils import MenuButton
 from .game import GameDialog
 from .team import TeamDialog
 from .transfer import TransferDialog
+from .player import PlayerAddDialog
 
 
 class Menu(MenuBar):
@@ -16,7 +17,7 @@ class Menu(MenuBar):
                 alignment=Alignment.CENTER,
             ),
             controls=[
-                MenuButton("Добавить игрока"),
+                MenuButton("Добавить игрока", self.element_open_player),
                 MenuButton(
                     "Добавить матч",
                     self.element_open_game,
@@ -39,9 +40,13 @@ class Menu(MenuBar):
         gd = GameDialog()
         self.page.show_dialog(gd)
         await asyncio.sleep(0.1)
-        # await gd._set_teams()
 
     async def element_open_transfer(self):
         td = TransferDialog()
         self.page.show_dialog(td)
+        await asyncio.sleep(0.3)
+
+    async def element_open_player(self):
+        pd = PlayerAddDialog()
+        self.page.show_dialog(pd)
         await asyncio.sleep(0.3)
