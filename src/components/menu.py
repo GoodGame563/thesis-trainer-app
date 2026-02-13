@@ -5,9 +5,9 @@ from flet import Alignment, MenuBar, MenuStyle
 from utils import MenuButton
 
 from .game import GameDialog
+from .player import PlayerAddDialog
 from .team import TeamDialog
 from .transfer import TransferDialog
-from .player import PlayerAddDialog
 
 
 class Menu(MenuBar):

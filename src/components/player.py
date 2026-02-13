@@ -159,11 +159,11 @@ class PlayerAddDialog(AlertDialog):
         await asyncio.sleep(0.2)
         await create_player(
             Player(
-                id = 0,
+                id=0,
                 full_name=self.full_name_field.value,
                 height=height,
                 weight=weight,
                 birth_date=self.date_birth_field.value,
-                path_to_photo=self.photo_path_field.value
+                path_to_photo=self.photo_path_field.value,
             )
         )
