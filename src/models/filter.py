@@ -166,10 +166,7 @@ def role_changed(role: KpiRole) -> bool:
     for p_i in filter_kpi[role].positive_indicators.values():
         if p_i.enabled:
             return True
-    for p_i in filter_kpi[role].negative_indicators.values():
-        if p_i.enabled:
-            return True
-    return False
+    return any(p_i.enabled for p_i in filter_kpi[role].negative_indicators.values())
 
 
 def calculate_bonus(data: TableData) -> int:
@@ -225,7 +222,7 @@ async def calculate_kpi(role_selected: bool, data: TableData) -> TableData:
                 if (
                     role_selected
                     and (key in role_bonus[kpi_role] or "all" in role_bonus[kpi_role])
-                    and not (f"-{key}" in role_bonus[kpi_role])
+                    and f"-{key}" not in role_bonus[kpi_role]
                 ):
                     rating += positive_multipliers[key] * 2 * data_in_cell
                 else:

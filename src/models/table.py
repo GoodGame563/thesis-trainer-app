@@ -115,7 +115,6 @@ class TableData:
 @dataclass(order=True)
 class ShortTableData:
     role: Role
-    role: Role
     minutes_played: int
     # ============= ПЕРЕДАЧИ =============
     successful_passes: int
