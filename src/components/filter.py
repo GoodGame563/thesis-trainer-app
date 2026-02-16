@@ -1,4 +1,5 @@
 import asyncio
+
 from flet import (
     BottomSheet,
     Button,
@@ -263,7 +264,6 @@ class FilterButtomSheet(BottomSheet):
         self.positive_table_container.update()
         self.negative_table_container.update()
         await asyncio.sleep(0.2)
-
 
     async def update_tables(self, new_role: KpiRole):
         self.safe_tables()

@@ -1,14 +1,15 @@
 import asyncio
 import select
+
 from flet import (
     Button,
     ButtonStyle,
     FilledButton,
     FloatingActionButton,
     Margin,
-    RoundedRectangleBorder,
     PopupMenuButton,
     PopupMenuItem,
+    RoundedRectangleBorder,
 )
 
 from models import ComparisonType

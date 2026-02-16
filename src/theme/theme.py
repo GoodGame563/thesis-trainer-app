@@ -12,13 +12,13 @@ from flet import (
     FloatingActionButtonTheme,
     MenuStyle,
     OutlinedBorder,
+    PopupMenuTheme,
     RoundedRectangleBorder,
     ScrollbarTheme,
     SwitchTheme,
     TextStyle,
     TextTheme,
     Theme,
-    PopupMenuTheme,
 )
 
 light_color = {

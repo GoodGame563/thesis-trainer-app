@@ -6,6 +6,7 @@ from aioshutil import R
 from .structs import ComparisonType, Role
 from .table import TableData
 
+
 class KpiRole(Enum):
     FIRST_LINE = "Первая линия"
     SECOND_LINE = "Вторая линия"
@@ -160,6 +161,7 @@ compare_kpi_role = {
     Role.FULLBACK: KpiRole.FULLBACK,
 }
 
+
 def role_changed(role: KpiRole) -> bool:
     for p_i in filter_kpi[role].positive_indicators.values():
         if p_i.enabled:
@@ -168,6 +170,7 @@ def role_changed(role: KpiRole) -> bool:
         if p_i.enabled:
             return True
     return False
+
 
 def calculate_bonus(data: TableData) -> int:
     bonus = 0
@@ -187,7 +190,8 @@ def calculate_bonus(data: TableData) -> int:
         bonus += 50
     return bonus
 
-def anything_changed()-> bool:
+
+def anything_changed() -> bool:
     for role in KpiRole:
         for p_i in filter_kpi[role].positive_indicators.values():
             if p_i.enabled:
@@ -196,6 +200,7 @@ def anything_changed()-> bool:
             if p_i.enabled:
                 return True
     return False
+
 
 async def calculate_kpi(role_selected: bool, data: TableData) -> TableData:
     rating = 0.0
@@ -208,30 +213,39 @@ async def calculate_kpi(role_selected: bool, data: TableData) -> TableData:
         select_filter_kpi = filter_kpi[KpiRole.ALL_ROLES]
 
     for key, value in select_filter_kpi.positive_indicators.items():
-        if(value.enabled):
+        if value.enabled:
             needs_rules += 1
             data_in_cell = getattr(data, key)
             compare_value = int(value.value)
-            print(f"{key}: данные в табличке {data_in_cell} {value.comprasion.value} данные в строке {compare_value}")
-            if (bool(f"{data_in_cell}{value.comprasion.value}{compare_value}")):
+            print(
+                f"{key}: данные в табличке {data_in_cell} {value.comprasion.value} данные в строке {compare_value}"
+            )
+            if bool(f"{data_in_cell}{value.comprasion.value}{compare_value}"):
                 success_rules += 1
-                if role_selected and (key in role_bonus[kpi_role] or "all" in role_bonus[kpi_role]) and not (f"-{key}" in role_bonus[kpi_role]):
+                if (
+                    role_selected
+                    and (key in role_bonus[kpi_role] or "all" in role_bonus[kpi_role])
+                    and not (f"-{key}" in role_bonus[kpi_role])
+                ):
                     rating += positive_multipliers[key] * 2 * data_in_cell
                 else:
                     rating += positive_multipliers[key] * data_in_cell
-                
+
     for key, value in select_filter_kpi.negative_indicators.items():
-        if(value.enabled):
+        if value.enabled:
             data_in_cell = getattr(data, key)
             compare_value = int(value.value)
-            print(f"{key}:  данные в табличке {data_in_cell} {value.comprasion.value} данные в строке {compare_value}")
+            print(
+                f"{key}:  данные в табличке {data_in_cell} {value.comprasion.value} данные в строке {compare_value}"
+            )
             print("рейтинг до: ", rating)
-            if (bool(f"{data_in_cell}{value.comprasion.value}{compare_value}")):
+            if bool(f"{data_in_cell}{value.comprasion.value}{compare_value}"):
                 rating += negative_multipliers[key] * data_in_cell
             print("рейтинг после: ", rating)
-    
-    rating = (rating * (0.75 + (success_rules/needs_rules)*0.5) + calculate_bonus(data))/data.minutes_played
+
+    rating = (
+        rating * (0.75 + (success_rules / needs_rules) * 0.5) + calculate_bonus(data)
+    ) / data.minutes_played
     print(rating)
     data.rating = rating
     return data
-

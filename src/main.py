@@ -14,9 +14,9 @@ from flet import (
 
 from components import FilterButtomSheet, Menu
 from db_controls import create_db, get_games_statistics
+from models import KpiRole, anything_changed, calculate_kpi
 from theme import dark_theme, light_theme
 from utils import CustomBSContentBlock, IconButton, InformationTable
-from models import calculate_kpi, KpiRole, anything_changed
 
 logging.basicConfig(level=logging.INFO)
 
@@ -40,17 +40,17 @@ async def main(page: Page):
         if anything_changed():
             get_stats = await get_games_statistics()
             new_table_data = []
-            for stat in get_stats: 
+            for stat in get_stats:
                 new_table_data.append(await calculate_kpi(role_selected, stat))
-            await asyncio.gather(main_table.set_columns(column_table), main_table.set_data(new_table_data))
+            await asyncio.gather(
+                main_table.set_columns(column_table),
+                main_table.set_data(new_table_data),
+            )
         else:
             await main_table.set_columns(column_table)
 
-
         # await main_table.set_columns(column_table)
         # await main_table.set_data(new_table_data)
-        
-
 
     async def open_filter(e):
         f = FilterButtomSheet(on_dismiss_filter)
