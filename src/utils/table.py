@@ -10,6 +10,7 @@ from flet import (
     DataColumnSortEvent,
     Icons,
     Stack,
+    StackFit,
 )
 from flet_datatable2 import DataColumn2, DataColumnSize, DataRow2, DataTable2
 
@@ -65,7 +66,7 @@ class InformationTable(Card):
         "rating": True,
     }
 
-    def __init__(self):
+    def __init__(self, expand):
         self.rows = []
         self.columns = []
         for key, value in self.visible_column_table.items():
@@ -106,7 +107,8 @@ class InformationTable(Card):
                     self.left_button,
                 ]
             ),
-            clip_behavior="HARD",
+            clip_behavior="ANTI_ALIAS_WITH_SAVE_LAYER",
+            expand=expand,
         )
 
     def sort_column(self, e: DataColumnSortEvent):

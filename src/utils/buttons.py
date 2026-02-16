@@ -1,3 +1,5 @@
+import asyncio
+import select
 from flet import (
     Button,
     ButtonStyle,
@@ -5,56 +7,42 @@ from flet import (
     FloatingActionButton,
     Margin,
     RoundedRectangleBorder,
+    PopupMenuButton,
+    PopupMenuItem,
 )
 
 from models import ComparisonType
 
-from .text import MenuText, NormalText
+from .text import ComparisonText, MenuText, NormalText
 
 
-def change_content_button(e):
-    match e.control.content.value:
-        case ComparisonType.EQUALLY:
-            e.control.content.value = ComparisonType.MORE
-        case ComparisonType.MORE:
-            e.control.content.value = ComparisonType.LESS
-        case ComparisonType.LESS:
-            e.control.content.value = ComparisonType.EQUALLY_MORE
-        case ComparisonType.MORE:
-            e.control.content.value = ComparisonType.EQUALLY_MORE
-        case ComparisonType.EQUALLY_MORE:
-            e.control.content.value = ComparisonType.EQUALLY_LESS
-        case ComparisonType.EQUALLY_LESS:
-            e.control.content.value = ComparisonType.EQUALLY
+class ComparisonButton(PopupMenuButton):
+    def __init__(self, text: str):
+        super().__init__(
+            style=ButtonStyle(shape=RoundedRectangleBorder(radius=8), padding=0),
+            content=ComparisonText(text),
+            elevation=3,
+            margin=5,
+            height=35,
+            width=35,
+            key="comprasion",
+            items=[
+                PopupMenuItem(content=ComparisonType.EQUALLY, on_click=self.select),
+                PopupMenuItem(content=ComparisonType.MORE, on_click=self.select),
+                PopupMenuItem(content=ComparisonType.LESS, on_click=self.select),
+                PopupMenuItem(
+                    content=ComparisonType.EQUALLY_MORE, on_click=self.select
+                ),
+                PopupMenuItem(
+                    content=ComparisonType.EQUALLY_LESS, on_click=self.select
+                ),
+            ],
+        )
 
-
-class ComparisonButton(Button):
-    def __init__(self, text):
-        super().__init__()
-        self.style = ButtonStyle(shape=RoundedRectangleBorder(radius=8), padding=0)
-        self.content = NormalText(text)
-        self.on_click = change_content_button
-        self.elevation = 3
-        self.margin = 5
-        self.height = 35
-        self.width = 35
-        self.key = "comprasion"
-
-    def change_content_button(self):
-        match self.value:
-            case ComparisonType.EQUALLY:
-                self.value = ComparisonType.MORE
-            case ComparisonType.MORE:
-                self.value = ComparisonType.LESS
-            case ComparisonType.LESS:
-                self.value = ComparisonType.EQUALLY_MORE
-            case ComparisonType.MORE:
-                self.value = ComparisonType.EQUALLY_MORE
-            case ComparisonType.EQUALLY_MORE:
-                self.value = ComparisonType.EQUALLY_LESS
-            case ComparisonType.EQUALLY_LESS:
-                self.value = ComparisonType.EQUALLY
+    async def select(self, e):
+        self.content.value = e.control.content
         self.update()
+        await asyncio.sleep(0.2)
 
 
 class BasicButton(Button):

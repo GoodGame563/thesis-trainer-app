@@ -1,3 +1,4 @@
+import asyncio
 from flet import (
     BottomSheet,
     Button,
@@ -8,6 +9,7 @@ from flet import (
     ExpansionPanel,
     ExpansionPanelList,
     ListView,
+    PopupMenuButton,
     Row,
     Switch,
 )
@@ -50,6 +52,13 @@ class FilterButtomSheet(BottomSheet):
                 )
             )
         )
+        self.switch_role_select = SwitchBlock(
+            "Учитывать амплуа",
+            False,
+            None,
+            "check_role",
+            1,
+        )
 
         self.column_table_container = Container(
             content=CustomShimmer(
@@ -81,13 +90,7 @@ class FilterButtomSheet(BottomSheet):
                                     controls=[
                                         Row(
                                             controls=[
-                                                SwitchBlock(
-                                                    "Учитывать амплуа",
-                                                    False,
-                                                    None,
-                                                    "check_role",
-                                                    1,
-                                                ),
+                                                self.switch_role_select,
                                                 CustomBSContentBlock(
                                                     self.dropdown_container,
                                                     1,
@@ -190,13 +193,14 @@ class FilterButtomSheet(BottomSheet):
 
     def safe_button(self, e):
         self.parent.page.pop_dialog()
+        self.safe_tables()
 
     def safe_tables(self):
         for c in self.positive_table_container.content.controls:
             for element in c.content.controls:
                 value = None
                 match element:
-                    case Button():
+                    case PopupMenuButton():
                         value = element.content.value
                     case _:
                         value = element.value
@@ -209,7 +213,7 @@ class FilterButtomSheet(BottomSheet):
             for element in c.content.controls:
                 value = None
                 match element:
-                    case Button():
+                    case PopupMenuButton():
                         value = element.content.value
                     case _:
                         value = element.value
@@ -219,11 +223,11 @@ class FilterButtomSheet(BottomSheet):
                     value,
                 )
 
-    def set_tables(self):
+    async def set_tables(self):
         for c in self.positive_table_container.content.controls:
             for element in c.content.controls:
                 match element:
-                    case Button():
+                    case PopupMenuButton():
                         element.content.value = getattr(
                             filter_kpi[self.selectKpiRole].positive_indicators[c.key],
                             element.key,
@@ -238,11 +242,10 @@ class FilterButtomSheet(BottomSheet):
                             filter_kpi[self.selectKpiRole].positive_indicators[c.key],
                             element.key,
                         )
-        self.positive_table_container.update()
         for c in self.negative_table_container.content.controls:
             for element in c.content.controls:
                 match element:
-                    case Button():
+                    case PopupMenuButton():
                         element.content.value = getattr(
                             filter_kpi[self.selectKpiRole].negative_indicators[c.key],
                             element.key,
@@ -257,15 +260,18 @@ class FilterButtomSheet(BottomSheet):
                             filter_kpi[self.selectKpiRole].negative_indicators[c.key],
                             element.key,
                         )
+        self.positive_table_container.update()
         self.negative_table_container.update()
+        await asyncio.sleep(0.2)
 
-    def update_tables(self, new_role: KpiRole):
+
+    async def update_tables(self, new_role: KpiRole):
         self.safe_tables()
         self.selectKpiRole = new_role
-        self.set_tables()
+        await self.set_tables()
 
-    def select(self, e):
-        self.update_tables(KpiRole[e.data])
+    async def select(self, e):
+        await self.update_tables(KpiRole[e.data])
 
 
 def get_option():
