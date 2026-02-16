@@ -62,13 +62,13 @@ class SwitchBlock(Card):
     def __init__(
         self,
         label: str,
-        value_swith: bool,
+        value_switch: bool,
         on_change=None,
         key="value",
         expand=None,
     ):
         super().__init__()
-        self.content = NeutralColorSwitch(label, value_swith, on_change, key)
+        self.content = NeutralColorSwitch(label, value_switch, on_change, key)
         self.margin = Margin.only(
             left=10,
             right=10,

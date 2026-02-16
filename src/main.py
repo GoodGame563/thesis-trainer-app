@@ -14,6 +14,7 @@ from flet import (
 
 from components import FilterButtomSheet, Menu
 from db_controls import create_db, get_games_statistics
+from models import KpiRole, anything_changed, calculate_kpi
 from theme import dark_theme, light_theme
 from utils import CustomBSContentBlock, IconButton, InformationTable
 
@@ -32,10 +33,24 @@ async def main(page: Page):
         page.update()
 
     async def on_dismiss_filter(e):
+        role_selected = e.control.switch_role_select.content.value
         column_table = {}
         for s_b in e.control.column_table_container.content.controls:
             column_table[s_b.content.key] = s_b.content.value
-        await main_table.set_columns(column_table)
+        if anything_changed():
+            get_stats = await get_games_statistics()
+            new_table_data = []
+            for stat in get_stats:
+                new_table_data.append(await calculate_kpi(role_selected, stat))
+            await asyncio.gather(
+                main_table.set_columns(column_table),
+                main_table.set_data(new_table_data),
+            )
+        else:
+            await main_table.set_columns(column_table)
+
+        # await main_table.set_columns(column_table)
+        # await main_table.set_data(new_table_data)
 
     async def open_filter(e):
         f = FilterButtomSheet(on_dismiss_filter)
@@ -54,7 +69,7 @@ async def main(page: Page):
 
     page.floating_action_button = theme_button
     page.floating_action_button_location = FloatingActionButtonLocation.END_TOP
-    main_table = InformationTable()
+    main_table = InformationTable(8)
 
     page.add(
         Container(
@@ -64,7 +79,7 @@ async def main(page: Page):
                         content=Column(
                             controls=[
                                 Menu(),
-                                CustomBSContentBlock(content=main_table, expand=9),
+                                main_table,
                             ],
                             horizontal_alignment=CrossAxisAlignment.STRETCH,
                         ),

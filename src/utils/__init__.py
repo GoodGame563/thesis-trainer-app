@@ -15,3 +15,4 @@ from .shimmer import CustomShimmer
 from .short_table import ShortInformationTable
 from .table import InformationTable
 from .text import BigerText, BigestText, NormalText
+from .text_fields import NormalTextField
