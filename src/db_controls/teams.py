@@ -1,8 +1,10 @@
 import aiosqlite
 from sqlalchemy import select
-from .structs import Teams, AllStats
-from models import Team
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
+
+from models import Team
+
+from .structs import AllStats, Teams
 
 
 async def find_all_teams_by_user_id(

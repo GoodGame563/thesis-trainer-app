@@ -4,7 +4,7 @@ import aiosqlite
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from models import TableData, ShortTableData
+from models import ShortTableData, TableData
 
 from .structs import AllStats, Players, Roles, Teams
 
