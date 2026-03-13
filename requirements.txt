@@ -2,3 +2,4 @@ flet==0.80.5
 aiosqlite==0.22.1
 flet-datatable2==0.80.5
 aioshutil==1.6
+sqlalchemy[asyncio] 

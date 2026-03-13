@@ -12,7 +12,10 @@ from flet import (
 from db_controls import (
     find_all_teams_by_user_id,
     get_all_games_by_player_team_id,
-    get_player_with_roles_and_teams,
+    get_players_roles_and_teams,
+    get_session,
+    get_player,
+    get_players_team,
 )
 from models import KpiRole
 from utils import (
@@ -116,41 +119,42 @@ class PlayerContainer(AlertDialog):
         )
 
     async def open_user(self, id):
-        pl = await get_player_with_roles_and_teams(id)
-        self.name_container.content = BigestText(pl["player"].full_name)
+        session = get_session()
+        player = await get_player(session, id)
+        team = await get_players_team(session, id)
+        pl = await get_players_roles_and_teams(session, id)
+        self.name_container.content = BigestText(player.full_name)
         self.name_container.update()
-        self.date_container.content = BigerText(pl["player"].birth_date)
+        self.date_container.content = BigerText(player.birth_date.strftime("%d.%m.%Y"))
         self.date_container.update()
-        self.weight_container.content = BigerText(str(pl["player"].weight) + " кг")
+        self.weight_container.content = BigerText(str(player.weight) + " кг")
         self.weight_container.update()
-        self.height_container.content = BigerText(str(pl["player"].height) + " см")
+        self.height_container.content = BigerText(str(player.height) + " см")
         self.height_container.update()
         self.role_team.clear()
         self.role_team.extend(
-            [
-                NormalTextBlock(f"{KpiRole[r_t['role']].value} - {r_t['team']}")
-                for r_t in pl["roles_with_team"]
-            ]
+            [NormalTextBlock(f"{KpiRole[r_t[0]].value} - {r_t[1]}") for r_t in pl]
         )
 
         self.image_container.content.src = (
-            pl["current_team"].path_to_logo if pl["current_team"] else "not-found.jpg"
+            team.path_to_logo if team else "not-found.jpg"
         )
         self.image_container.update()
         self.team_name_container.content = BigerText(
-            pl["current_team"].name if pl["current_team"] else "Нет команды"
+            team.name if team else "Нет команды"
         )
         self.team_name_container.update()
+
         text_buttons = []
         contols = []
-        for t in await find_all_teams_by_user_id(id):
+        for t in await find_all_teams_by_user_id(session, id):
             text_buttons.append(t.name)
             i_t = ShortInformationTable()
-            i_t.set_data(await get_all_games_by_player_team_id(id, t.id))
+            i_t.set_data(await get_all_games_by_player_team_id(session, id, t.id))
             contols.append(i_t)
         self.content.controls[1] = SlidingContentBlock(
             text_buttons=tuple(text_buttons),
             controls=contols,
             expand=5,
         )
-        self.update()
+        # self.update()

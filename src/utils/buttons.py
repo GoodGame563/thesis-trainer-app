@@ -1,5 +1,4 @@
 import asyncio
-import select
 
 from flet import (
     Button,

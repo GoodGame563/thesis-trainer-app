@@ -13,8 +13,8 @@ from flet import (
 )
 
 from components import FilterButtomSheet, Menu
-from db_controls import create_db, get_games_statistics
 from models import KpiRole, anything_changed, calculate_kpi
+from db_controls import create_db, get_games_statistics, get_session, set_engine
 from theme import dark_theme, light_theme
 from utils import CustomBSContentBlock, IconButton, InformationTable
 
@@ -22,7 +22,10 @@ logging.basicConfig(level=logging.INFO)
 
 
 async def main(page: Page):
-    await create_db()
+    engine = await create_db()
+    set_engine(engine)
+    session = get_session()
+    session1 = get_session()
 
     async def change_theme(e):
         page.theme = dark_theme if page.theme == light_theme else light_theme
@@ -38,14 +41,14 @@ async def main(page: Page):
         for s_b in e.control.column_table_container.content.controls:
             column_table[s_b.content.key] = s_b.content.value
         if anything_changed():
-            get_stats = await get_games_statistics()
+            # get_stats = await get_games_statistics()
             new_table_data = []
-            for stat in get_stats:
-                new_table_data.append(await calculate_kpi(role_selected, stat))
-            await asyncio.gather(
-                main_table.set_columns(column_table),
-                main_table.set_data(new_table_data),
-            )
+            # for stat in get_stats:
+            #     new_table_data.append(await calculate_kpi(role_selected, stat))
+            # await asyncio.gather(
+            #     main_table.set_columns(column_table),
+            #     main_table.set_data(new_table_data),
+            # )
         else:
             await main_table.set_columns(column_table)
 
@@ -99,7 +102,7 @@ async def main(page: Page):
             clip_behavior="ANTI_ALIAS_WITH_SAVE_LAYER",
         )
     )
-    main_table.set_data(await get_games_statistics())
+    main_table.set_data(await get_games_statistics(session, game_id=1))
 
 
 if __name__ == "__main__":

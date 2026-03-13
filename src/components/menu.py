@@ -2,7 +2,7 @@ import asyncio
 
 from flet import Alignment, MenuBar, MenuStyle
 
-from utils import MenuButton
+from utils import MenuButton, Picker
 
 from .game import GameDialog
 from .player import PlayerAddDialog
@@ -27,6 +27,7 @@ class Menu(MenuBar):
                     "Трансфер",
                     self.element_open_transfer,
                 ),
+                MenuButton("Выбрать матч", self.element_open_match),
             ],
             expand=1,
         )
@@ -50,3 +51,8 @@ class Menu(MenuBar):
         pd = PlayerAddDialog()
         self.page.show_dialog(pd)
         await asyncio.sleep(0.3)
+
+    async def element_open_match(self, e):
+        picker = Picker(e.control)
+        self.page.show_dialog(picker)
+        pass
