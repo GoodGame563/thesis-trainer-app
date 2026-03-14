@@ -153,8 +153,6 @@ class PlayerContainer(AlertDialog):
         )
         self.team_name_container.update()
 
-        text_buttons = []
-        contols = []
         # for t in await find_all_teams_by_user_id(session, id):
         #     text_buttons.append(t.name)
         #     i_t = ShortInformationTable()

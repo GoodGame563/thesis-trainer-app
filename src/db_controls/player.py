@@ -84,7 +84,7 @@ async def update_player(
         return False
 
     params.append(player_id)
-    query = f"UPDATE players SET {', '.join(updates)} WHERE id = ?"
+    f"UPDATE players SET {', '.join(updates)} WHERE id = ?"
     return True
 
     # async with db_connect() as db:
