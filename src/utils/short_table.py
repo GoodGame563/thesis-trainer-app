@@ -26,32 +26,37 @@ class ShortInformationTable(Card):
     visible_column_table: ClassVar[bool] = {
         "role": True,
         "minutes_played": True,
-        "passes_accurate": True,
-        "passes_inaccurate": True,
-        "passes_percent": True,
-        "captures_done": True,
-        "captures_missed": True,
-        "captures_percent": True,
-        "rakov_cleared": True,
-        "tackles_done": True,
-        "meters_covered": True,
+        "successful_passes": True,
+        "bad_passes": True,
+        "successful_tackle": True,
+        "dominant_tackles": True,
+        "miss_tackle": True,
+        "ruck_cleared": True,
+        "steals": True,
+        "metres_carried": True,
         "defenders_beaten": True,
-        "breakthroughs": True,
-        "attempts_grounded": True,
-        "realizations_scored": True,
-        "realizations_attempted": True,
-        "realizations_percent": True,
-        "penalties_scored": True,
-        "penalties_attempted": True,
-        "penalties_percent": True,
-        "dropgoals_scored": True,
-        "dropgoals_attempted": True,
-        "dropgoals_percent": True,
-        "points_scored": True,
-        "penalties_received": True,
-        "loss_ball": True,
-        "yellow_cards": True,
-        "red_cards": True,
+        "carriers": True,
+        "line_breaks": True,
+        "line_break_assists": True,
+        "tries": True,
+        "try_assists": True,
+        "successful_conversions": True,
+        "miss_conversions": True,
+        "successful_penalties": True,
+        "miss_penalties": True,
+        "successful_drop_goal": True,
+        "miss_drop_goal": True,
+        "points": True,
+        "scrums_win": True,
+        "scrums_steal": True,
+        "scrums_lose": True,
+        "lineout_win": True,
+        "lineout_steal": True,
+        "lineout_lose": True,
+        "ball_losses": True,
+        "penalty": True,
+        "yellow_card": True,
+        "red_card": True,
         "rating": True,
     }
 
@@ -66,6 +71,7 @@ class ShortInformationTable(Card):
                     key=key,
                     on_sort=self.sort_column,
                     size=DataColumnSize.M,
+                    expand=1,
                 )
             )
         self.right_button = IconButton(Icons.ARROW_FORWARD, self.to_right)
@@ -75,7 +81,7 @@ class ShortInformationTable(Card):
             rows=self.rows,
             horizontal_lines=BorderSide(1, light_cs.outline),
             vertical_lines=BorderSide(1, light_cs.outline),
-            min_width=7000,
+            min_width=8000,
             visible_horizontal_scroll_bar=True,
             visible_vertical_scroll_bar=True,
             expand=1,
@@ -116,7 +122,7 @@ class ShortInformationTable(Card):
                 visible += 1
             for row in self.rows:
                 row.cells[i].visible = value
-        self.main_table.min_width = visible * 218
+        self.main_table.min_width = visible * 250
 
     def to_left(self, e):
         self.index -= self.step if self.step - self.index <= 0 else 0

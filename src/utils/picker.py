@@ -15,11 +15,11 @@ from .text import NormalText
 
 
 class Picker(CupertinoBottomSheet):
-    def __init__(self, activation_button: Button | FilledButton):
+    def __init__(self, activation_button: Button | FilledButton, dissmiss_func=None):
         picker = CupertinoPicker(
             controls=[CustomShimmer(NormalText("Wait")) for _ in range(10)],
             expand=5,
-            selected_index=3,
+            selected_index=2,
             magnification=1.22,
             squeeze=1.2,
             use_magnifier=True,
@@ -28,7 +28,6 @@ class Picker(CupertinoBottomSheet):
         async def save_data():
             self.open = False
             self.update()
-            await asyncio.sleep(0.2)
             activation_button.content = picker.controls[picker.selected_index]
             activation_button.update()
 
@@ -48,6 +47,7 @@ class Picker(CupertinoBottomSheet):
             height=216,
             padding=10,
             modal=True,
+            on_dismiss=dissmiss_func,
         )
 
     async def set_data(self, data: list[NormalText]):

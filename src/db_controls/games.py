@@ -1,169 +1,199 @@
 from datetime import date
 
 import aiosqlite
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
+from sqlalchemy.orm import aliased
 
-from models import Player, Role, ShortTableData, TableData, Team
+from models import AllStat, Game, Role, ShortTableData, TableData, Team
 
-from .db_connection import db_connect
+from .structs import AllStats, Games, Players, Roles, Teams
 
 
-async def get_games_statistics() -> list[TableData]:
-    query = """
-        SELECT
-            p.id as pl_id,
-            p.full_name,
-            p.weight,
-            p.height,
-            p.date_birth,
-            p.foto,
-            t.id as t_id,
-            t.name as command,
-            t.logo,
-            r.name as role,
-            g.minutes_played,
-            g.passes_accurate,
-            g.passes_inaccurate,
-            g.passes_percent,
-            g.captures_done,
-            g.captures_missed,
-            g.captures_percent,
-            g.rakov_cleared,
-            g.tackles_done,
-            g.meters_covered,
-            g.defenders_beaten,
-            g.breakthroughs,
-            g.attempts_grounded,
-            g.realizations_scored,
-            g.realizations_attempted,
-            g.realizations_percent,
-            g.penalties_scored,
-            g.penalties_attempted,
-            g.penalties_percent,
-            g.dropgoals_scored,
-            g.dropgoals_attempted,
-            g.dropgoals_percent,
-            g.points_scored,
-            g.penalties_received,
-            g.loss_ball,
-            g.yellow_cards,
-            g.red_cards
-        FROM all_games g
-        JOIN players p ON g.player_id = p.id
-        JOIN teams t ON g.team_id = t.id
-        JOIN roles r ON g.role_id = r.id
-        ORDER BY g.id
-    """
-
+async def get_games_statistics(
+    async_session: async_sessionmaker[AsyncSession], game_id: int
+) -> list[TableData]:
     result = []
-    async with db_connect() as db:
-        db.row_factory = aiosqlite.Row
-        async with db.execute(query) as cursor:
-            async for row in cursor:
-                birth_date = date.fromisoformat(row["date_birth"])
-
-                Team(id=row["t_id"], name=row["command"], path_to_logo=row["logo"])
-
-                player = Player(
-                    id=row["pl_id"],
-                    full_name=row["full_name"],
-                    weight=row["weight"],
-                    height=row["height"],
-                    birth_date=birth_date,
-                    path_to_photo=row["foto"],
-                )
-
-                role = Role[row["role"]]
-
-                rating = 0.0
-
-                table_data = TableData(
+    async with async_session() as session:
+        stmt = (
+            select(AllStats, Players, Teams, Roles)
+            .where(AllStats.game_id == game_id)
+            .join(Players)
+            .join(Teams)
+            .join(Roles)
+        )
+        data = await session.execute(stmt)
+        for s, p, t, r in data.tuples():
+            player = p.to_model()
+            result.append(
+                TableData(
                     player=player,
-                    role=role,
-                    date_birth=birth_date,
-                    team=row["command"],
-                    minutes_played=row["minutes_played"],
-                    passes_accurate=row["passes_accurate"],
-                    passes_inaccurate=row["passes_inaccurate"],
-                    passes_percent=row["passes_percent"],
-                    captures_done=row["captures_done"],
-                    captures_missed=row["captures_missed"],
-                    captures_percent=row["captures_percent"],
-                    rakov_cleared=row["rakov_cleared"],
-                    tackles_done=row["tackles_done"],
-                    meters_covered=row["meters_covered"],
-                    defenders_beaten=row["defenders_beaten"],
-                    breakthroughs=row["breakthroughs"],
-                    attempts_grounded=row["attempts_grounded"],
-                    realizations_scored=row["realizations_scored"],
-                    realizations_attempted=row["realizations_attempted"],
-                    realizations_percent=row["realizations_percent"],
-                    penalties_scored=row["penalties_scored"],
-                    penalties_attempted=row["penalties_attempted"],
-                    penalties_percent=row["penalties_percent"],
-                    dropgoals_scored=row["dropgoals_scored"],
-                    dropgoals_attempted=row["dropgoals_attempted"],
-                    dropgoals_percent=row["dropgoals_percent"],
-                    points_scored=row["points_scored"],
-                    penalties_received=row["penalties_received"],
-                    loss_ball=row["loss_ball"],
-                    yellow_cards=row["yellow_cards"],
-                    red_cards=row["red_cards"],
-                    rating=rating,
+                    role=r.to_model(),
+                    date_birth=player.birth_date,
+                    team=t.name,
+                    minutes_played=s.minutes_played,
+                    successful_passes=s.successful_passes,
+                    bad_passes=s.bad_passes,
+                    successful_tackle=s.successful_tackle,
+                    dominant_tackles=s.dominant_tackles,
+                    miss_tackle=s.miss_tackle,
+                    ruck_cleared=s.ruck_cleared,
+                    steals=s.steals,
+                    metres_carried=s.metres_carried,
+                    defenders_beaten=s.defenders_beaten,
+                    carriers=s.carriers,
+                    line_breaks=s.line_breaks,
+                    line_break_assists=s.line_break_assists,
+                    tries=s.tries,
+                    try_assists=s.try_assists,
+                    successful_conversions=s.successful_conversions,
+                    miss_conversions=s.miss_conversions,
+                    successful_penalties=s.successful_penalties,
+                    miss_penalties=s.miss_penalties,
+                    successful_drop_goal=s.successful_drop_goal,
+                    miss_drop_goal=s.miss_drop_goal,
+                    points=s.points,
+                    scrums_win=s.scrums_win,
+                    scrums_steal=s.scrums_steal,
+                    scrums_lose=s.scrums_lose,
+                    lineout_win=s.lineout_win,
+                    lineout_steal=s.lineout_steal,
+                    lineout_lose=s.lineout_lose,
+                    ball_losses=s.ball_losses,
+                    penalty=s.penalty,
+                    yellow_card=s.yellow_card,
+                    red_card=s.red_card,
+                    rating=0.0,
                 )
-                result.append(table_data)
-
+            )
     return result
 
 
 async def get_all_games_by_player_team_id(
-    player_id: int, team_id: int
+    async_session: async_sessionmaker[AsyncSession], player_id: int, team_id: int
 ) -> list[ShortTableData]:
-    query = """
-               SELECT
-            g.*,
-			r.name as role
-        FROM all_games g
-		JOIN roles r on g.role_id = r.id
-        WHERE g.player_id = ? AND g.team_id = ?
-        ORDER BY g.id
-    """
-
     result = []
-    async with db_connect() as db:
-        db.row_factory = aiosqlite.Row
-        async with db.execute(query, (player_id, team_id)) as cursor:
-            async for row in cursor:
-                table_data = ShortTableData(
-                    role=Role[row["role"]],
-                    minutes_played=row["minutes_played"],
-                    passes_accurate=row["passes_accurate"],
-                    passes_inaccurate=row["passes_inaccurate"],
-                    passes_percent=row["passes_percent"],
-                    captures_done=row["captures_done"],
-                    captures_missed=row["captures_missed"],
-                    captures_percent=row["captures_percent"],
-                    rakov_cleared=row["rakov_cleared"],
-                    tackles_done=row["tackles_done"],
-                    meters_covered=row["meters_covered"],
-                    defenders_beaten=row["defenders_beaten"],
-                    breakthroughs=row["breakthroughs"],
-                    attempts_grounded=row["attempts_grounded"],
-                    realizations_scored=row["realizations_scored"],
-                    realizations_attempted=row["realizations_attempted"],
-                    realizations_percent=row["realizations_percent"],
-                    penalties_scored=row["penalties_scored"],
-                    penalties_attempted=row["penalties_attempted"],
-                    penalties_percent=row["penalties_percent"],
-                    dropgoals_scored=row["dropgoals_scored"],
-                    dropgoals_attempted=row["dropgoals_attempted"],
-                    dropgoals_percent=row["dropgoals_percent"],
-                    points_scored=row["points_scored"],
-                    penalties_received=row["penalties_received"],
-                    loss_ball=row["loss_ball"],
-                    yellow_cards=row["yellow_cards"],
-                    red_cards=row["red_cards"],
-                    rating=0.0,
-                )
-                result.append(table_data)
+    async with async_session() as session:
+        stmt = (
+            select(AllStats, Roles)
+            .where(AllStats.player_id == player_id and AllStats.team_id == team_id)
+            .join(Roles)
+        )
+        data = await session.execute(stmt)
+        for s, r in data.tuples():
+            table_data = ShortTableData(
+                role=r.to_model(),
+                minutes_played=s.minutes_played,
+                successful_passes=s.successful_passes,
+                bad_passes=s.bad_passes,
+                successful_tackle=s.successful_tackle,
+                dominant_tackles=s.dominant_tackles,
+                miss_tackle=s.miss_tackle,
+                ruck_cleared=s.ruck_cleared,
+                steals=s.steals,
+                metres_carried=s.metres_carried,
+                defenders_beaten=s.defenders_beaten,
+                carriers=s.carriers,
+                line_breaks=s.line_breaks,
+                line_break_assists=s.line_break_assists,
+                tries=s.tries,
+                try_assists=s.try_assists,
+                successful_conversions=s.successful_conversions,
+                miss_conversions=s.miss_conversions,
+                successful_penalties=s.successful_penalties,
+                miss_penalties=s.miss_penalties,
+                successful_drop_goal=s.successful_drop_goal,
+                miss_drop_goal=s.miss_drop_goal,
+                points=s.points,
+                scrums_win=s.scrums_win,
+                scrums_steal=s.scrums_steal,
+                scrums_lose=s.scrums_lose,
+                lineout_win=s.lineout_win,
+                lineout_steal=s.lineout_steal,
+                lineout_lose=s.lineout_lose,
+                ball_losses=s.ball_losses,
+                penalty=s.penalty,
+                yellow_card=s.yellow_card,
+                red_card=s.red_card,
+                rating=0.0,
+            )
+            result.append(table_data)
 
     return result
+
+
+async def get_all_games(async_session: async_sessionmaker[AsyncSession]) -> list[Game]:
+    async with async_session() as session:
+        team1 = aliased(Teams)
+        team2 = aliased(Teams)
+        query = (
+            select(Games, team1, team2)
+            .join(team1, Games.first_team == team1.id)
+            .join(team2, Games.second_team == team2.id)
+        )
+        return [
+            Game(g.id, g.name, t1.to_model(), t2.to_model())
+            for g, t1, t2 in (await session.execute(query)).tuples()
+        ]
+
+
+async def add_game(
+    async_session: async_sessionmaker[AsyncSession], first_team: Team, second_team: Team
+):
+    async with async_session() as session, session.begin():
+        new_game = Games(
+            f"{first_team.name} vs {second_team.name}",
+            first_team.id,
+            second_team.id,
+        )
+        session.add(new_game)
+        await session.flush()
+        return new_game.id
+
+
+async def add_stat(async_session: async_sessionmaker[AsyncSession], stat: AllStat):
+    async with async_session() as session, session.begin():
+        query = select(Players.id).where(Players.full_name == stat.player_name)
+        player_id = (await session.execute(query)).scalar()
+        if player_id is None:
+            return
+        session.add(
+            AllStats(
+                player_id=player_id,
+                team_id=stat.team,
+                role_id=Role[stat.role].value,
+                game_id=stat.game_id,
+                minutes_played=stat.minutes_played,
+                successful_passes=stat.successful_passes,
+                bad_passes=stat.bad_passes,
+                ball_losses=stat.ball_losses,
+                carriers=stat.carriers,
+                defenders_beaten=stat.defenders_beaten,
+                dominant_tackles=stat.dominant_tackles,
+                line_break_assists=stat.line_break_assists,
+                line_breaks=stat.line_breaks,
+                lineout_lose=stat.lineout_lose,
+                lineout_steal=stat.lineout_steal,
+                lineout_win=stat.lineout_win,
+                metres_carried=stat.metres_carried,
+                miss_conversions=stat.miss_conversions,
+                miss_drop_goal=stat.miss_drop_goal,
+                miss_penalties=stat.miss_penalties,
+                miss_tackle=stat.miss_tackle,
+                penalty=stat.penalty,
+                points=stat.points,
+                red_card=stat.red_card,
+                ruck_cleared=stat.ruck_cleared,
+                scrums_lose=stat.scrums_lose,
+                scrums_steal=stat.scrums_steal,
+                scrums_win=stat.scrums_win,
+                steals=stat.steals,
+                successful_conversions=stat.successful_conversions,
+                successful_drop_goal=stat.successful_drop_goal,
+                successful_penalties=stat.successful_penalties,
+                successful_tackle=stat.successful_tackle,
+                tries=stat.tries,
+                try_assists=stat.try_assists,
+                yellow_card=stat.yellow_card,
+            )
+        )

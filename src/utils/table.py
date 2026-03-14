@@ -10,6 +10,7 @@ from flet import (
     DataColumnSortEvent,
     Icons,
     Stack,
+    StackFit,
 )
 from flet_datatable2 import DataColumn2, DataColumnSize, DataRow2, DataTable2
 
@@ -25,42 +26,47 @@ class InformationTable(Card):
     data_table: ClassVar[list[TableData]] = []
     index = 0
     step = 15
-    visible_column_table: ClassVar[bool] = {
+    visible_column_table: dict[str, bool] = {
         "player": True,
         "date_birth": True,
         "team": True,
         "role": True,
         "minutes_played": True,
-        "passes_accurate": True,
-        "passes_inaccurate": True,
-        "passes_percent": True,
-        "captures_done": True,
-        "captures_missed": True,
-        "captures_percent": True,
-        "rakov_cleared": True,
-        "tackles_done": True,
-        "meters_covered": True,
+        "successful_passes": True,
+        "bad_passes": True,
+        "successful_tackle": True,
+        "dominant_tackles": True,
+        "miss_tackle": True,
+        "ruck_cleared": True,
+        "steals": True,
+        "metres_carried": True,
         "defenders_beaten": True,
-        "breakthroughs": True,
-        "attempts_grounded": True,
-        "realizations_scored": True,
-        "realizations_attempted": True,
-        "realizations_percent": True,
-        "penalties_scored": True,
-        "penalties_attempted": True,
-        "penalties_percent": True,
-        "dropgoals_scored": True,
-        "dropgoals_attempted": True,
-        "dropgoals_percent": True,
-        "points_scored": True,
-        "penalties_received": True,
-        "loss_ball": True,
-        "yellow_cards": True,
-        "red_cards": True,
+        "carriers": True,
+        "line_breaks": True,
+        "line_break_assists": True,
+        "tries": True,
+        "try_assists": True,
+        "successful_conversions": True,
+        "miss_conversions": True,
+        "successful_penalties": True,
+        "miss_penalties": True,
+        "successful_drop_goal": True,
+        "miss_drop_goal": True,
+        "points": True,
+        "scrums_win": True,
+        "scrums_steal": True,
+        "scrums_lose": True,
+        "lineout_win": True,
+        "lineout_steal": True,
+        "lineout_lose": True,
+        "ball_losses": True,
+        "penalty": True,
+        "yellow_card": True,
+        "red_card": True,
         "rating": True,
     }
 
-    def __init__(self):
+    def __init__(self, expand):
         self.rows = []
         self.columns = []
         for key, value in self.visible_column_table.items():
@@ -71,9 +77,10 @@ class InformationTable(Card):
                     key=key,
                     on_sort=self.sort_column,
                     size=DataColumnSize.M,
+                    expand=1,
                 )
             )
-
+        self.index_game = 0
         self.right_button = IconButton(Icons.ARROW_FORWARD, self.to_right)
         self.left_button = IconButton(Icons.ARROW_BACK, self.to_left)
         self.main_table = DataTable2(
@@ -81,7 +88,7 @@ class InformationTable(Card):
             rows=self.rows,
             horizontal_lines=BorderSide(1, light_cs.outline),
             vertical_lines=BorderSide(1, light_cs.outline),
-            min_width=7000,
+            min_width=9000,
             visible_horizontal_scroll_bar=True,
             visible_vertical_scroll_bar=True,
             expand=1,
@@ -100,7 +107,8 @@ class InformationTable(Card):
                     self.left_button,
                 ]
             ),
-            clip_behavior="HARD",
+            clip_behavior="ANTI_ALIAS_WITH_SAVE_LAYER",
+            expand=expand,
         )
 
     def sort_column(self, e: DataColumnSortEvent):
@@ -127,7 +135,7 @@ class InformationTable(Card):
                 visible += 1
             for row in self.rows:
                 row.cells[i].visible = value
-        self.main_table.min_width = visible * 218
+        self.main_table.min_width = visible * 250
         self.main_table.update()
 
     def to_left(self, e):
@@ -195,9 +203,10 @@ class InformationTable(Card):
             data_rows.append(DataRow2(cells=cells))
         return data_rows
 
-    def set_data(self, data_list: list[TableData]):
+    async def set_data(self, data_list: list[TableData]):
         self.data_table = data_list
         self.update_data()
+        self.update()
 
     def update_data(self):
         self.rows.clear()
@@ -214,11 +223,14 @@ class InformationTable(Card):
     async def set_columns(self, column_table: dict[str, bool]):
         self.main_table.disabled = True
         self.main_table.update()
-        await asyncio.sleep(0.3)
+        # await asyncio.sleep(0.3)
 
         for key, value in column_table.items():
             self.visible_column_table[key] = value
         await self.update_columns()
         self.main_table.disabled = False
         self.main_table.update()
-        await asyncio.sleep(0.3)
+        # await asyncio.sleep(0.3)
+
+    def set_game_index(self, id: int):
+        self.index_game = id

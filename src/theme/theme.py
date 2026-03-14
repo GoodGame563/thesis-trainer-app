@@ -1,4 +1,5 @@
 from flet import (
+    BorderSide,
     BottomSheetTheme,
     ButtonStyle,
     ButtonTheme,
@@ -10,6 +11,9 @@ from flet import (
     FilledButtonTheme,
     FloatingActionButtonTheme,
     MenuStyle,
+    OutlinedBorder,
+    PopupMenuTheme,
+    RoundedRectangleBorder,
     ScrollbarTheme,
     SwitchTheme,
     TextStyle,
@@ -91,6 +95,11 @@ light_theme = Theme(
         thumb_color=light_color["accent"],
         track_color=light_color["spliter"],
         thickness=7,
+    ),
+    popup_menu_theme=PopupMenuTheme(
+        elevation=5,
+        color=light_color["background"],
+        shadow_color=light_color["shadow"],
     ),
     text_theme=TextTheme(
         body_large=TextStyle(color=light_color["primary"]),
@@ -184,6 +193,11 @@ dark_theme = Theme(
     ),
     scrollbar_theme=ScrollbarTheme(
         thumb_color=dark_color["accent"], track_color=dark_color["spliter"], thickness=7
+    ),
+    popup_menu_theme=PopupMenuTheme(
+        elevation=5,
+        color=dark_color["background"],
+        shadow_color=dark_color["shadow"],
     ),
     text_theme=TextTheme(
         body_large=TextStyle(color=dark_color["primary"]),

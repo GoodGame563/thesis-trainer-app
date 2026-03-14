@@ -1,4 +1,16 @@
-from flet import Card, CardVariant, Column, Margin, Row, Tab, TabBar, TabBarView, Tabs
+from flet import (
+    Card,
+    CardVariant,
+    Column,
+    MainAxisAlignment,
+    Margin,
+    Row,
+    Tab,
+    TabBar,
+    TabBarView,
+    Tabs,
+    Text,
+)
 
 from .buttons import ComparisonButton
 from .switchs import NegativeColorSwitch, NeutralColorSwitch, PositiveColorSwitch
@@ -62,13 +74,13 @@ class SwitchBlock(Card):
     def __init__(
         self,
         label: str,
-        value_swith: bool,
+        value_switch: bool,
         on_change=None,
         key="value",
         expand=None,
     ):
         super().__init__()
-        self.content = NeutralColorSwitch(label, value_swith, on_change, key)
+        self.content = NeutralColorSwitch(label, value_switch, on_change, key)
         self.margin = Margin.only(
             left=10,
             right=10,
@@ -94,49 +106,41 @@ class CustomSSContentBlock(Card):
         )
 
 
-class BigestTextBlock(Card):
-    def __init__(self, text, expand=None):
-        data = BigestText(text)
-        data.margin = 5
+class BaseTextBlock(Card):
+    def __inti__(self):
+        super().__init__()
+        self.inner_data = Text("")
+
+    def change_text(self, text: str):
+        self.inner_data.value = text
+        self.inner_data.update()
+
+
+class BigestTextBlock(BaseTextBlock):
+    def __init__(self, text: str, expand=None):
+        self.inner_data = BigestText(text)
+        self.inner_data.margin = 5
         super().__init__(
             elevation=10,
             variant=CardVariant.OUTLINED,
             content=Row(
                 controls=[
-                    data,
+                    self.inner_data,
                 ],
-                alignment="center",
+                alignment=MainAxisAlignment.CENTER,
                 expand=True,
             ),
             expand=expand,
         )
 
 
-class NormalTextBlock(Card):
-    def __init__(self, text, expand=None):
-        data = NormalText(text)
-        data.margin = 5
-        super().__init__(
-            elevation=10,
-            variant=CardVariant.OUTLINED,
-            content=Row(
-                controls=[
-                    data,
-                ],
-                alignment="center",
-                expand=True,
-            ),
-            expand=expand,
-        )
-
-
-class BigerTextBlock(Card):
-    def __init__(self, text):
-        self.data_content = BigerText(text)
+class BigerTextBlock(BaseTextBlock):
+    def __init__(self, text: str):
+        self.inner_data = BigerText(text)
         super().__init__(
             elevation=8,
             variant=CardVariant.OUTLINED,
-            content=self.data_content,
+            content=self.inner_data,
             margin=Margin.only(
                 left=10,
                 right=10,
@@ -146,8 +150,26 @@ class BigerTextBlock(Card):
         )
 
 
+class NormalTextBlock(BaseTextBlock):
+    def __init__(self, text: str, expand=None):
+        self.inner_data = NormalText(text)
+        self.inner_data.margin = 5
+        super().__init__(
+            elevation=10,
+            variant=CardVariant.OUTLINED,
+            content=Row(
+                controls=[
+                    self.inner_data,
+                ],
+                alignment=MainAxisAlignment.CENTER,
+                expand=True,
+            ),
+            expand=expand,
+        )
+
+
 class SlidingContentBlock(Card):
-    def __init__(self, text_buttons: tuple[str], controls, expand=None):
+    def __init__(self, text_buttons: list[str], controls, expand=None):
         tabs = []
         for el in text_buttons:
             tabs.append(Tab(label=NormalText(el)))
