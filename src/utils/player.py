@@ -8,6 +8,7 @@ from flet import (
     ListView,
     Row,
     Stack,
+    Icons,
 )
 
 from db_controls import (
@@ -25,6 +26,7 @@ from utils import (
     CustomSSContentBlock,
     NormalTextBlock,
     SlidingContentBlock,
+    IconButton
 )
 
 from .shimmer import CustomShimmer
@@ -61,63 +63,69 @@ class PlayerContainer(AlertDialog):
             expand=5,
         )
         super().__init__(
-            content=Column(
+            content=Stack(
                 controls=[
-                    Row(
+                    Column(
                         controls=[
-                            CustomBSContentBlock(
-                                content=Image(
-                                    src="not-found.jpg",
-                                ),
-                                expand=1,
-                            ),
-                            CustomBSContentBlock(
-                                content=Column(
-                                    controls=[
-                                        self.name_container,
-                                        Row(
+                            Row(
+                                controls=[
+                                    CustomBSContentBlock(
+                                        content=Image(
+                                            src="not-found.jpg",
+                                        ),
+                                        expand=1,
+                                    ),
+                                    CustomBSContentBlock(
+                                        content=Column(
                                             controls=[
-                                                Column(
+                                                self.name_container,
+                                                Row(
                                                     controls=[
-                                                        Row(
+                                                        Column(
                                                             controls=[
-                                                                self.date_container,
-                                                                self.height_container,
-                                                                self.weight_container,
+                                                                Row(
+                                                                    controls=[
+                                                                        self.date_container,
+                                                                        self.height_container,
+                                                                        self.weight_container,
+                                                                    ],
+                                                                    spacing=0,
+                                                                    wrap=False,
+                                                                    expand=3,
+                                                                ),
+                                                                Row(
+                                                                    controls=[
+                                                                        self.image_container,
+                                                                        self.team_name_container,
+                                                                    ],
+                                                                    expand=4,
+                                                                ),
                                                             ],
-                                                            spacing=0,
-                                                            wrap=False,
-                                                            expand=3,
+                                                            expand=1,
                                                         ),
-                                                        Row(
-                                                            controls=[
-                                                                self.image_container,
-                                                                self.team_name_container,
-                                                            ],
-                                                            expand=4,
+                                                        ListView(
+                                                            controls=self.role_team,
+                                                            expand=1,
                                                         ),
                                                     ],
-                                                    expand=1,
-                                                ),
-                                                ListView(
-                                                    controls=self.role_team,
-                                                    expand=1,
+                                                    expand=True,
                                                 ),
                                             ],
-                                            expand=True,
+                                            horizontal_alignment="STRETCH",
                                         ),
-                                    ],
-                                    horizontal_alignment="STRETCH",
-                                ),
-                                expand=3,
+                                        expand=3,
+                                    ),
+                                ],
+                                expand=5,
                             ),
-                        ],
-                        expand=5,
+                            self.game_stat,
+                        ]
                     ),
-                    self.game_stat,
+                    IconButton(Icons.CHANGE_CIRCLE)
                 ]
             )
         )
+
 
     async def open_user(self, id):
         session = get_session()
@@ -148,14 +156,14 @@ class PlayerContainer(AlertDialog):
 
         text_buttons = []
         contols = []
-        for t in await find_all_teams_by_user_id(session, id):
-            text_buttons.append(t.name)
-            i_t = ShortInformationTable()
-            i_t.set_data(await get_all_games_by_player_team_id(session, id, t.id))
-            contols.append(i_t)
-        self.content.controls[1] = SlidingContentBlock(
-            text_buttons=tuple(text_buttons),
-            controls=contols,
-            expand=5,
-        )
+        # for t in await find_all_teams_by_user_id(session, id):
+        #     text_buttons.append(t.name)
+        #     i_t = ShortInformationTable()
+        #     i_t.set_data(await get_all_games_by_player_team_id(session, id, t.id))
+        #     contols.append(i_t)
+        # self.content.controls[1] = SlidingContentBlock(
+        #     text_buttons=tuple(text_buttons),
+        #     controls=contols,
+        #     expand=5,
+        # )
         # self.update()
