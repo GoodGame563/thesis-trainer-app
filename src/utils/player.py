@@ -7,7 +7,7 @@ from flet import (
     Image,
     ListView,
     Row,
-    Stack
+    Stack,
 )
 
 from db_controls import (

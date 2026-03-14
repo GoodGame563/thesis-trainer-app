@@ -1,4 +1,4 @@
-from flet import Text, TextOverflow, TextAlign
+from flet import Text, TextAlign, TextOverflow
 
 
 class NormalText(Text):

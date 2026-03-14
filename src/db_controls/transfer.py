@@ -1,8 +1,10 @@
 from datetime import date
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
-from .structs import Transfers
+
 from models import Player, Team, Transfer
+
+from .structs import Transfers
 
 
 async def get_latest_transfer(

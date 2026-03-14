@@ -2,27 +2,27 @@ import asyncio
 import logging
 
 from flet import (
+    ClipBehavior,
     Column,
     Container,
     CrossAxisAlignment,
     FloatingActionButtonLocation,
     Page,
     Stack,
+    ThemeMode,
     icons,
     run,
-    ThemeMode,
-    ClipBehavior,
 )
 
 from components import FilterButtomSheet, Menu
-from models import KpiRole, anything_changed, calculate_kpi
 from db_controls import (
     create_db,
+    get_all_games,
     get_games_statistics,
     get_session,
     set_engine,
-    get_all_games,
 )
+from models import KpiRole, anything_changed, calculate_kpi
 from theme import dark_theme, light_theme
 from utils import CustomBSContentBlock, IconButton, InformationTable
 

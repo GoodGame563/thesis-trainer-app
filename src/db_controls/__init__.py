@@ -1,10 +1,10 @@
 from .db_connection import get_session, set_engine
 from .games import (
-    get_games_statistics,
-    get_all_games_by_player_team_id,
-    get_all_games,
     add_game,
     add_stat,
+    get_all_games,
+    get_all_games_by_player_team_id,
+    get_games_statistics,
 )
 from .init_db import create_db
 from .player import (

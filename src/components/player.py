@@ -1,4 +1,5 @@
 import asyncio
+from datetime import datetime
 
 import aioshutil
 from flet import (
@@ -16,7 +17,7 @@ from flet import (
     Text,
     TextField,
 )
-from datetime import datetime
+
 from db_controls import create_player, get_session
 from models import Player
 from utils import ActionButton, BasicButton, NormalTextField

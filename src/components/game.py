@@ -4,23 +4,24 @@ from flet import (
     AlertDialog,
     Card,
     CardVariant,
+    ClipBehavior,
     Column,
     Container,
+    CrossAxisAlignment,
     FilePicker,
     FilePickerFileType,
     MainAxisAlignment,
     Margin,
     Row,
     Text,
-    TextField,
     TextAlign,
-    ClipBehavior,
-    CrossAxisAlignment,
+    TextField,
 )
+
+from db_controls import add_game, add_stat, get_all_teams, get_session
 from exsel_reader import parse_excel_to_stats
-from db_controls import get_all_teams, get_session, add_game, add_stat
-from utils import ActionButton, BasicButton, NormalText, Picker
 from models import Team
+from utils import ActionButton, BasicButton, NormalText, Picker
 
 
 class GameDialog(AlertDialog):
@@ -111,7 +112,12 @@ class GameDialog(AlertDialog):
 
     async def save(self):
         self.open = False
-        if isinstance(self.f_team_button.content, str) or self.f_team_button.content is None or isinstance(self.s_team_button.content, str) or self.s_team_button.content is None: 
+        if (
+            isinstance(self.f_team_button.content, str)
+            or self.f_team_button.content is None
+            or isinstance(self.s_team_button.content, str)
+            or self.s_team_button.content is None
+        ):
             return
         if not isinstance(self.f_team_button.content, NormalText):
             return
@@ -120,7 +126,7 @@ class GameDialog(AlertDialog):
 
         if team_1_key is None or team_2_key is None:
             return
-        
+
         new_id = await add_game(
             self.session,
             Team(team_1_key, self.f_team_button.content.value, ""),

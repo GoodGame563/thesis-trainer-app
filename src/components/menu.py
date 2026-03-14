@@ -2,13 +2,13 @@ import asyncio
 
 from flet import Alignment, MenuBar, MenuStyle
 
-from utils import MenuButton, Picker, NormalText
+from db_controls import get_all_games, get_session
+from utils import MenuButton, NormalText, Picker
 
 from .game import GameDialog
 from .player import PlayerAddDialog
 from .team import TeamDialog
 from .transfer import TransferDialog
-from db_controls import get_session, get_all_games
 
 
 class Menu(MenuBar):

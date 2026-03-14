@@ -2,12 +2,12 @@ from datetime import date
 
 import aiosqlite
 from sqlalchemy import select
-from sqlalchemy.orm import aliased
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
+from sqlalchemy.orm import aliased
 
-from models import TableData, ShortTableData, Game, Team, AllStat, Role
+from models import AllStat, Game, Role, ShortTableData, TableData, Team
 
-from .structs import AllStats, Players, Roles, Teams, Games
+from .structs import AllStats, Games, Players, Roles, Teams
 
 
 async def get_games_statistics(

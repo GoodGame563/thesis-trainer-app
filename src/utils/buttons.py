@@ -15,6 +15,7 @@ from models import ComparisonType
 
 from .text import ComparisonText, MenuText, NormalText
 
+
 class ComparisonButton(PopupMenuButton):
     def __init__(self, text: str):
         super().__init__(
@@ -95,9 +96,10 @@ class ActionButton(FilledButton):
             margin=Margin.only(left=10, right=10, top=5, bottom=0),
             expand=expand,
         )
+
     # def get_key(self) -> int:
     #     if self.content is None or not isinstance(self.content, NormalText):
-    #         return 0 
+    #         return 0
     #     key = self.content.key
-        
+
     #     return self.content.key
