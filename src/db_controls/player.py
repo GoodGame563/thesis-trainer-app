@@ -1,8 +1,11 @@
+from datetime import date
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
-from .structs import Players, Teams, Transfers, Roles, AllStats
+
 from models import Player, Team
-from datetime import date
+
+from .structs import AllStats, Players, Roles, Teams, Transfers
 
 
 async def get_player(

@@ -13,10 +13,10 @@ from flet import (
 from db_controls import (
     find_all_teams_by_user_id,
     get_all_games_by_player_team_id,
-    get_players_roles_and_teams,
-    get_session,
     get_player,
+    get_players_roles_and_teams,
     get_players_team,
+    get_session,
 )
 from models import KpiRole
 from utils import (
