@@ -5,9 +5,7 @@ import pandas as pd
 from models import AllStat
 
 
-def parse_excel_to_stats(
-    file_path: str, game_id: int | None = None
-) -> list[AllStat]:
+def parse_excel_to_stats(file_path: str, game_id: int | None = None) -> list[AllStat]:
     df = pd.read_excel(file_path, sheet_name="primer", header=0)
 
     column_map = {
