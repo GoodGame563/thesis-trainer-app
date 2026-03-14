@@ -4,11 +4,11 @@ from flet import (
     BorderSide,
     Column,
     Container,
+    Icons,
     Image,
     ListView,
     Row,
     Stack,
-    Icons,
 )
 
 from db_controls import (
@@ -24,9 +24,9 @@ from utils import (
     BigerTextBlock,
     CustomBSContentBlock,
     CustomSSContentBlock,
+    IconButton,
     NormalTextBlock,
     SlidingContentBlock,
-    IconButton
 )
 
 from .shimmer import CustomShimmer
@@ -121,11 +121,10 @@ class PlayerContainer(AlertDialog):
                             self.game_stat,
                         ]
                     ),
-                    IconButton(Icons.CHANGE_CIRCLE)
+                    IconButton(Icons.CHANGE_CIRCLE),
                 ]
             )
         )
-
 
     async def open_user(self, id):
         session = get_session()
