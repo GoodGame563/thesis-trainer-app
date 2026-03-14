@@ -12,6 +12,7 @@ from flet import (
     ThemeMode,
     icons,
     run,
+    Theme
 )
 
 from components import FilterButtomSheet, Menu
@@ -43,6 +44,7 @@ async def main(page: Page):
         page.update()
 
     async def on_dismiss_filter(e):
+        print(type(e.control))
         role_selected = e.control.switch_role_select.content.value
         column_table = {}
         for s_b in e.control.column_table_container.content.controls:
@@ -80,7 +82,6 @@ async def main(page: Page):
     is_dark = {"value": False}
     page.theme_mode = ThemeMode.LIGHT
     page.theme = dark_theme if is_dark["value"] else light_theme
-
     theme_button = IconButton(icons.Icons.SUNNY, change_theme)
 
     page.floating_action_button = theme_button

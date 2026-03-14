@@ -64,27 +64,18 @@ async def update_player(
     weight: int | None = None,
     date_birth: date | None = None,
 ) -> bool:
-    updates = []
-    params = []
-
-    if full_name is not None:
-        updates.append("full_name = ?")
-        params.append(full_name)
-    if height is not None:
-        updates.append("height = ?")
-        params.append(height)
-    if weight is not None:
-        updates.append("weight = ?")
-        params.append(weight)
-    if date_birth is not None:
-        updates.append("date_birth = ?")
-        params.append(date_birth)
-
-    if not updates:
-        return False
-
-    params.append(player_id)
-    f"UPDATE players SET {', '.join(updates)} WHERE id = ?"
+    async with async_session() as session:
+        select_pl = select(Players).where(Players.id == player_id)
+        player = (await session.execute(select_pl)).scalar_one()
+        if full_name is not None:
+            player.full_name = full_name
+        if height is not None:
+            player.height = height
+        if weight is not None:
+            player.weight = weight
+        if date_birth is not None:
+            player.date_birth = date_birth.isoformat()
+            await session.commit()
     return True
 
     # async with db_connect() as db:

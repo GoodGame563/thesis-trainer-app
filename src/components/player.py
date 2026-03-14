@@ -16,6 +16,7 @@ from flet import (
     Row,
     Text,
     TextField,
+    CrossAxisAlignment,
 )
 
 from db_controls import create_player, get_session
@@ -100,7 +101,7 @@ class PlayerAddDialog(AlertDialog):
                         ActionButton("Сохранить", self.save),
                     ],
                     expand=True,
-                    horizontal_alignment="STRETCH",
+                    horizontal_alignment=CrossAxisAlignment.STRETCH,
                 ),
                 margin=10,
                 width=700,
@@ -134,7 +135,8 @@ class PlayerAddDialog(AlertDialog):
         )
         if len(file) == 0:
             return
-        await aioshutil.copy2(file[0].path, ".\\assets\\photo_" + file[0].name)
+
+        await aioshutil.copy2(file[0].path, f".\\assets\\photo_{file[0].name}")
         self.path_file = "photo_" + file[0].name
         self.photo_path_field.value = self.path_file
         self.photo_path_field.update()
