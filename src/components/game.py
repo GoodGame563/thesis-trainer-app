@@ -13,10 +13,14 @@ from flet import (
     Row,
     Text,
     TextField,
+    TextAlign,
+    ClipBehavior,
+    CrossAxisAlignment,
 )
-
-from db_controls import get_all_teams
+from exsel_reader import parse_excel_to_stats
+from db_controls import get_all_teams, get_session, add_game, add_stat
 from utils import ActionButton, BasicButton, NormalText, Picker
+from models import Team
 
 
 class GameDialog(AlertDialog):
@@ -31,7 +35,7 @@ class GameDialog(AlertDialog):
         )
         self.f_team_button = ActionButton("Выбрать команду", self.select_team, 1)
         self.s_team_button = ActionButton("Выбрать команду", self.select_team, 1)
-
+        self.session = get_session()
         super().__init__(
             content=Container(
                 content=Column(
@@ -40,10 +44,10 @@ class GameDialog(AlertDialog):
                             content=Text(
                                 "Добавить матч",
                                 no_wrap=False,
-                                overflow="ELLIPSIS",
+                                overflow="ELLIPSIS",  # type: ignore
                                 expand=True,
                                 size=30,
-                                text_align="center",
+                                text_align=TextAlign.CENTER,
                                 margin=10,
                             ),
                             margin=Margin.only(
@@ -52,7 +56,7 @@ class GameDialog(AlertDialog):
                                 top=10,
                                 bottom=0,
                             ),
-                            clip_behavior=True,
+                            clip_behavior=ClipBehavior.ANTI_ALIAS,
                             variant=CardVariant.OUTLINED,
                         ),
                         Row(
@@ -73,7 +77,7 @@ class GameDialog(AlertDialog):
                     ],
                     alignment=MainAxisAlignment.SPACE_EVENLY,
                     expand=True,
-                    horizontal_alignment="STRETCH",
+                    horizontal_alignment=CrossAxisAlignment.STRETCH,
                 ),
                 margin=10,
                 width=700,
@@ -90,12 +94,14 @@ class GameDialog(AlertDialog):
             allow_multiple=False,
             allowed_extensions=["xlsx", "xls"],
         )
-        self.path_file_field.value = file[0].path
+        self.path_file_field.value = (
+            file[0].path if isinstance(file[0].path, str) else ""
+        )
         self.path_file_field.update()
         await asyncio.sleep(0.1)
 
     async def _get_teams(self):
-        teams = await get_all_teams()
+        teams = await get_all_teams(self.session)
         return [NormalText(team.name, team.id) for team in teams]
 
     async def select_team(self, e):
@@ -103,8 +109,29 @@ class GameDialog(AlertDialog):
         self.page.show_dialog(picker)
         await picker.set_data(await self._get_teams())
 
-    def save(self):
+    async def save(self):
         self.open = False
+        if isinstance(self.f_team_button.content, str) or self.f_team_button.content is None or isinstance(self.s_team_button.content, str) or self.s_team_button.content is None: 
+            return
+        if not isinstance(self.f_team_button.content, NormalText):
+            return
+        team_1_key = self.f_team_button.content.key
+        team_2_key = self.s_team_button.content.key
+
+        if team_1_key is None or team_2_key is None:
+            return
+        
+        new_id = await add_game(
+            self.session,
+            Team(team_1_key, self.f_team_button.content.value, ""),
+            Team(self.s_team_button.content.key, self.s_team_button.content.value, ""),
+        )
+        for s in parse_excel_to_stats(self.path_file_field.value, new_id):
+            if int(s.team) == 1:
+                s.team = self.f_team_button.content.key
+            elif int(s.team) == 2:
+                s.team = self.s_team_button.content.key
+            await add_stat(self.session, s)
 
     def dissmiss(self):
         del self

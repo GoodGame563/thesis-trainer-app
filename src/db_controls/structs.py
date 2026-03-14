@@ -1,9 +1,9 @@
-from datetime import date
+from datetime import date as DATE
 
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-from models import Player, Role, Team
+from models import Player, Role, Team, Transfer
 
 
 class Base(DeclarativeBase):
@@ -19,6 +19,15 @@ class Players(Base):
     date_birth: Mapped[str]
     foto: Mapped[str]
 
+    def __init__(
+        self, full_name: str, height: float, weight: float, date_birth: DATE, foto: str
+    ):
+        self.full_name = full_name
+        self.date_birth = date_birth.isoformat()
+        self.foto = foto
+        self.height = height
+        self.weight = weight
+
     def to_model(self) -> Player:
         return Player(
             id=self.id,
@@ -26,7 +35,7 @@ class Players(Base):
             weight=self.weight,
             height=self.height,
             path_to_photo=self.foto,
-            birth_date=date.fromisoformat(self.date_birth),
+            birth_date=DATE.fromisoformat(self.date_birth),
         )
 
 
@@ -35,6 +44,10 @@ class Teams(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     logo: Mapped[str]
+
+    def __init__(self, name: str, path_to_logo: str):
+        self.name = name
+        self.logo = path_to_logo
 
     def to_model(self) -> Team:
         return Team(id=self.id, name=self.name, path_to_logo=self.logo)
@@ -46,6 +59,9 @@ class Roles(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
 
+    def __init__(self, name: str):
+        self.name = name
+
     def to_model(self) -> Role:
         return Role[self.name]
 
@@ -56,6 +72,11 @@ class Games(Base):
     name: Mapped[str]
     first_team: Mapped[int] = mapped_column(ForeignKey("teams.id"))
     second_team: Mapped[int] = mapped_column(ForeignKey("teams.id"))
+
+    def __init__(self, name: str, first_team: int, second_team: int):
+        self.name = name
+        self.first_team = first_team
+        self.second_team = second_team
 
 
 class AllStats(Base):
@@ -126,6 +147,82 @@ class AllStats(Base):
     yellow_card: Mapped[int]
     red_card: Mapped[int]
 
+    def __init__(
+        self,
+        player_id: int,
+        team_id: int,
+        role_id: int,
+        game_id: int,
+        minutes_played: int = 0,
+        successful_passes: int = 0,
+        bad_passes: int = 0,
+        successful_tackle: int = 0,
+        dominant_tackles: int = 0,
+        miss_tackle: int = 0,
+        ruck_cleared: int = 0,
+        steals: int = 0,
+        metres_carried: int = 0,
+        defenders_beaten: int = 0,
+        carriers: int = 0,
+        line_breaks: int = 0,
+        line_break_assists: int = 0,
+        tries: int = 0,
+        try_assists: int = 0,
+        successful_conversions: int = 0,
+        successful_penalties: int = 0,
+        successful_drop_goal: int = 0,
+        miss_conversions: int = 0,
+        miss_penalties: int = 0,
+        miss_drop_goal: int = 0,
+        points: int = 0,
+        scrums_win: int = 0,
+        scrums_steal: int = 0,
+        scrums_lose: int = 0,
+        lineout_win: int = 0,
+        lineout_steal: int = 0,
+        lineout_lose: int = 0,
+        ball_losses: int = 0,
+        penalty: int = 0,
+        yellow_card: int = 0,
+        red_card: int = 0,
+    ):
+        self.player_id = player_id
+        self.team_id = team_id
+        self.role_id = role_id
+        self.game_id = game_id
+        self.minutes_played = minutes_played
+        self.successful_passes = successful_passes
+        self.bad_passes = bad_passes
+        self.successful_tackle = successful_tackle
+        self.dominant_tackles = dominant_tackles
+        self.miss_tackle = miss_tackle
+        self.ruck_cleared = ruck_cleared
+        self.steals = steals
+        self.metres_carried = metres_carried
+        self.defenders_beaten = defenders_beaten
+        self.carriers = carriers
+        self.line_breaks = line_breaks
+        self.line_break_assists = line_break_assists
+        self.tries = tries
+        self.try_assists = try_assists
+        self.successful_conversions = successful_conversions
+        self.successful_penalties = successful_penalties
+        self.successful_drop_goal = successful_drop_goal
+        self.miss_conversions = miss_conversions
+        self.miss_penalties = miss_penalties
+        self.miss_drop_goal = miss_drop_goal
+        self.points = points
+        self.scrums_win = scrums_win
+        self.scrums_steal = scrums_steal
+        self.scrums_lose = scrums_lose
+        self.lineout_win = lineout_win
+        self.lineout_steal = lineout_steal
+        self.lineout_lose = lineout_lose
+        self.ball_losses = ball_losses
+        self.penalty = penalty
+        self.yellow_card = yellow_card
+        self.red_card = red_card
+
 
 class Transfers(Base):
     __tablename__ = "transfers"
@@ -134,3 +231,8 @@ class Transfers(Base):
     player_id: Mapped[int] = mapped_column(ForeignKey("players.id"))
     team_id: Mapped[int] = mapped_column(ForeignKey("teams.id"))
     date: Mapped[str]
+
+    def __init__(self, player_id: int, team_id: int, transfer_date: DATE):
+        self.player_id = player_id
+        self.team_id = team_id
+        self.date = transfer_date.isoformat()

@@ -15,7 +15,6 @@ from models import ComparisonType
 
 from .text import ComparisonText, MenuText, NormalText
 
-
 class ComparisonButton(PopupMenuButton):
     def __init__(self, text: str):
         super().__init__(
@@ -86,12 +85,19 @@ class BigBasicButton(Button):
 
 
 class ActionButton(FilledButton):
-    def __init__(self, text, on_click=None, expand=False):
-        super().__init__()
-        self.style = ButtonStyle(shape=RoundedRectangleBorder(radius=8))
-        self.content = NormalText(text)
-        self.height = 50
-        self.on_click = on_click
-        self.elevation = 8
-        self.margin = Margin.only(left=10, right=10, top=5, bottom=0)
-        self.expand = expand
+    def __init__(self, text: str, on_click=None, expand: bool | int = False):
+        super().__init__(
+            style=ButtonStyle(shape=RoundedRectangleBorder(radius=8)),
+            content=NormalText(text, 0),
+            height=50,
+            on_click=on_click,
+            elevation=8,
+            margin=Margin.only(left=10, right=10, top=5, bottom=0),
+            expand=expand,
+        )
+    # def get_key(self) -> int:
+    #     if self.content is None or not isinstance(self.content, NormalText):
+    #         return 0 
+    #     key = self.content.key
+        
+    #     return self.content.key

@@ -54,6 +54,7 @@ async def get_players_roles_and_teams(
 
 
 async def update_player(
+    async_session: async_sessionmaker[AsyncSession],
     player_id: int,
     full_name: str | None = None,
     height: int | None = None,
@@ -89,36 +90,25 @@ async def update_player(
     #     return db.total_changes > 0
 
 
-async def get_all_players() -> list[Player]:
-    return []
-    # async with db_connect() as db:
-    #     db.row_factory = aiosqlite.Row
-    #     async with db.execute("SELECT * FROM players") as cursor:
-    #         rows = await cursor.fetchall()
-    #         return [
-    #             Player(
-    #                 id=row["id"],
-    #                 birth_date=row["date_birth"],
-    #                 full_name=row["full_name"],
-    #                 height=row["height"],
-    #                 weight=row["weight"],
-    #                 path_to_photo=row["foto"],
-    #             )
-    #             for row in rows
-    #         ]
+async def get_all_players(
+    async_session: async_sessionmaker[AsyncSession],
+) -> list[Player]:
+    async with async_session() as session:
+        result = (await session.execute(select(Players))).scalars()
+        return [p.to_model() for p in result]
 
 
-async def create_player(player: Player):
-    pass
-    # async with db_connect() as db:
-    #     await db.execute(
-    #         """INSERT INTO players (full_name, height, weight, date_birth, foto) VALUES (?, ?, ?, ?, ?)""",
-    #         (
-    #             player.full_name,
-    #             player.height,
-    #             player.weight,
-    #             player.birth_date,
-    #             player.path_to_photo,
-    #         ),
-    #     )
-    #     await db.commit()
+async def create_player(
+    async_session: async_sessionmaker[AsyncSession], player: Player
+):
+    async with async_session() as session:
+        async with session.begin():
+            session.add(
+                Players(
+                    player.full_name,
+                    player.height,
+                    player.weight,
+                    player.birth_date,
+                    player.path_to_photo,
+                )
+            )

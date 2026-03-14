@@ -16,7 +16,7 @@ from flet import (
     TextField,
 )
 
-from db_controls import create_transfer, get_all_players, get_all_teams
+from db_controls import create_transfer, get_all_players, get_all_teams, get_session
 from utils import ActionButton, BasicButton, NormalText, Picker
 
 
@@ -30,6 +30,7 @@ class TransferDialog(AlertDialog):
             margin=Margin.only(left=10, right=10, top=5, bottom=0),
             expand=True,
         )
+        self.session = get_session()
         self.player_button = ActionButton("Выбрать игрока", self._select_player, 1)
         self.team_button = ActionButton("Выбрать команду", self._select_team, 1)
         super().__init__(
@@ -87,12 +88,14 @@ class TransferDialog(AlertDialog):
         )
 
     async def _get_teams(self):
-        return [NormalText(team.name, team.id) for team in await get_all_teams()]
+        return [
+            NormalText(team.name, team.id) for team in await get_all_teams(self.session)
+        ]
 
     async def _get_players(self):
         return [
             NormalText(player.full_name, player.id)
-            for player in await get_all_players()
+            for player in await get_all_players(self.session)
         ]
 
     async def _select_date(self, e):
@@ -122,7 +125,9 @@ class TransferDialog(AlertDialog):
         self.page.show_dialog(picker)
         await picker.set_data(await self._get_teams())
 
-    async def _save(self):
+    async def _save(self, e):
+        e.control.disabled = True
+        e.control.update()
         if (
             self.player_button.content.key is None
             or self.team_button.content.key is None
@@ -130,8 +135,8 @@ class TransferDialog(AlertDialog):
         ):
             return
         self.open = False
-        await asyncio.sleep(0.2)
         await create_transfer(
+            self.session,
             self.player_button.content.key,
             self.team_button.content.key,
             datetime.strptime(self._date_field.value, "%d.%m.%Y"),

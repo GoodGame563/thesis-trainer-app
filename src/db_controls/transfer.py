@@ -1,11 +1,13 @@
 from datetime import date
 
-import aiosqlite
-
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
+from .structs import Transfers
 from models import Player, Team, Transfer
 
 
-async def get_latest_transfer(player_id: int) -> Transfer | None:
+async def get_latest_transfer(
+    async_session: async_sessionmaker[AsyncSession], player_id: int
+) -> Transfer | None:
     return None
     # async with db_connect() as db:
     #     db.row_factory = aiosqlite.Row
@@ -59,15 +61,12 @@ async def get_latest_transfer(player_id: int) -> Transfer | None:
     #     )
 
 
-async def create_transfer(player_id: int, team_id: int, transfer_date: date):
-    pass
-    # async with db_connect() as db:
-    #     db.row_factory = aiosqlite.Row
-    #     async with db.execute(
-    #         """
-    #         INSERT INTO transfers (player_id, team_id, date)
-    #         VALUES (?, ?, ?)
-    #     """,
-    #         (player_id, team_id, transfer_date.strftime("%Y-%m-%d")),
-    #     ):
-    #         await db.commit()
+async def create_transfer(
+    async_session: async_sessionmaker[AsyncSession],
+    player_id: int,
+    team_id: int,
+    transfer_date: date,
+):
+    async with async_session() as session:
+        async with session.begin():
+            session.add(Transfers(player_id, team_id, transfer_date))

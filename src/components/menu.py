@@ -2,16 +2,18 @@ import asyncio
 
 from flet import Alignment, MenuBar, MenuStyle
 
-from utils import MenuButton, Picker
+from utils import MenuButton, Picker, NormalText
 
 from .game import GameDialog
 from .player import PlayerAddDialog
 from .team import TeamDialog
 from .transfer import TransferDialog
+from db_controls import get_session, get_all_games
 
 
 class Menu(MenuBar):
-    def __init__(self):
+    def __init__(self, set_table):
+        self.set_table = set_table
         super().__init__(
             style=MenuStyle(
                 alignment=Alignment.CENTER,
@@ -53,6 +55,12 @@ class Menu(MenuBar):
         await asyncio.sleep(0.3)
 
     async def element_open_match(self, e):
-        picker = Picker(e.control)
+        async def dissmis():
+            print(e.control.content.key)
+            await self.set_table(e.control.content.key)
+
+        picker = Picker(e.control, dissmis)
         self.page.show_dialog(picker)
-        pass
+        await picker.set_data(
+            [NormalText(g.name, g.id) for g in await get_all_games(get_session())]
+        )

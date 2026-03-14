@@ -7,6 +7,7 @@ from flet import (
     Image,
     ListView,
     Row,
+    Stack
 )
 
 from db_controls import (
@@ -53,7 +54,7 @@ class PlayerContainer(AlertDialog):
         self.team_name_container = NormalTextBlock("")
         self.game_stat = CustomShimmer(
             SlidingContentBlock(
-                text_buttons=("dsadsad", "sadasdas"),
+                text_buttons=[str("dsadsad"), str("sadasdas")],
                 controls=[Container(), Container()],
                 expand=5,
             ),

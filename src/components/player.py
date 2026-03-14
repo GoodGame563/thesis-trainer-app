@@ -16,8 +16,8 @@ from flet import (
     Text,
     TextField,
 )
-
-from db_controls import create_player
+from datetime import datetime
+from db_controls import create_player, get_session
 from models import Player
 from utils import ActionButton, BasicButton, NormalTextField
 
@@ -158,12 +158,13 @@ class PlayerAddDialog(AlertDialog):
         self.open = False
         await asyncio.sleep(0.2)
         await create_player(
+            get_session(),
             Player(
                 id=0,
                 full_name=self.full_name_field.value,
                 height=height,
                 weight=weight,
-                birth_date=self.date_birth_field.value,
+                birth_date=datetime.strptime(self.date_birth_field.value, "%d.%m.%Y"),
                 path_to_photo=self.photo_path_field.value,
-            )
+            ),
         )

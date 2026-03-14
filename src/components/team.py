@@ -16,7 +16,7 @@ from flet import (
     TextField,
 )
 
-from db_controls import create_teams
+from db_controls import create_teams, get_session
 from utils import ActionButton, BasicButton
 
 
@@ -78,7 +78,7 @@ class TeamDialog(AlertDialog):
     async def save(self):
         self.open = False
         await asyncio.sleep(0.2)
-        await create_teams(self.command_field.value, self.path_file)
+        await create_teams(get_session(), self.command_field.value, self.path_file)
 
     async def select_logo(self):
         f_p = FilePicker(on_upload=self.upload_file)

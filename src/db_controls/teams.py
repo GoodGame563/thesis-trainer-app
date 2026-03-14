@@ -24,31 +24,15 @@ async def find_all_teams_by_user_id(
     return teams
 
 
-async def get_all_teams() -> list[Team]:
-    teams = []
-
-    # async with db_connect() as db:
-    #     db.row_factory = aiosqlite.Row
-    #     async with db.execute(
-    #         """
-    #             SELECT id, name, logo
-    #             FROM teams
-    #         """,
-    #     ) as cursor:
-    #         teams = [Team(row["id"], row["name"], row["logo"]) async for row in cursor]
-    return teams
+async def get_all_teams(async_session: async_sessionmaker[AsyncSession]) -> list[Team]:
+    async with async_session() as session:
+        result = (await session.execute(select(Teams))).scalars()
+        return [t.to_model() for t in result]
 
 
-async def create_teams(name: str, logo: str):
-    pass
-    # async with (
-    #     db_connect() as db,
-    #     db.execute(
-    #         """
-    #         INSERT INTO teams (name, logo)
-    #         VALUES (?, ?)
-    #     """,
-    #         (name, logo),
-    #     ),
-    # ):
-    #     await db.commit()
+async def create_teams(
+    async_session: async_sessionmaker[AsyncSession], name: str, logo: str
+):
+    async with async_session() as session:
+        async with session.begin():
+            session.add(Teams(name, logo))
