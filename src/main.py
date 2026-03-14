@@ -9,10 +9,10 @@ from flet import (
     FloatingActionButtonLocation,
     Page,
     Stack,
+    Theme,
     ThemeMode,
     icons,
     run,
-    Theme
 )
 
 from components import FilterButtomSheet, Menu

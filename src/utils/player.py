@@ -1,31 +1,30 @@
+import asyncio
+from datetime import datetime
+
+import aioshutil
 from flet import (
     AlertDialog,
     Border,
     BorderSide,
-    Column,
-    Container,
-    Icons,
-    Image,
-    ListView,
-    Row,
-    Stack,
-    AlertDialog,
     Card,
     CardVariant,
     Column,
     Container,
+    CrossAxisAlignment,
     DatePicker,
     FilePicker,
     FilePickerFileType,
+    Icons,
+    Image,
+    ListView,
     MainAxisAlignment,
     Margin,
     Row,
+    Stack,
     Text,
     TextField,
-    CrossAxisAlignment,
 )
-import asyncio
-import aioshutil
+
 from db_controls import (
     find_all_teams_by_user_id,
     get_all_games_by_player_team_id,
@@ -37,20 +36,20 @@ from db_controls import (
 )
 from models import KpiRole
 from utils import (
+    ActionButton,
+    BasicButton,
     BigerTextBlock,
     CustomBSContentBlock,
     CustomSSContentBlock,
     IconButton,
     NormalTextBlock,
     SlidingContentBlock,
-    BasicButton,
-    ActionButton,
 )
-from .text_fields import NormalTextField
-from datetime import datetime
+
 from .shimmer import CustomShimmer
 from .short_table import ShortInformationTable
 from .text import BigerText, BigestText
+from .text_fields import NormalTextField
 
 
 class PlayerContainer(AlertDialog):
@@ -151,7 +150,6 @@ class PlayerContainer(AlertDialog):
         self.page.show_dialog(p_d)
         await p_d.set_value()
 
-
     async def update_data(self):
         pass
 
@@ -178,7 +176,7 @@ class PlayerContainer(AlertDialog):
         )
         self.image_container.update()
         # self.team_name_container.content = BigerText(
-            
+
         # )
         # self.team_name_container.update()
         text_buttons = []
@@ -271,6 +269,7 @@ class PlayerUpdateDialog(AlertDialog):
                 expand=True,
             ),
         )
+
     async def set_value(self):
         player = await get_player(self.session, self.player_id)
         self.full_name_field.value = player.full_name
@@ -316,9 +315,7 @@ class PlayerUpdateDialog(AlertDialog):
         # try:
         height = int(self.height_field.value)
         weight = int(self.weight_field.value)
-        date_birth = datetime.strptime(
-            self.date_birth_field.value, "%Y-%m-%d"
-        ).date()
+        date_birth = datetime.strptime(self.date_birth_field.value, "%Y-%m-%d").date()
         # except ValueError:
         #     return
 

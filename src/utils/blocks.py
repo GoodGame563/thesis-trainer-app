@@ -1,9 +1,22 @@
-from flet import Card, CardVariant, Column, Margin, Row, Tab, TabBar, TabBarView, Tabs, MainAxisAlignment, Text
+from flet import (
+    Card,
+    CardVariant,
+    Column,
+    MainAxisAlignment,
+    Margin,
+    Row,
+    Tab,
+    TabBar,
+    TabBarView,
+    Tabs,
+    Text,
+)
 
 from .buttons import ComparisonButton
 from .switchs import NegativeColorSwitch, NeutralColorSwitch, PositiveColorSwitch
 from .text import BigerText, BigestText, NormalText
 from .text_fields import SmallTextField
+
 
 class PositiveSwitchTextFieldBlock(Card):
     def __init__(
@@ -98,12 +111,13 @@ class BaseTextBlock(Card):
         super().__init__()
         self.inner_data = Text("")
 
-    def change_text(self, text:str):
+    def change_text(self, text: str):
         self.inner_data.value = text
         self.inner_data.update()
 
+
 class BigestTextBlock(BaseTextBlock):
-    def __init__(self, text:str , expand=None):
+    def __init__(self, text: str, expand=None):
         self.inner_data = BigestText(text)
         self.inner_data.margin = 5
         super().__init__(
@@ -121,7 +135,7 @@ class BigestTextBlock(BaseTextBlock):
 
 
 class BigerTextBlock(BaseTextBlock):
-    def __init__(self, text:str):
+    def __init__(self, text: str):
         self.inner_data = BigerText(text)
         super().__init__(
             elevation=8,
@@ -135,8 +149,9 @@ class BigerTextBlock(BaseTextBlock):
             ),
         )
 
+
 class NormalTextBlock(BaseTextBlock):
-    def __init__(self, text:str, expand=None):
+    def __init__(self, text: str, expand=None):
         self.inner_data = NormalText(text)
         self.inner_data.margin = 5
         super().__init__(
@@ -151,9 +166,6 @@ class NormalTextBlock(BaseTextBlock):
             ),
             expand=expand,
         )
-
-
-
 
 
 class SlidingContentBlock(Card):

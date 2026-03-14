@@ -8,6 +8,7 @@ from flet import (
     CardVariant,
     Column,
     Container,
+    CrossAxisAlignment,
     DatePicker,
     FilePicker,
     FilePickerFileType,
@@ -16,7 +17,6 @@ from flet import (
     Row,
     Text,
     TextField,
-    CrossAxisAlignment,
 )
 
 from db_controls import create_player, get_session
