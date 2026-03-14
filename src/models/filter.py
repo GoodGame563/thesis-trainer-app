@@ -240,9 +240,11 @@ async def calculate_kpi(role_selected: bool, data: TableData) -> TableData:
                 rating += negative_multipliers[key] * data_in_cell
             print("рейтинг после: ", rating)
 
-    rating = (
-        rating * (0.75 + (success_rules / needs_rules) * 0.5) + calculate_bonus(data)
-    ) / data.minutes_played
+    rating = rating * (0.75 + (success_rules / needs_rules) * 0.5) + calculate_bonus(
+        data
+    )
+    print(rating)
+    rating = rating / data.minutes_played
     print(rating)
     data.rating = rating
     return data
