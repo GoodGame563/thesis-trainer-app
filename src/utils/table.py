@@ -26,7 +26,7 @@ class InformationTable(Card):
     data_table: ClassVar[list[TableData]] = []
     index = 0
     step = 15
-    visible_column_table: ClassVar[bool] = {
+    visible_column_table: dict[str, bool] = {
         "player": True,
         "date_birth": True,
         "team": True,
@@ -80,7 +80,7 @@ class InformationTable(Card):
                     expand=1,
                 )
             )
-
+        self.index_game = 0
         self.right_button = IconButton(Icons.ARROW_FORWARD, self.to_right)
         self.left_button = IconButton(Icons.ARROW_BACK, self.to_left)
         self.main_table = DataTable2(
@@ -203,9 +203,10 @@ class InformationTable(Card):
             data_rows.append(DataRow2(cells=cells))
         return data_rows
 
-    def set_data(self, data_list: list[TableData]):
+    async def set_data(self, data_list: list[TableData]):
         self.data_table = data_list
         self.update_data()
+        self.update()
 
     def update_data(self):
         self.rows.clear()
@@ -222,11 +223,14 @@ class InformationTable(Card):
     async def set_columns(self, column_table: dict[str, bool]):
         self.main_table.disabled = True
         self.main_table.update()
-        await asyncio.sleep(0.3)
+        # await asyncio.sleep(0.3)
 
         for key, value in column_table.items():
             self.visible_column_table[key] = value
         await self.update_columns()
         self.main_table.disabled = False
         self.main_table.update()
-        await asyncio.sleep(0.3)
+        # await asyncio.sleep(0.3)
+
+    def set_game_index(self, id: int):
+        self.index_game = id

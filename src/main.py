@@ -2,18 +2,26 @@ import asyncio
 import logging
 
 from flet import (
+    ClipBehavior,
     Column,
     Container,
     CrossAxisAlignment,
     FloatingActionButtonLocation,
     Page,
     Stack,
+    ThemeMode,
     icons,
     run,
 )
 
 from components import FilterButtomSheet, Menu
-from db_controls import create_db, get_games_statistics
+from db_controls import (
+    create_db,
+    get_all_games,
+    get_games_statistics,
+    get_session,
+    set_engine,
+)
 from models import KpiRole, anything_changed, calculate_kpi
 from theme import dark_theme, light_theme
 from utils import CustomBSContentBlock, IconButton, InformationTable
@@ -22,11 +30,13 @@ logging.basicConfig(level=logging.INFO)
 
 
 async def main(page: Page):
-    await create_db()
+
+    engine = await create_db()
+    set_engine(engine)
+    session = get_session()
 
     async def change_theme(e):
         page.theme = dark_theme if page.theme == light_theme else light_theme
-        page.update()
         theme_button.icon = (
             icons.Icons.SUNNY if page.theme == light_theme else icons.Icons.DARK_MODE
         )
@@ -38,7 +48,9 @@ async def main(page: Page):
         for s_b in e.control.column_table_container.content.controls:
             column_table[s_b.content.key] = s_b.content.value
         if anything_changed():
-            get_stats = await get_games_statistics()
+            get_stats = await get_games_statistics(
+                session, game_id=main_table.index_game
+            )
             new_table_data = []
             for stat in get_stats:
                 new_table_data.append(await calculate_kpi(role_selected, stat))
@@ -49,20 +61,24 @@ async def main(page: Page):
         else:
             await main_table.set_columns(column_table)
 
-        # await main_table.set_columns(column_table)
-        # await main_table.set_data(new_table_data)
+        await main_table.set_columns(column_table)
+        await main_table.set_data(new_table_data)
 
     async def open_filter(e):
         f = FilterButtomSheet(on_dismiss_filter)
         page.show_dialog(f)
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.4)
         await f.set_data(main_table.visible_column_table)
+
+    async def set_table(id):
+        await main_table.set_data(await get_games_statistics(session, game_id=id))
+        main_table.set_game_index(id)
 
     logging.getLogger("flet_core").setLevel(logging.INFO)
     page.title = "Таблица с фильтром"
     page.padding = 0
     is_dark = {"value": False}
-    page.theme_mode = "light"
+    page.theme_mode = ThemeMode.LIGHT
     page.theme = dark_theme if is_dark["value"] else light_theme
 
     theme_button = IconButton(icons.Icons.SUNNY, change_theme)
@@ -78,7 +94,7 @@ async def main(page: Page):
                     Container(
                         content=Column(
                             controls=[
-                                Menu(),
+                                Menu(set_table),
                                 main_table,
                             ],
                             horizontal_alignment=CrossAxisAlignment.STRETCH,
@@ -96,10 +112,9 @@ async def main(page: Page):
                 ]
             ),
             expand=True,
-            clip_behavior="ANTI_ALIAS_WITH_SAVE_LAYER",
+            clip_behavior=ClipBehavior.ANTI_ALIAS_WITH_SAVE_LAYER,
         )
     )
-    main_table.set_data(await get_games_statistics())
 
 
 if __name__ == "__main__":
