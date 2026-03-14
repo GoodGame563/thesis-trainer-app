@@ -1,5 +1,5 @@
 import asyncio
-from typing import ClassVar, Dict
+from typing import ClassVar
 
 from flet import (
     Alignment,
@@ -26,7 +26,7 @@ class InformationTable(Card):
     data_table: ClassVar[list[TableData]] = []
     index = 0
     step = 15
-    visible_column_table: Dict[str, bool] = {
+    visible_column_table: dict[str, bool] = {
         "player": True,
         "date_birth": True,
         "team": True,

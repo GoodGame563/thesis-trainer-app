@@ -6,8 +6,8 @@ from models import AllStat
 
 
 def parse_excel_to_stats(
-    file_path: str, game_id: Optional[int] = None
-) -> List[AllStat]:
+    file_path: str, game_id: int | None = None
+) -> list[AllStat]:
     df = pd.read_excel(file_path, sheet_name="primer", header=0)
 
     column_map = {
@@ -59,7 +59,7 @@ def parse_excel_to_stats(
     mapped_df[str_columns] = mapped_df[str_columns].fillna("").astype(str)
     mapped_df[numeric_columns] = mapped_df[numeric_columns].fillna(0).astype(int)
 
-    stats_list: List[AllStat] = []
+    stats_list: list[AllStat] = []
     for _, row in mapped_df.iterrows():
         player_name = row["player_name"].strip()
         if not player_name:

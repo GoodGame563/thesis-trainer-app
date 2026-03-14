@@ -68,7 +68,7 @@ class AllStat:
     player_name: str
     team: int
     role: str
-    game_id: Optional[int] = None
+    game_id: int | None = None
 
     minutes_played: int = 0
 

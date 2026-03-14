@@ -56,7 +56,7 @@ class PlayerContainer(AlertDialog):
         self.team_name_container = NormalTextBlock("")
         self.game_stat = CustomShimmer(
             SlidingContentBlock(
-                text_buttons=[str("dsadsad"), str("sadasdas")],
+                text_buttons=["dsadsad", "sadasdas"],
                 controls=[Container(), Container()],
                 expand=5,
             ),

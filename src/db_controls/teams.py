@@ -35,6 +35,5 @@ async def get_all_teams(async_session: async_sessionmaker[AsyncSession]) -> list
 async def create_teams(
     async_session: async_sessionmaker[AsyncSession], name: str, logo: str
 ):
-    async with async_session() as session:
-        async with session.begin():
-            session.add(Teams(name, logo))
+    async with async_session() as session, session.begin():
+        session.add(Teams(name, logo))

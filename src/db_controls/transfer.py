@@ -69,6 +69,5 @@ async def create_transfer(
     team_id: int,
     transfer_date: date,
 ):
-    async with async_session() as session:
-        async with session.begin():
-            session.add(Transfers(player_id, team_id, transfer_date))
+    async with async_session() as session, session.begin():
+        session.add(Transfers(player_id, team_id, transfer_date))

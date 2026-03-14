@@ -104,14 +104,13 @@ async def get_all_players(
 async def create_player(
     async_session: async_sessionmaker[AsyncSession], player: Player
 ):
-    async with async_session() as session:
-        async with session.begin():
-            session.add(
-                Players(
-                    player.full_name,
-                    player.height,
-                    player.weight,
-                    player.birth_date,
-                    player.path_to_photo,
-                )
+    async with async_session() as session, session.begin():
+        session.add(
+            Players(
+                player.full_name,
+                player.height,
+                player.weight,
+                player.birth_date,
+                player.path_to_photo,
             )
+        )
