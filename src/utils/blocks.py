@@ -11,6 +11,7 @@ from flet import (
     Tabs,
     Text,
 )
+
 from models import ComparisonType
 
 from .buttons import ComparisonButton

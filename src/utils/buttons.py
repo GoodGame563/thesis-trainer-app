@@ -29,7 +29,8 @@ class ComparisonButton(PopupMenuButton):
             width=35,
             key="comprasion",
             items=[
-                PopupMenuItem(content=el.value, on_click=self.select, key=el.name) for el in ComparisonType
+                PopupMenuItem(content=el.value, on_click=self.select, key=el.name)
+                for el in ComparisonType
             ],
         )
 

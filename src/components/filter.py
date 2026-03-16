@@ -5,32 +5,32 @@ from flet import (
     Button,
     Column,
     Container,
+    CrossAxisAlignment,
     Dropdown,
     DropdownOption,
     ExpansionPanel,
     ExpansionPanelList,
     ListView,
+    MainAxisAlignment,
     PopupMenuButton,
     Row,
-    Switch,
     ScrollMode,
-    CrossAxisAlignment,
-    MainAxisAlignment,
+    Switch,
 )
 
-from models import KpiRole, filter_kpi, name_column_table, TableData
+from models import KpiRole, TableData, filter_kpi, name_column_table
 from utils import (
     ActionButton,
     BigestTextBlock,
     CustomBSContentBlock,
     CustomShimmer,
+    FilterList,
     NegativeSwitchTextFieldBlock,
     NormalText,
     PositiveSwitchTextFieldBlock,
     SlidingContentBlock,
     SwitchBlock,
     VisibleColumnsList,
-    FilterList,
 )
 
 

@@ -1,11 +1,13 @@
 from flet import ListView, ScrollMode
+
+from models import ValueIndicators
+
 from .blocks import (
-    SwitchBlock,
-    PositiveSwitchTextFieldBlock,
     NegativeSwitchTextFieldBlock,
+    PositiveSwitchTextFieldBlock,
+    SwitchBlock,
 )
 from .shimmer import CustomShimmer
-from models import ValueIndicators
 
 
 class PlayerList(ListView):
@@ -21,9 +23,9 @@ class PlayerList(ListView):
 
 class FilterList(ListView):
     def __init__(self):
-        self.info: list[
-            PositiveSwitchTextFieldBlock | NegativeSwitchTextFieldBlock
-        ] = []
+        self.info: list[PositiveSwitchTextFieldBlock | NegativeSwitchTextFieldBlock] = (
+            []
+        )
 
         super().__init__(
             scroll=ScrollMode.ALWAYS,

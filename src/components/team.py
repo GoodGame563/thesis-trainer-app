@@ -5,15 +5,18 @@ from flet import (
     AlertDialog,
     Card,
     CardVariant,
+    ClipBehavior,
     Column,
     Container,
+    CrossAxisAlignment,
     FilePicker,
     FilePickerFileType,
     MainAxisAlignment,
     Margin,
     Row,
     Text,
-    TextField,TextAlign,ClipBehavior,CrossAxisAlignment
+    TextAlign,
+    TextField,
 )
 
 from db_controls import create_teams, get_session
@@ -38,7 +41,7 @@ class TeamDialog(AlertDialog):
                             content=Text(
                                 "Создать команду",
                                 no_wrap=False,
-                                overflow="ELLIPSIS", # type: ignore
+                                overflow="ELLIPSIS",  # type: ignore
                                 expand=True,
                                 size=30,
                                 text_align=TextAlign.CENTER,

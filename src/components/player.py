@@ -6,6 +6,7 @@ from flet import (
     AlertDialog,
     Card,
     CardVariant,
+    ClipBehavior,
     Column,
     Container,
     CrossAxisAlignment,
@@ -16,9 +17,8 @@ from flet import (
     Margin,
     Row,
     Text,
-    TextField,
     TextAlign,
-    ClipBehavior
+    TextField,
 )
 
 from db_controls import create_player, get_session
@@ -56,7 +56,7 @@ class PlayerAddDialog(AlertDialog):
                             content=Text(
                                 "Добавить игрока",
                                 no_wrap=False,
-                                overflow="ELLIPSIS", # type: ignore
+                                overflow="ELLIPSIS",  # type: ignore
                                 expand=True,
                                 size=30,
                                 text_align=TextAlign.CENTER,

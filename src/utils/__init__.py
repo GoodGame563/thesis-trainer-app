@@ -10,10 +10,10 @@ from .blocks import (
     SwitchBlock,
 )
 from .buttons import ActionButton, BasicButton, ComparisonButton, IconButton, MenuButton
+from .list import FilterList, PlayerList, VisibleColumnsList
 from .picker import Picker
 from .shimmer import CustomShimmer
 from .short_table import ShortInformationTable
 from .table import InformationTable
 from .text import BigerText, BigestText, NormalText
 from .text_fields import NormalTextField
-from .list import VisibleColumnsList, FilterList, PlayerList
