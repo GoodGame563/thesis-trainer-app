@@ -7,6 +7,7 @@ from flet import (
     CupertinoBottomSheet,
     CupertinoPicker,
     FilledButton,
+    CrossAxisAlignment
 )
 
 from .buttons import ActionButton
@@ -16,10 +17,10 @@ from .text import NormalText
 
 class Picker(CupertinoBottomSheet):
     def __init__(self, activation_button: Button | FilledButton, dissmiss_func=None):
-        picker = CupertinoPicker(
+        self.picker = CupertinoPicker(
             controls=[CustomShimmer(NormalText("Wait")) for _ in range(10)],
             expand=5,
-            selected_index=2,
+            selected_index=0,
             magnification=1.22,
             squeeze=1.2,
             use_magnifier=True,
@@ -28,17 +29,17 @@ class Picker(CupertinoBottomSheet):
         async def save_data():
             self.open = False
             self.update()
-            activation_button.content = picker.controls[picker.selected_index]
+            activation_button.content = self.picker.controls[self.picker.selected_index]
             activation_button.update()
 
         super().__init__(
             content=Container(
                 content=Column(
                     controls=[
-                        picker,
+                        self.picker,
                         ActionButton("Сохранить", save_data, 1),
                     ],
-                    horizontal_alignment="CENTER",
+                    horizontal_alignment=CrossAxisAlignment.CENTER,
                     height=300,
                 ),
                 margin=10,
@@ -51,6 +52,6 @@ class Picker(CupertinoBottomSheet):
         )
 
     async def set_data(self, data: list[NormalText]):
-        picker = self.content.content.controls[0]
-        picker.controls = data
-        picker.update()
+        self.picker.controls.clear()
+        self.picker.controls.extend(data)
+        self.picker.update()

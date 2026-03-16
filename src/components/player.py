@@ -17,6 +17,8 @@ from flet import (
     Row,
     Text,
     TextField,
+    TextAlign,
+    ClipBehavior
 )
 
 from db_controls import create_player, get_session
@@ -54,10 +56,10 @@ class PlayerAddDialog(AlertDialog):
                             content=Text(
                                 "Добавить игрока",
                                 no_wrap=False,
-                                overflow="ELLIPSIS",
+                                overflow="ELLIPSIS", # type: ignore
                                 expand=True,
                                 size=30,
-                                text_align="center",
+                                text_align=TextAlign.CENTER,
                                 margin=10,
                             ),
                             margin=Margin.only(
@@ -66,7 +68,7 @@ class PlayerAddDialog(AlertDialog):
                                 top=10,
                                 bottom=0,
                             ),
-                            clip_behavior=True,
+                            clip_behavior=ClipBehavior.ANTI_ALIAS,
                             variant=CardVariant.OUTLINED,
                         ),
                         Row(
@@ -133,7 +135,8 @@ class PlayerAddDialog(AlertDialog):
             file_type=FilePickerFileType.IMAGE,
             allow_multiple=False,
         )
-        if len(file) == 0:
+
+        if len(file) == 0 or file[0].path is None:
             return
 
         await aioshutil.copy2(file[0].path, f".\\assets\\photo_{file[0].name}")

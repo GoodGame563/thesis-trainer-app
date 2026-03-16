@@ -11,6 +11,7 @@ from flet import (
     Tabs,
     Text,
 )
+from models import ComparisonType
 
 from .buttons import ComparisonButton
 from .switchs import NegativeColorSwitch, NeutralColorSwitch, PositiveColorSwitch
@@ -18,56 +19,70 @@ from .text import BigerText, BigestText, NormalText
 from .text_fields import SmallTextField
 
 
-class PositiveSwitchTextFieldBlock(Card):
+class SwitchTextFieldBlock(Card):
+    def __init__(
+        self,
+        switch: PositiveColorSwitch | NegativeColorSwitch,
+        value_button: ComparisonType,
+        value_field: str,
+        key="value",
+    ):
+        self.field = SmallTextField(value_field)
+        self.switch = switch
+        self.button = ComparisonButton(value_button)
+
+        super().__init__(
+            content=Row(controls=[self.switch, self.button, self.field]),
+            margin=Margin.only(
+                left=10,
+                right=10,
+                top=8,
+                bottom=0,
+            ),
+            key=key,
+            variant=CardVariant.OUTLINED,
+            elevation=4,
+        )
+
+    def get_comparison(self) -> ComparisonType:
+        return self.button.get_comparison_type()
+
+    def get_value(self) -> int:
+        return int(self.field.value) if self.field.value.isnumeric() else 0
+
+    def get_key(self) -> str:
+        return str(self.key)
+
+    def get_enabled(self) -> bool:
+        return self.switch.get_value()
+
+
+class PositiveSwitchTextFieldBlock(SwitchTextFieldBlock):
     def __init__(
         self,
         label: str,
         value_swith: bool,
-        value_button: str,
+        value_button: ComparisonType,
         value_field: str,
         key="value",
     ):
-        super().__init__()
-        self.field = SmallTextField(value_field)
-        self.switch = PositiveColorSwitch(label, value_swith)
-        self.content = Row(
-            controls=[self.switch, ComparisonButton(value_button), self.field]
+        super().__init__(
+            PositiveColorSwitch(label, value_swith), value_button, value_field, key
         )
-        self.margin = Margin.only(
-            left=10,
-            right=10,
-            top=8,
-            bottom=0,
-        )
-        self.key = key
-        self.variant = CardVariant.OUTLINED
-        self.elevation = 4
 
 
-class NegativeSwitchTextFieldBlock(Card):
+class NegativeSwitchTextFieldBlock(SwitchTextFieldBlock):
     def __init__(
         self,
         label: str,
         value_swith: bool,
-        value_button: str,
+        value_button: ComparisonType,
         value_field: str,
         key="value",
     ):
-        super().__init__()
-        self.field = SmallTextField(value_field)
-        self.switch = NegativeColorSwitch(label, value_swith)
-        self.content = Row(
-            controls=[self.switch, ComparisonButton(value_button), self.field]
+        super().__init__(
+            NegativeColorSwitch(label, value_swith), value_button, value_field, key
         )
-        self.margin = Margin.only(
-            left=10,
-            right=10,
-            top=8,
-            bottom=0,
-        )
-        self.key = key
-        self.variant = CardVariant.OUTLINED
-        self.elevation = 4
 
 
 class SwitchBlock(Card):
@@ -79,8 +94,9 @@ class SwitchBlock(Card):
         key="value",
         expand=None,
     ):
+        self.switch = NeutralColorSwitch(label, value_switch, on_change, key)
         super().__init__()
-        self.content = NeutralColorSwitch(label, value_switch, on_change, key)
+        self.content = self.switch
         self.margin = Margin.only(
             left=10,
             right=10,
@@ -90,6 +106,12 @@ class SwitchBlock(Card):
         self.variant = CardVariant.OUTLINED
         self.elevation = 4
         self.expand = expand
+
+    def get_value(self) -> bool:
+        return self.switch.get_value()
+
+    def get_key(self) -> str:
+        return self.switch.get_key()
 
 
 class CustomBSContentBlock(Card):
