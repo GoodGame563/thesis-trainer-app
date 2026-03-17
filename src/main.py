@@ -44,11 +44,13 @@ async def main(page: Page):
         page.update()
 
     async def on_dismiss_filter(e):
-        print(type(e.control))
-        role_selected = e.control.switch_role_select.content.value
-        column_table = {}
-        for s_b in e.control.column_table_container.content.controls:
-            column_table[s_b.content.key] = s_b.content.value
+        filter_sheet = e.control
+        if not isinstance(filter_sheet, FilterButtomSheet):
+            return None
+
+        role_selected = filter_sheet.get_switch_role_value()
+        column_table = filter_sheet.get_filter_visible_column()
+
         if anything_changed():
             get_stats = await get_games_statistics(
                 session, game_id=main_table.index_game
@@ -63,13 +65,10 @@ async def main(page: Page):
         else:
             await main_table.set_columns(column_table)
 
-        await main_table.set_columns(column_table)
-        await main_table.set_data(new_table_data)
-
     async def open_filter(e):
         f = FilterButtomSheet(on_dismiss_filter)
         page.show_dialog(f)
-        await asyncio.sleep(0.4)
+        await asyncio.sleep(0.1)
         await f.set_data(main_table.visible_column_table)
 
     async def set_table(id):

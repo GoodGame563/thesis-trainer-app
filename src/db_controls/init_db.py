@@ -14,7 +14,7 @@ db_path = f"{data_path}/base.db"
 async def create_db():
     if not path.exists(data_path):
         makedirs(data_path)
-    engine = create_async_engine("sqlite+aiosqlite:///" + db_path, echo=True)
+    engine = create_async_engine("sqlite+aiosqlite:///" + db_path, echo=False)
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 

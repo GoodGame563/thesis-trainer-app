@@ -3,7 +3,18 @@ from flet import ControlState, Switch
 from theme import light_cs
 
 
-class PositiveColorSwitch(Switch):
+class BaseSwitch(Switch):
+    def __init__(self):
+        super().__init__()
+
+    def get_value(self) -> bool:
+        return self.value
+
+    def get_key(self) -> str:
+        return str(self.key)
+
+
+class PositiveColorSwitch(BaseSwitch):
     def __init__(self, label: str, value: bool, on_change=None, key="enabled"):
         super().__init__()
         self.label = label
@@ -13,7 +24,7 @@ class PositiveColorSwitch(Switch):
         self.thumb_color = {ControlState.SELECTED: light_cs.tertiary}
 
 
-class NegativeColorSwitch(Switch):
+class NegativeColorSwitch(BaseSwitch):
     def __init__(self, label: str, value: bool, on_change=None, key="enabled"):
         super().__init__()
         self.label = label
@@ -23,7 +34,7 @@ class NegativeColorSwitch(Switch):
         self.thumb_color = {ControlState.SELECTED: light_cs.error}
 
 
-class NeutralColorSwitch(Switch):
+class NeutralColorSwitch(BaseSwitch):
     def __init__(self, label: str, value: bool, on_change, key="enabled"):
         super().__init__()
         self.label = label

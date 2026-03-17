@@ -5,27 +5,32 @@ from flet import (
     Button,
     Column,
     Container,
+    CrossAxisAlignment,
     Dropdown,
     DropdownOption,
     ExpansionPanel,
     ExpansionPanelList,
     ListView,
+    MainAxisAlignment,
     PopupMenuButton,
     Row,
+    ScrollMode,
     Switch,
 )
 
-from models import KpiRole, filter_kpi, name_column_table
+from models import KpiRole, TableData, filter_kpi, name_column_table
 from utils import (
     ActionButton,
     BigestTextBlock,
     CustomBSContentBlock,
     CustomShimmer,
+    FilterList,
     NegativeSwitchTextFieldBlock,
     NormalText,
     PositiveSwitchTextFieldBlock,
     SlidingContentBlock,
     SwitchBlock,
+    VisibleColumnsList,
 )
 
 
@@ -33,26 +38,8 @@ class FilterButtomSheet(BottomSheet):
     selectKpiRole = KpiRole.ALL_ROLES
 
     def __init__(self, on_dismiss):
-        self.positive_table_container = Container(
-            content=CustomShimmer(
-                ListView(
-                    controls=[SwitchBlock("Wait", True) for _ in range(10)],
-                    scroll="ALWAYS",
-                    height=300,
-                    expand=1,
-                )
-            )
-        )
-        self.negative_table_container = Container(
-            content=CustomShimmer(
-                ListView(
-                    controls=[SwitchBlock("Wait", True) for _ in range(10)],
-                    scroll="ALWAYS",
-                    height=300,
-                    expand=1,
-                )
-            )
-        )
+        self.positive_list_view = FilterList()
+        self.negative_list_view = FilterList()
         self.switch_role_select = SwitchBlock(
             "Учитывать амплуа",
             False,
@@ -60,14 +47,7 @@ class FilterButtomSheet(BottomSheet):
             "check_role",
             1,
         )
-
-        self.column_table_container = Container(
-            content=CustomShimmer(
-                ListView(
-                    controls=[SwitchBlock("Wait", True) for _ in range(10)], spacing=0
-                )
-            )
-        )
+        self.column_list_view = VisibleColumnsList()
         self.dropdown_container = Container(
             content=CustomShimmer(
                 Dropdown(
@@ -84,9 +64,9 @@ class FilterButtomSheet(BottomSheet):
                     controls=[
                         BigestTextBlock("Фильтр", 1),
                         SlidingContentBlock(
-                            ("Что отображать", "Подсчет KPI"),
+                            ("Что отображать", "Подсчет KPI"),  # type: ignore
                             [
-                                self.column_table_container,
+                                self.column_list_view,
                                 Column(
                                     controls=[
                                         Row(
@@ -104,14 +84,15 @@ class FilterButtomSheet(BottomSheet):
                                                     header=NormalText(
                                                         "Позитивные факторы"
                                                     ),
-                                                    content=self.positive_table_container,
+                                                    content=self.positive_list_view,
                                                     expand=1,
+                                                    adaptive=True,
                                                 ),
                                                 ExpansionPanel(
                                                     header=NormalText(
                                                         "Негативные факторы"
                                                     ),
-                                                    content=self.negative_table_container,
+                                                    content=self.negative_list_view,
                                                     expand=1,
                                                 ),
                                             ],
@@ -120,14 +101,14 @@ class FilterButtomSheet(BottomSheet):
                                             expanded_header_padding=4,
                                         ),
                                     ],
-                                    horizontal_alignment="STRETCH",
+                                    horizontal_alignment=CrossAxisAlignment.STRETCH,
                                 ),
                             ],
                             expand=6,
                         ),
                         Row(
                             controls=[ActionButton("Сохранить", self.safe_button)],
-                            alignment="center",
+                            alignment=MainAxisAlignment.CENTER,
                             expand=1,
                         ),
                     ],
@@ -138,7 +119,13 @@ class FilterButtomSheet(BottomSheet):
             on_dismiss=on_dismiss,
         )
 
-    async def set_data(self, visible_columns):
+    def get_switch_role_value(self) -> bool:
+        return self.switch_role_select.get_value()
+
+    def get_filter_visible_column(self) -> dict[str, bool]:
+        return self.column_list_view.get_value()
+
+    async def set_data(self, visible_columns: dict[str, bool]):
         self.dropdown_container.content = Dropdown(
             value="ALL_ROLES",
             options=get_option(),
@@ -146,123 +133,53 @@ class FilterButtomSheet(BottomSheet):
             margin=5,
             expand=True,
         )
-
-        self.column_table_container.content = ListView(
-            controls=[
+        self.column_list_view.set_value(
+            [
                 SwitchBlock(name_column_table[key], value, None, key)
                 for key, value in visible_columns.items()
-            ],
-            spacing=0,
+            ]
         )
-        self.positive_table_container.content = ListView(
-            controls=[
+        await self.set_tables()
+
+    def safe_button(self):
+        self.page.pop_dialog()
+        self.safe_tables()
+
+    def safe_tables(self):
+        for key, value in self.positive_list_view.get_value().items():
+            filter_kpi[self.selectKpiRole].positive_indicators[key] = value
+        for key, value in self.negative_list_view.get_value().items():
+            filter_kpi[self.selectKpiRole].negative_indicators[key] = value
+
+    async def set_tables(self):
+        self.positive_list_view.set_value(
+            [
                 PositiveSwitchTextFieldBlock(
                     name_column_table[key],
                     value.enabled,
                     value.comprasion,
-                    value.value,
+                    str(value.value),
                     key,
                 )
                 for key, value in filter_kpi[
                     self.selectKpiRole
                 ].positive_indicators.items()
-            ],
-            scroll="ALWAYS",
-            height=300,
-            expand=1,
+            ]
         )
-        self.negative_table_container.content = ListView(
-            controls=[
+        self.negative_list_view.set_value(
+            [
                 NegativeSwitchTextFieldBlock(
                     name_column_table[key],
                     value.enabled,
                     value.comprasion,
-                    value.value,
+                    str(value.value),
                     key,
                 )
                 for key, value in filter_kpi[
                     self.selectKpiRole
                 ].negative_indicators.items()
-            ],
-            scroll="ALWAYS",
-            height=300,
-            expand=1,
+            ]
         )
-
-    def change_switch(self, e):
-        self.set(e.control.key, e.control.value)
-
-    def safe_button(self, e):
-        self.parent.page.pop_dialog()
-        self.safe_tables()
-
-    def safe_tables(self):
-        for c in self.positive_table_container.content.controls:
-            for element in c.content.controls:
-                value = None
-                match element:
-                    case PopupMenuButton():
-                        value = element.content.value
-                    case _:
-                        value = element.value
-                setattr(
-                    filter_kpi[self.selectKpiRole].positive_indicators[c.key],
-                    element.key,
-                    value,
-                )
-        for c in self.negative_table_container.content.controls:
-            for element in c.content.controls:
-                value = None
-                match element:
-                    case PopupMenuButton():
-                        value = element.content.value
-                    case _:
-                        value = element.value
-                setattr(
-                    filter_kpi[self.selectKpiRole].negative_indicators[c.key],
-                    element.key,
-                    value,
-                )
-
-    async def set_tables(self):
-        for c in self.positive_table_container.content.controls:
-            for element in c.content.controls:
-                match element:
-                    case PopupMenuButton():
-                        element.content.value = getattr(
-                            filter_kpi[self.selectKpiRole].positive_indicators[c.key],
-                            element.key,
-                        )
-                    case Switch():
-                        element.value = getattr(
-                            filter_kpi[self.selectKpiRole].positive_indicators[c.key],
-                            element.key,
-                        )
-                    case _:
-                        element.value = getattr(
-                            filter_kpi[self.selectKpiRole].positive_indicators[c.key],
-                            element.key,
-                        )
-        for c in self.negative_table_container.content.controls:
-            for element in c.content.controls:
-                match element:
-                    case PopupMenuButton():
-                        element.content.value = getattr(
-                            filter_kpi[self.selectKpiRole].negative_indicators[c.key],
-                            element.key,
-                        )
-                    case Switch():
-                        element.value = getattr(
-                            filter_kpi[self.selectKpiRole].negative_indicators[c.key],
-                            element.key,
-                        )
-                    case _:
-                        element.value = getattr(
-                            filter_kpi[self.selectKpiRole].negative_indicators[c.key],
-                            element.key,
-                        )
-        self.positive_table_container.update()
-        self.negative_table_container.update()
         await asyncio.sleep(0.2)
 
     async def update_tables(self, new_role: KpiRole):

@@ -5,14 +5,17 @@ from flet import (
     AlertDialog,
     Card,
     CardVariant,
+    ClipBehavior,
     Column,
     Container,
+    CrossAxisAlignment,
     FilePicker,
     FilePickerFileType,
     MainAxisAlignment,
     Margin,
     Row,
     Text,
+    TextAlign,
     TextField,
 )
 
@@ -38,10 +41,10 @@ class TeamDialog(AlertDialog):
                             content=Text(
                                 "Создать команду",
                                 no_wrap=False,
-                                overflow="ELLIPSIS",
+                                overflow="ELLIPSIS",  # type: ignore
                                 expand=True,
                                 size=30,
-                                text_align="center",
+                                text_align=TextAlign.CENTER,
                                 margin=10,
                             ),
                             margin=Margin.only(
@@ -50,7 +53,7 @@ class TeamDialog(AlertDialog):
                                 top=10,
                                 bottom=0,
                             ),
-                            clip_behavior=True,
+                            clip_behavior=ClipBehavior.ANTI_ALIAS,
                             variant=CardVariant.OUTLINED,
                         ),
                         Row(
@@ -63,7 +66,7 @@ class TeamDialog(AlertDialog):
                     ],
                     alignment=MainAxisAlignment.SPACE_EVENLY,
                     expand=True,
-                    horizontal_alignment="STRETCH",
+                    horizontal_alignment=CrossAxisAlignment.STRETCH,
                 ),
                 margin=10,
                 width=700,
@@ -72,21 +75,18 @@ class TeamDialog(AlertDialog):
             ),
         )
 
-    async def upload_file(self, e):
-        print(e)
-
     async def save(self):
         self.open = False
         await asyncio.sleep(0.2)
         await create_teams(get_session(), self.command_field.value, self.path_file)
 
     async def select_logo(self):
-        f_p = FilePicker(on_upload=self.upload_file)
+        f_p = FilePicker()
         file = await f_p.pick_files(
             file_type=FilePickerFileType.IMAGE,
             allow_multiple=False,
         )
-        if len(file) == 0:
+        if len(file) == 0 or file[0].path is None:
             return
         await aioshutil.copy2(file[0].path, ".\\assets\\logo_" + file[0].name)
         self.path_file = "logo_" + file[0].name
