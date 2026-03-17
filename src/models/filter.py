@@ -243,11 +243,11 @@ async def calculate_kpi(role_selected: bool, data: TableData) -> TableData:
         kpi = 1
     rating = rating * kpi + calculate_bonus(data)
     if data.minutes_played > 30:
-        t = 0.4 * data.minutes_played + 28
+        0.4 * data.minutes_played + 28
     elif data.minutes_played > 10:
-        t = 1.5 * data.minutes_played - 5
+        1.5 * data.minutes_played - 5
     else:
-        t = 0.5 * data.minutes_played + 4, 5
+        0.5 * data.minutes_played + 4, 5
 
     print(rating)
     rating = rating / data.minutes_played

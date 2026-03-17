@@ -23,9 +23,9 @@ class PlayerList(ListView):
 
 class FilterList(ListView):
     def __init__(self):
-        self.info: list[PositiveSwitchTextFieldBlock | NegativeSwitchTextFieldBlock] = (
-            []
-        )
+        self.info: list[
+            PositiveSwitchTextFieldBlock | NegativeSwitchTextFieldBlock
+        ] = []
 
         super().__init__(
             scroll=ScrollMode.ALWAYS,
