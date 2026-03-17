@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
 
-from aioshutil import R
-
 from .structs import ComparisonType, Role
 from .table import TableData
 
@@ -28,14 +26,14 @@ class ValueIndicators:
 
 @dataclass
 class RoleKpiMetrics:
-    positive_indicators: dict
-    negative_indicators: dict
+    positive_indicators: dict[str, ValueIndicators]
+    negative_indicators: dict[str, ValueIndicators]
 
 
-filter_kpi = {}
+filter_kpi: dict[KpiRole, RoleKpiMetrics] = {}
 
 for r in KpiRole:
-    positive_indicators = {
+    positive_indicators: dict[str, ValueIndicators] = {
         "successful_passes": ValueIndicators(ComparisonType.EQUALLY, 0, False),
         "successful_tackle": ValueIndicators(ComparisonType.EQUALLY, 0, False),
         "dominant_tackles": ValueIndicators(ComparisonType.EQUALLY, 0, False),
@@ -57,7 +55,7 @@ for r in KpiRole:
         "lineout_win": ValueIndicators(ComparisonType.EQUALLY, 0, False),
         "lineout_steal": ValueIndicators(ComparisonType.EQUALLY, 0, False),
     }
-    negative_indicators = {
+    negative_indicators: dict[str, ValueIndicators] = {
         "ball_losses": ValueIndicators(ComparisonType.EQUALLY, 0, False),
         "penalty": ValueIndicators(ComparisonType.EQUALLY, 0, False),
         "yellow_card": ValueIndicators(ComparisonType.EQUALLY, 0, False),
@@ -240,11 +238,19 @@ async def calculate_kpi(role_selected: bool, data: TableData) -> TableData:
                 rating += negative_multipliers[key] * data_in_cell
             print("рейтинг после: ", rating)
 
-    rating = rating * (0.75 + (success_rules / needs_rules) * 0.5) + calculate_bonus(
-        data
-    )
+    kpi = 0.75 + (success_rules / needs_rules) * 0.5
+    if data.minutes_played <= 10:
+        kpi = 1
+    rating = rating * kpi + calculate_bonus(data)
+    if data.minutes_played > 30:
+        0.4 * data.minutes_played + 28
+    elif data.minutes_played > 10:
+        1.5 * data.minutes_played - 5
+    else:
+        0.5 * data.minutes_played + 4, 5
+
     print(rating)
     rating = rating / data.minutes_played
     print(rating)
-    data.rating = rating
+    data.rating = round(rating, 2)
     return data

@@ -17,30 +17,29 @@ from .text import ComparisonText, MenuText, NormalText
 
 
 class ComparisonButton(PopupMenuButton):
-    def __init__(self, text: str):
+    def __init__(self, type: ComparisonType):
+        self.select_comparison = type
+        self.text = ComparisonText(self.select_comparison.value)
         super().__init__(
             style=ButtonStyle(shape=RoundedRectangleBorder(radius=8), padding=0),
-            content=ComparisonText(text),
+            content=self.text,
             elevation=3,
             margin=5,
             height=35,
             width=35,
             key="comprasion",
             items=[
-                PopupMenuItem(content=ComparisonType.EQUALLY, on_click=self.select),
-                PopupMenuItem(content=ComparisonType.MORE, on_click=self.select),
-                PopupMenuItem(content=ComparisonType.LESS, on_click=self.select),
-                PopupMenuItem(
-                    content=ComparisonType.EQUALLY_MORE, on_click=self.select
-                ),
-                PopupMenuItem(
-                    content=ComparisonType.EQUALLY_LESS, on_click=self.select
-                ),
+                PopupMenuItem(content=el.value, on_click=self.select, key=el.name)
+                for el in ComparisonType
             ],
         )
 
+    def get_comparison_type(self) -> ComparisonType:
+        return self.select_comparison
+
     async def select(self, e):
-        self.content.value = e.control.content
+        self.text.value = e.control.content
+        self.select_comparison = ComparisonType[e.control.key]
         self.update()
         await asyncio.sleep(0.2)
 
